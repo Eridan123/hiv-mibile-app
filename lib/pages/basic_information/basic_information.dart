@@ -48,8 +48,6 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
           children: [
             Container(
               padding: EdgeInsets.fromLTRB(0,MediaQuery.of(context).size.width * 0.02,0,MediaQuery.of(context).size.height * 0),
-//              width:MediaQuery.of(context).size.width * 1,
-//              alignment: Alignment(-0.3,0),
               child: Material(
                 elevation: 4.0,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -85,7 +83,7 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
                           ),
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.30,
+                          width:MediaQuery.of(context).size.width * 0.30,
                           padding: EdgeInsets.all(5),
                           child: Center(
                             child: Text(

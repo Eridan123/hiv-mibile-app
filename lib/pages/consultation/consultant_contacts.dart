@@ -132,7 +132,7 @@ class _ConsultantContactPageState extends State<ConsultantContactPage> {
             ),
           ),
           SizedBox(height: 20,),
-          model.whatsapp != null ? Padding(
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
               title: Text(
@@ -146,11 +146,11 @@ class _ConsultantContactPageState extends State<ConsultantContactPage> {
               leading: FaIcon(FontAwesomeIcons.whatsapp, color: Colors.green, size: 40,),
               onTap: () => FlutterOpenWhatsapp.sendSingleMessage(model.whatsapp, ""),
             ),
-          ) : Container(),
+          ),
           SizedBox(
             height: 10,
           ),
-          model.telegram != null ? Padding(
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
               title: Text(
@@ -164,11 +164,11 @@ class _ConsultantContactPageState extends State<ConsultantContactPage> {
               leading: FaIcon(FontAwesomeIcons.telegram, color: Colors.lightBlue, size: 40,),
               onTap: () => _telegramMe(model.telegram),
             ),
-          ) : Container(),
+          ),
           SizedBox(
             height: 20,
           ),
-          model.facebook != null ? Padding(
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
               title: Text(
@@ -182,11 +182,11 @@ class _ConsultantContactPageState extends State<ConsultantContactPage> {
               leading: FaIcon(FontAwesomeIcons.facebook, color: Colors.blue, size: 40,),
               onTap: () => _facebookMe(model.facebook),
             ),
-          ) : Container(),
+          ),
           SizedBox(
             height: 20,
           ),
-          model.phone_number != null ? Padding(
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
               title: Text(
@@ -200,11 +200,11 @@ class _ConsultantContactPageState extends State<ConsultantContactPage> {
               leading: FaIcon(FontAwesomeIcons.phoneSquareAlt, color: Colors.lightGreen, size: 40,),
               onTap: () => _callMe(model.phone_number),
             ),
-          ) : Container(),
+          ),
           SizedBox(
             height: 20,
           ),
-          model.location.longitude != null ? Padding(
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListTile(
               title: Text(
@@ -218,7 +218,7 @@ class _ConsultantContactPageState extends State<ConsultantContactPage> {
               leading: FaIcon(FontAwesomeIcons.mapMarked, color: Colors.lightGreen, size: 40,),
               onTap: () => _facebookMe(model.facebook),
             ),
-          ) : Container(),
+          ),
           SizedBox(
             height: 10,
           )

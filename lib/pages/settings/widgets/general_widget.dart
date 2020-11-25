@@ -60,7 +60,7 @@ class _GeneralWidgetState extends State<GeneralWidget> {
           ),
           onTap: () => Navigator.of(context).pushNamed(Routes.changeLanguage),
         ),
-        ListTile(
+        /*ListTile(
           leading: Text(
             'instructions_to_app'.tr(),
             style: TextStyle(
@@ -69,7 +69,7 @@ class _GeneralWidgetState extends State<GeneralWidget> {
             ),
           ),
           onTap: () {},
-        ),
+        ),*/
         ListTile(
           leading: Text(
             'feedback'.tr(),

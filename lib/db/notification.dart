@@ -31,7 +31,7 @@ class NotificationDb {
   return new NotificationDb(
       id: json["id"],
       description: json["description"],
-      datetime: json["datetime"],
+      datetime: DateTime.parse(json['datetime']),
       time_type: timeType,
       type: dbType
   );
@@ -40,7 +40,7 @@ class NotificationDb {
   Map<String, dynamic> toJson() => {
     "id": id,
     "description": description,
-    "date_time": '${datetime.year}-${datetime.month}-${datetime.day} ${datetime.hour}:${datetime.minute}',
+    "datetime": datetime.toString(),
     "time_type": time_type.toString(),
     "type": type.toString(),
   };

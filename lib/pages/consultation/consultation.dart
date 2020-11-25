@@ -36,7 +36,7 @@ class _ConsultationPageState extends State<ConsultationPage> {
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
                 title: Text(
-                  _list[index].theme.ru,
+                  _list[index].theme.ky,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

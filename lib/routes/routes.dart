@@ -29,4 +29,5 @@ class Routes {
   static const String symptom = '/symptom';
   static const String mood = '/mood';
   static const String visit_doctor = '/visit_doctor';
+  static const String visit_add = '/visit_add';
 }

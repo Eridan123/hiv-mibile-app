@@ -34,7 +34,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
         children: [
           ListTile(
               title: Text(
-                'Зидовудин/ламивудин+абакавир',
+                'зидовудин/ламивудин+абакавир',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Зидовудин/ламивудин+невирапин',
+                'зидовудин/ламивудин+невирапин',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -71,7 +71,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Тенофовир+эмтрицитабин/эфавиренз',
+                'тенофовир+эмтрицитабин/эфавиренз',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Ламивудин+Тенофовир+долутегравир',
+                'ламивудин+тенофовир+долутегравир',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -105,7 +105,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Тенофовир+эмтрицитабин+долутегравир',
+                'тенофовир+эмтрицитабин+долутегравир',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -122,7 +122,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Абакавир+ламивудин+лопинавир/ритонавир',
+                'абакавир+ламивудин+лопинавир/ритонавир',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Зидовудин/ламивудин+лопинавир/ритонавир',
+                'зидовудин/ламивудин+лопинавир/ритонавир',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -156,7 +156,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Зидовудин/ламивудин+атазанавир/ритонавир',
+                'зидовудин/ламивудин+атазанавир/ритонавир',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -173,7 +173,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Тенофовир/эмтрицитабин+лопинавир/ритонавир',
+                'тенофовир/эмтрицитабин+лопинавир/ритонавир',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Тенофовир/эмтрицитабин+ атазатазанавир/ритонавир',
+                'тенофовир/эмтрицитабин+ атазатазанавир/ритонавир',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -207,7 +207,7 @@ class _InformationOnArvpPageState extends State<InformationOnArvpPage> {
           Divider(),
           ListTile(
               title: Text(
-                'Долутегравир/Абакавир/Ламивудин',
+                'долутегравир/абакавир/ламивудин',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -262,7 +262,7 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Зидовудин/ламивудин+абакавир (Тризивир (Trizivir) // Акимасол)', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'зидовудин/ламивудин+абакавир (тризивир (trizivir) // акимасол)', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: ' – комбинированный препарат, содержащий три препарата: зидовудин, ламивудин и абакавир.\n'),
                   ]
               ),
@@ -284,7 +284,7 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Тризивир можно принимать как во время еды, так и между приемами пищи.'),
+                    TextSpan(text: 'тризивир можно принимать как во время еды, так и между приемами пищи.'),
                   ]
               ),
             ),
@@ -316,7 +316,7 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Зидовудин/ламивудин+невирапин (Зидолам-Н (Zidolam-N))', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'зидовудин/ламивудин+невирапин (зидолам-н (zidolam-n))', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: ' — комбинированный препарат, в состав которого входят ламивудин, зидовудин и невирапин.  \n'),
                   ]
               ),
@@ -338,7 +338,7 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Зидолам-Н принимают независимо от приема пищи.'),
+                    TextSpan(text: 'зидолам-н принимают независимо от приема пищи.'),
                   ]
               ),
             ),
@@ -370,7 +370,7 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Тенофовир+эмтрицитабин/эфавиренз (Трустива (TRUSTIVA) // Атрипла (Atripla) // Трактен-Н) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'тенофовир+эмтрицитабин/эфавиренз (трустива (trustiva) // атрипла (atripla) // трактен-н) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: '- комбинированный препарат с фиксированными дозами тенофовира,эмтрицитабина и эфавиренза.\n'),
                   ]
               ),
@@ -426,9 +426,9 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'TLD // Виропил (VIROPIL) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'tld // виропил (viropil) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: ' - это комбинированное лекарство для лечения ВИЧ-инфекции первого типа. Основой химического '
-                        'состава препарата являются 3 активных компонента: Долутегравир, Ламивудин и Тенофовир. \n'),
+                        'состава препарата являются 3 активных компонента: долутегравир, ламивудин и тенофовир. \n'),
                   ]
               ),
             ),
@@ -482,7 +482,7 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Тенофовир+эмтрицитабин+долутегравир (Spegra // Telagara)', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'тенофовир+эмтрицитабин+долутегравир (spegra // telagara)', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: ' - комбинированный препарат, содержащий три антиретровирусных средства, таких как долутегравир, эмтрицибин, тенофовир алафенамид.\n'),
                   ]
               ),
@@ -504,7 +504,7 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Таблетки Spegra необходимо запивать  большим количеством воды. Во избежание проблем с ЖКТ, '
+                    TextSpan(text: 'Таблетки spegra необходимо запивать  большим количеством воды. Во избежание проблем с ЖКТ, '
                         'пить лекарство рекомендуется через несколько часов после еды, в вечернее время (на ночь)'),
                   ]
               ),
@@ -537,9 +537,9 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Абакавир+ламивудин (Кивекса (Kivexa) // Лавудин-АБ (Lavudine-AB) // Алагет (Alaget) // Албавир (Albavir)) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'абакавир+ламивудин (кивекса (kivexa) // лавудин-аб (lavudine-ab) // алагет (alaget) // албавир (albavir)) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: ' - Комбинированное противовирусное средство для лечения ВИЧ-инфекции. \n'),
-                    TextSpan(text: 'Лопинавир/ритонавир (Калетра (Kaletra) // Аливиа) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'лопинавир/ритонавир (калетра (kaletra) // аливиа) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: '– комбинированный препарат обеспечивает противовирусную активность. \n'),
                   ]
               ),
@@ -561,8 +561,8 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Препараты Кивекса можно принимать как во время еды, так и между приемами пищи.'
-              'Таблетки Калетра следует проглатывать целиком, не разжевывая, не разламывая и не измельчая. Можно принимать независимо от приема пищи.'),
+                    TextSpan(text: 'Препараты кивекса можно принимать как во время еды, так и между приемами пищи.'
+              'таблетки калетра следует проглатывать целиком, не разжевывая, не разламывая и не измельчая. Можно принимать независимо от приема пищи.'),
                   ]
               ),
             ),
@@ -594,9 +594,9 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Зидовудин/ламивудин (Комбивир // Вирокомб (Virocomb) // Зидолам (Zidolam) // Зилакомб (Zilacomb) // Лазевун (Lazevun) // Лами-Зидокс (Lami-Zidox) // Эмлазид (Emlazid)) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'зидовудин/ламивудин (комбивир // вирокомб (virocomb) // зидолам (zidolam) // зилакомб (zilacomb) // лазевун (lazevun) // лами-зидокс (lami-zidox) // эмлазид (emlazid)) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: '- Комбинированный противовирусный препарат, в состав которого входят ламивудин и зидовудин.  \n'),
-                    TextSpan(text: 'Лопинавир/ритонавир (Калетра (Kaletra) // Аливиа) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'лопинавир/ритонавир (калетра (kaletra) // аливиа) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: '- комбинированный препарат обеспечивает противовирусную активность. \n'),
                   ]
               ),
@@ -621,7 +621,7 @@ class _TextBodyState extends State<TextBody> {
                     TextSpan(text: 'Комбивир - Для обеспечения точности дозирования таблетки необходимо проглатывать целиком. Для тех пациентов, '
               'у которых имеются трудности с проглатыванием, рекомендуется дробить таблетки и добавлять их к небольшому количеству полутвердой пищи '
               'или жидкости. Все количество полученной смеси необходимо принять внутрь незамедлительно. '
-              'Таблетки Калетра следует проглатывать целиком, не разжевывая, не разламывая и не измельчая. Можно принимать независимо от приема пищи.'),
+              'Таблетки калетра следует проглатывать целиком, не разжевывая, не разламывая и не измельчая. Можно принимать независимо от приема пищи.'),
                   ]
               ),
             ),
@@ -653,9 +653,9 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Зидовудин/ламивудин (Комбивир // Вирокомб (Virocomb) // Зидолам (Zidolam) // Зилакомб (Zilacomb) // Лазевун (Lazevun) // Лами-Зидокс (Lami-Zidox) // Эмлазид (Emlazid))', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'зидовудин/ламивудин (комбивир // вирокомб (virocomb) // зидолам (zidolam) // зилакомб (zilacomb) // лазевун (lazevun) // лами-зидокс (lami-zidox) // эмлазид (emlazid))', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: '- Комбинированный противовирусный препарат, в состав которого входят ламивудин и зидовудин. \n'),
-                    TextSpan(text: 'Атазанавир/ритонавир (Атазор-Р (Atazor-R)) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'Атазанавир/ритонавир (атазор-р (atazor-r)) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: '- Противовирусные препараты для лечения ВИЧ-инфекции, комбинации.  \n'),
                   ]
               ),
@@ -711,9 +711,9 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Тенофовир/эмтрицитабин (Эмтритен // Трувада // Дабловир // Доквир)', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'Тенофовир/эмтрицитабин (эмтритен // трувада // дабловир // доквир)', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: ' - Комбинированный противовирусный препарат с фиксированными дозами тенофовира дизопроксила фумарата и эмтрицитабина.\n'),
-                    TextSpan(text: 'Лопинавир/ритонавир (Калетра (Kaletra) // Аливиа) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'Лопинавир/ритонавир (калетра (kaletra) // аливиа) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: ' - комбинированный препарат обеспечивает противовирусную активность. \n'),
                   ]
               ),
@@ -768,9 +768,9 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Тенофовир/эмтрицитабин (Эмтритен // Трувада // Дабловир // Доквир)', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'Тенофовир/эмтрицитабин (эмтритен // трувада // дабловир // доквир)', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: ' - Комбинированный противовирусный препарат с фиксированными дозами тенофовира дизопроксила фумарата и эмтрицитабина. \n'),
-                    TextSpan(text: 'Атазанавир/ритонавир (Атазор-Р (Atazor-R)) ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'Атазанавир/ритонавир (атазор-р (atazor-r)) ', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: '- Противовирусные препараты для лечения ВИЧ-инфекции, комбинации. \n'),
                   ]
               ),
@@ -824,7 +824,7 @@ class _TextBodyState extends State<TextBody> {
               text: TextSpan(
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
-                    TextSpan(text: 'Долутегравир/Абакавир/Ламивудин (Триумек (Triumeq))', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: 'Долутегравир/абакавир/ламивудин (триумек (triumeq))', style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: '- комбинированный противоврисуный  препарат, с фиксированными дозами долутегравира, абакавира и ламувидина. \n'),
                   ]
               ),

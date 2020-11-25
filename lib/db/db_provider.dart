@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:HIVApp/db/image_files.dart';
 import 'package:HIVApp/db/map_point.dart';
 import 'package:HIVApp/db/model/answer.dart';
 import 'package:HIVApp/db/mood.dart';
@@ -117,7 +118,7 @@ class DBProvider {
       await db.execute("CREATE TABLE notifications ("
           "id INTEGER PRIMARY KEY AUTOINCREMENT,"
           "description TEXT,"
-          "date_time DATETIME,"
+          "datetime DATETIME,"
           "time_type TEXT CHECK( time_type IN ('NotificationDbTimeType.Hour','NotificationDbTimeType.Day','NotificationDbTimeType.Month') )   NOT NULL DEFAULT 'NotificationDbTimeType.Hour',"
           "type TEXT CHECK( type IN ('NotificationDbType.Drug','NotificationDbType.Visit','NotificationDbType.Analysis') )   NOT NULL DEFAULT 'NotificationDbType.Drug'"
           ")");
@@ -137,28 +138,38 @@ class DBProvider {
       await db.execute("CREATE TABLE user_symptoms ("
           "id INTEGER PRIMARY KEY AUTOINCREMENT,"
           "user_id INTEGER,"
-          "symptom_id INTEGER,"
+          "title TEXT,"
+          "file_name TEXT,"
           "date_time DATETIME,"
+          "rating REAL,"
           "CONSTRAINT fk_user\n"
           "FOREIGN KEY (user_id)\n"
           "REFERENCES users(id)\n"
-          "CONSTRAINT fk_syptom\n"
-          "FOREIGN KEY (symptom_id)\n"
-          "REFERENCES symptoms(id)\n"
           ")");
       //endregion
       //region User Moods
       await db.execute("CREATE TABLE user_moods ("
           "id INTEGER PRIMARY KEY AUTOINCREMENT,"
           "user_id INTEGER,"
-          "mood_id INTEGER,"
+          "title TEXT,"
+          "file_name TEXT,"
           "date_time DATETIME,"
           "CONSTRAINT fk_user\n"
           "FOREIGN KEY (user_id)\n"
           "REFERENCES users(id)\n"
-          "CONSTRAINT fk_mood\n"
-          "FOREIGN KEY (mood_id)\n"
-          "REFERENCES moods(id)"
+          ")");
+      //endregion
+      //region User Images
+      await db.execute("CREATE TABLE user_images ("
+          "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "user_id INTEGER,"
+          "path TEXT,"
+          "type INTEGER,"
+          "file_name TEXT,"
+          "date_time DATETIME,"
+          "CONSTRAINT fk_user\n"
+          "FOREIGN KEY (user_id)\n"
+          "REFERENCES users(id)\n"
           ")");
       //endregion
       //endregion
@@ -401,7 +412,7 @@ class DBProvider {
   Future<List<NotificationDb>> getAllNotifications() async {
 
     final db = await database;
-    var res =await  db.query("notifications");
+    var res =await  db.query("notifications", orderBy: "datetime DESC");
     List<NotificationDb> list = new List<NotificationDb>();
     for(var r in res){
       list.add(NotificationDb.fromJson(r));
@@ -471,15 +482,53 @@ class DBProvider {
     //get the biggest id in the table
     //insert to the table using the new id
     var raw = await db.rawInsert(
-        "INSERT Into user_moods(id, user_id, mood_id, date_time)"
-            " VALUES (?,?,?,?)",
-        [model.id, model.user_id, model.mood_id, model.date_time]);
+        "INSERT Into user_moods(id, user_id, title, file_name, date_time)"
+            " VALUES (?,?,?,?,?)",
+        [model.id, model.user_id, model.title, model.file_name, model.date_time.toString()]);
     return raw;
   }
   getUserMood(int id) async {
     final db = await database;
     var res =await  db.query("user_moods", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? UserMood.fromJson(res.first) : Null ;
+  }
+  Future<List<UserMood>> getAllUserMoods() async {
+    final db = await database;
+    var res =await  db.query("user_moods", orderBy: "date_time DESC");
+    List<UserMood> list = new List<UserMood>();
+    for(var r in res){
+      list.add(UserMood.fromJson(r));
+    }
+    return res.isNotEmpty ? list : Null ;
+  }
+  Future<List<UserMoodTotal>> getAllUserMoodsGroupedByTitle(int type) async{
+    String queryStr='';
+    if(type == 1){
+      queryStr = "'-7 day'";
+    }
+    else if(type == 2){
+      queryStr = "'-30 day'";
+    }
+    else if(type == 3){
+      queryStr = "'-60 day'";
+    }
+    else if(type == 4){
+      queryStr = "'-90 day'";
+    }
+    else if(type == 5){
+      queryStr = "'-6 months'";
+    }
+    else {
+      queryStr = "'-1 year'";
+    }
+
+    final db = await database;
+    var res =await  db.rawQuery("select s.file_name, s.title, count() as count from user_moods s where s.date_time > datetime('now',"+queryStr+") group by s.file_name");
+    List<UserMoodTotal> list = new List<UserMoodTotal>();
+    for(var r in res){
+      list.add(UserMoodTotal.fromJson(r));
+    }
+    return res.isNotEmpty ? list : Null ;
   }
   updateUserMood(UserMood newModel) async {
     final db = await database;
@@ -496,5 +545,141 @@ class DBProvider {
     db.rawDelete("Delete * from user_moods");
   }
   //endregion
+  //region User Symptoms
+  newUserSymptom(UserSymptom model) async {
+    final db = await database;
+    //get the biggest id in the table
+    //insert to the table using the new id
+    var raw = await db.rawInsert(
+        "INSERT Into user_symptoms(id, user_id, title, file_name, date_time, rating)"
+            " VALUES (?,?,?,?,?,?)",
+        [model.id, 1, model.title, model.file_name, model.date_time.toString(), model.rating]);
+    return raw;
+  }
+  getUserSymptom(int id) async {
+    final db = await database;
+    var res =await  db.query("user_symptoms", where: "id = ?", whereArgs: [id]);
+    return res.isNotEmpty ? UserMood.fromJson(res.first) : Null ;
+  }
+  Future<List<UserSymptom>> getAllUserSymptoms() async {
+    final db = await database;
+    var res =await  db.query("user_symptoms", orderBy: "date_time DESC");
+    List<UserSymptom> list = new List<UserSymptom>();
+    for(var r in res){
+      list.add(UserSymptom.fromJson(r));
+    }
+    return list;
+  }
+  Future<List<UserSymptomTotal>> getAllGroupedByTitle(int type) async{
+    String queryStr='';
+    if(type == 1){
+      queryStr = "'-7 day'";
+    }
+    else if(type == 2){
+      queryStr = "'-30 day'";
+    }
+    else if(type == 3){
+      queryStr = "'-60 day'";
+    }
+    else if(type == 4){
+      queryStr = "'-90 day'";
+    }
+    else if(type == 5){
+      queryStr = "'-6 months'";
+    }
+    else {
+      queryStr = "'-1 year'";
+    }
+
+    final db = await database;
+    var res =await  db.rawQuery("select s.file_name, s.title, count() as count from user_symptoms s where s.date_time > datetime('now',"+queryStr+") group by s.title");
+    List<UserSymptomTotal> list = new List<UserSymptomTotal>();
+    for(var r in res){
+      list.add(UserSymptomTotal.fromJson(r));
+    }
+    return res.isNotEmpty ? list : Null ;
+  }
+  updateUserSymptom(UserSymptom newModel) async {
+    final db = await database;
+    var res = await db.update("user_symptoms", newModel.toJson(),
+        where: "id = ?", whereArgs: [newModel.id]);
+    return res;
+  }
+  deleteUserSymptom(int id) async {
+    final db = await database;
+    db.delete("user_symptoms", where: "id = ?", whereArgs: [id]);
+  }
+  deleteAllUserSymptom() async {
+    final db = await database;
+    db.rawDelete("Delete * from user_symptoms");
+  }
+  //endregion
+  //region User Images
+  newUserImage(UserImageFile model) async {
+    final db = await database;
+    var raw = await db.rawInsert(
+        "INSERT Into user_images(id, user_id, path, file_name, date_time, type)"
+            " VALUES (?,?,?,?,?,?)",
+        [model.id, 1, model.path, model.file_name, model.date_time.toString(), model.type]);
+    return raw;
+  }
+  getUserImage(int id) async {
+    final db = await database;
+    var res =await  db.query("user_images", where: "id = ?", whereArgs: [id]);
+    return res.isNotEmpty ? UserMood.fromJson(res.first) : Null ;
+  }
+  Future<List<UserImageFile>> getAllUserImages() async {
+    final db = await database;
+    var res =await  db.query("user_images", orderBy: "date_time DESC");
+    List<UserImageFile> list = new List<UserImageFile>();
+    for(var r in res){
+      list.add(UserImageFile.fromJson(r));
+    }
+    return list;
+  }
+  /*Future<List<UserSymptomTotal>> getAllUserImagesByType(int type) async{
+    String queryStr='';
+    if(type == 1){
+      queryStr = "'-7 day'";
+    }
+    else if(type == 2){
+      queryStr = "'-30 day'";
+    }
+    else if(type == 3){
+      queryStr = "'-60 day'";
+    }
+    else if(type == 4){
+      queryStr = "'-90 day'";
+    }
+    else if(type == 5){
+      queryStr = "'-6 months'";
+    }
+    else {
+      queryStr = "'-1 year'";
+    }
+
+    final db = await database;
+    var res =await  db.rawQuery("select s.file_name, s.title, count() as count from user_images s where s.date_time > datetime('now',"+queryStr+") group by s.title");
+    List<UserSymptomTotal> list = new List<UserSymptomTotal>();
+    for(var r in res){
+      list.add(UserSymptomTotal.fromJson(r));
+    }
+    return res.isNotEmpty ? list : Null ;
+  }*/
+  updateUserImage(UserImageFile newModel) async {
+    final db = await database;
+    var res = await db.update("user_images", newModel.toJson(),
+        where: "id = ?", whereArgs: [newModel.id]);
+    return res;
+  }
+  deleteUserImage(int id) async {
+    final db = await database;
+    db.delete("user_images", where: "id = ?", whereArgs: [id]);
+  }
+  deleteAllUserImage() async {
+    final db = await database;
+    db.rawDelete("Delete * from user_images");
+  }
+//endregion
   //endregion
 }

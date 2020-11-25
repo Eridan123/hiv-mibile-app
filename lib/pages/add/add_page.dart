@@ -6,6 +6,7 @@ import 'package:HIVApp/components/text_form_field.dart';
 import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/db/notification.dart';
 import 'package:HIVApp/pages/add/notification_form.dart';
+import 'package:HIVApp/pages/my_state/mood/add_mood_form.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +27,8 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../components/custom_button.dart';
 import '../../utils/constants.dart';
 import '../../model/notification.dart';
+import '../my_state/symptom/add_form.dart';
+import 'image_form.dart';
 
 
 
@@ -125,6 +128,82 @@ class _AddPageState extends State<AddPage> {
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) => NotificationForm(type: NotificationDbType.Analysis),
+                      ),);
+                    }
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(
+                      'set_symptom'.tr(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => AddSymptomForm(title: 'set_symptom'),
+                      ),);
+                    }
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(
+                      'set_mood'.tr(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => AddMoodForm(title: 'set_mood'),
+                      ),);
+                    }
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(
+                      'set_image_analysis'.tr(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => ImageForm(title: 'set_image_analysis', type: 1,),
+                      ),);
+                    }
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(
+                      'set_image_recipe'.tr(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Colors.grey,
+                    ),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => ImageForm(title: 'set_image_recipe', type: 2,),
                       ),);
                     }
                 ),

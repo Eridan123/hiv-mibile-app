@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -70,6 +71,7 @@ class _NotificationFormState extends State<NotificationForm> {
   NotificationDbType notificationDbType = NotificationDbType.Drug;
   NotificationDbType _type;
   String title;
+  String notification_title = 'Получение препарата';
 
 
   final format = DateFormat("yyyy-MM-dd HH:mm");
@@ -150,17 +152,22 @@ class _NotificationFormState extends State<NotificationForm> {
 
   writeTitle(){
     var titleStr = '';
+    var notificationTitleStr = '';
     if(_type == NotificationDbType.Drug){
       titleStr = 'add_drug_notification';
+      notificationTitleStr = 'drug_notification_title';
     }
     else if(_type == NotificationDbType.Visit){
       titleStr = 'add_visit_notification';
+      notificationTitleStr = 'visit_notification_title';
     }
     else if(_type == NotificationDbType.Analysis){
       titleStr = 'add_analysis_notification';
+      notificationTitleStr = 'analysis_notification_title';
     }
     setState(() {
       title = titleStr;
+      notification_title = notificationTitleStr;
     });
   }
 
@@ -260,10 +267,13 @@ class _NotificationFormState extends State<NotificationForm> {
   }
 
   Widget dateTimePicker() {
-    return Column(children: <Widget>[
-      DateTimeField(
+    return Container(
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.02),
+      width: MediaQuery.of(context).size.width * 0.7,
+      child: DateTimeField(
         format: format,
         initialValue: DateTime.now(),
+        resetIcon: Icon(FontAwesomeIcons.calendarAlt),
         onShowPicker: (context, currentValue) async {
           final date = await showDatePicker(
               context: context,
@@ -286,7 +296,7 @@ class _NotificationFormState extends State<NotificationForm> {
           }
         },
       ),
-    ]);
+    );
   }
 
   @override
@@ -333,11 +343,12 @@ class _NotificationFormState extends State<NotificationForm> {
                         style: kInputTextStyle,
                       ),
                     ),
-                    Padding(
+                    Container(
+                      width: MediaQuery.of(context).size.width*0.5,
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownButton<Day>(
                         isExpanded: true,
-                        hint: Text("gender_dot".tr()),
+                        hint: Text("date".tr()),
                         value: _day,
                         elevation: 16,
                         style: TextStyle(
@@ -393,7 +404,7 @@ class _NotificationFormState extends State<NotificationForm> {
                         TextButton(
                           child: Text('add'.tr()),
                           onPressed: () {
-                            _scheduledNotification("Применение препарата", _description, _dateTime, _day.type, 1)
+                            _scheduledNotification(notification_title.tr(), _description, _dateTime, _day.type, 1)
                                 .then((value) async {
                               await DBProvider.db.newNotification(
                                   NotificationDb(description: _description, datetime: _dateTime, time_type: _day.type, type: notificationDbType));

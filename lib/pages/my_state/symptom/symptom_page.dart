@@ -1,11 +1,14 @@
+import 'package:HIVApp/components/custom_button.dart';
 import 'package:HIVApp/pages/basic_information/widgets/text.dart';
 import 'package:HIVApp/pages/basic_information/widgets/video.dart';
-import 'package:HIVApp/pages/my_state/symptom/calendar_widget.dart';
+import 'package:HIVApp/pages/my_state/symptom/chronology_widget.dart';
 import 'package:HIVApp/pages/my_state/symptom/total_widget.dart';
 import 'package:HIVApp/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+
+import 'add_form.dart';
 
 class SymptomPage extends StatefulWidget {
   @override
@@ -20,7 +23,7 @@ class _SymptomPageState extends State<SymptomPage> {
 
   Widget getWidget(int type){
     if(type == 0)
-      return SymptomCalendarWidget();
+      return SymptomChronolgy();
     else if(type == 1)
       return SymptomTotalWidget();
   }
@@ -38,7 +41,7 @@ class _SymptomPageState extends State<SymptomPage> {
         elevation: 1,
         title: Text('my_condition'.tr() + ' / ' + 'symptoms'.tr()),
       ),
-      body: SymptomCalendarWidget()/*Column(
+      body: Column(
         children: [
           Container(
             padding: EdgeInsets.fromLTRB(0,MediaQuery.of(context).size.width * 0.02,0,MediaQuery.of(context).size.height * 0),
@@ -66,11 +69,11 @@ class _SymptomPageState extends State<SymptomPage> {
                     isSelected: isSelected,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.30,
+                        width: MediaQuery.of(context).size.width * 0.40,
                         padding: EdgeInsets.all(5),
                         child: Center(
                           child: Text(
-                            'calendar'.tr(),
+                            'chronology'.tr(),
                             style: Theme.of(context)
                                 .textTheme
                                 .button
@@ -79,7 +82,7 @@ class _SymptomPageState extends State<SymptomPage> {
                         ),
                       ),
                       Container(
-                        width:MediaQuery.of(context).size.width * 0.30,
+                        width:MediaQuery.of(context).size.width * 0.40,
                         padding: EdgeInsets.all(5),
                         child: Center(
                           child: Text(
@@ -98,9 +101,23 @@ class _SymptomPageState extends State<SymptomPage> {
             ),
           ),
 //            SizedBox(height: MediaQuery.of(context).size.height * 0,),
-          getWidget(_currentWidget),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+              child: getWidget(_currentWidget),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: CustomButton(
+              text: 'add'.tr(),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => AddSymptomForm(title: 'set_symptom'),
+                ),);
+              },
+            ),
+          ),
         ],
-      )*/,
+      ),
     );
   }
 }

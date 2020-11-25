@@ -9,7 +9,7 @@ class _VideoWidgetState extends State<VideoWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('I am video'),
+      child: Container(),
     );
   }
 }
