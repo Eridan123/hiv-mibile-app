@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:HIVApp/data/pref_manager.dart';
 import 'package:HIVApp/db/db_provider.dart';
+import 'package:HIVApp/db/image_files.dart';
 import 'package:HIVApp/db/notification.dart';
 import 'package:HIVApp/db/user_mood.dart';
 import 'package:HIVApp/db/user_symptom.dart';
@@ -22,10 +25,14 @@ class _DiaryPageState extends State<DiaryPage> {
   List<NotificationDb> _notificationList = new List<NotificationDb>();
   List<UserSymptom> _userSymptomList = new List<UserSymptom>();
   List<UserMood> _userMoodList = new List<UserMood>();
+  List<UserImageFile> _userAnalysisImageList = new List<UserImageFile>();
+  List<UserImageFile> _userRecipeImageList = new List<UserImageFile>();
 
   double moodHeight = 0;
   double symptomHeight = 0;
   double notificationHeight = 0;
+  double analysisiImageHeight = 0;
+  double recipeImageHeight = 0;
 
   _getUserSymptomList() async{
     if(_userSymptomList.isNotEmpty)
@@ -51,6 +58,26 @@ class _DiaryPageState extends State<DiaryPage> {
     await DBProvider.db.getAllUserMoods().then((value) {
       setState(() {
         _userMoodList.addAll(value);
+      });
+    });
+  }
+
+  _getUserAnalysisImageList() async{
+    if(_userAnalysisImageList.isNotEmpty)
+      _userAnalysisImageList.clear();
+    await DBProvider.db.getAllUserImages(1).then((value) {
+      setState(() {
+        _userAnalysisImageList.addAll(value);
+      });
+    });
+  }
+
+  _getUserRecipeImageList() async{
+    if(_userRecipeImageList.isNotEmpty)
+      _userRecipeImageList.clear();
+    await DBProvider.db.getAllUserImages(2).then((value) {
+      setState(() {
+        _userRecipeImageList.addAll(value);
       });
     });
   }
@@ -215,12 +242,114 @@ class _DiaryPageState extends State<DiaryPage> {
       ],
     );
   }
+  Widget getUserAnalysisImages(){
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+          child: ListTile(
+            title: Text('analysis_images'.tr(),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            trailing: Icon(analysisiImageHeight == 0 ? FontAwesomeIcons.sortDown : FontAwesomeIcons.sortUp),
+            onTap: (){
+              setState(() {
+                if(analysisiImageHeight == 0)
+                  analysisiImageHeight = MediaQuery.of(context).size.height * 0.08 * 5;
+                else
+                  analysisiImageHeight = 0;
+              });
+            },
+          ),
+        ),
+        Container(
+          height: analysisiImageHeight,
+          child: ListView.builder(
+//                      separatorBuilder: (context, index) => Divider(),
+              padding: const EdgeInsets.all(8),
+              itemCount: _userAnalysisImageList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: Text(
+                    '${_userAnalysisImageList[index].date_time.year}-${_userAnalysisImageList[index]
+                        .date_time.month}-${_userAnalysisImageList[index].date_time
+                        .day}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  title:Semantics(
+                      child: Image.file(File(_userAnalysisImageList[index].path)),
+                      label: 'image_picker_example_picked_image'),
+                );
+              }
+          ),
+        ),
+      ],
+    );
+  }
+  Widget getUserRecipeImages(){
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+          child: ListTile(
+            title: Text('recipe_images'.tr(),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            trailing: Icon(recipeImageHeight == 0 ? FontAwesomeIcons.sortDown : FontAwesomeIcons.sortUp),
+            onTap: (){
+              setState(() {
+                if(recipeImageHeight == 0)
+                  recipeImageHeight = MediaQuery.of(context).size.height * 0.08 * 5;
+                else
+                  recipeImageHeight = 0;
+              });
+            },
+          ),
+        ),
+        Container(
+          height: recipeImageHeight,
+          child: ListView.builder(
+//                      separatorBuilder: (context, index) => Divider(),
+              padding: const EdgeInsets.all(8),
+              itemCount: _userRecipeImageList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: Text(
+                    '${_userRecipeImageList[index].date_time.year}-${_userRecipeImageList[index]
+                        .date_time.month}-${_userRecipeImageList[index].date_time
+                        .day}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  title:Semantics(
+                      child: Image.file(File(_userRecipeImageList[index].path)),
+                      label: 'image_picker_example_picked_image'),
+                );
+              }
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   void initState() {
     _getListOfNotifications();
     _getUserSymptomList();
     _getUserMoodList();
+    _getUserAnalysisImageList();
+    _getUserRecipeImageList();
     super.initState();
   }
 
@@ -235,6 +364,8 @@ class _DiaryPageState extends State<DiaryPage> {
           getNotifications(),
           getUserSymptoms(),
           getUserMoods(),
+          getUserAnalysisImages(),
+          getUserRecipeImages(),
         ],
       ),
     );

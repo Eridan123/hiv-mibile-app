@@ -45,15 +45,6 @@ class _AddPageState extends State<AddPage> {
   @override
   initState(){
     super.initState();
-    _getList();
-  }
-
-  _getList () async{
-    await DBProvider.db.getAllNotifications().then((value) {
-      setState(() {
-        _list = value;
-      });
-    });
   }
 
   @override
@@ -65,7 +56,6 @@ class _AddPageState extends State<AddPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           title: Text('add'.tr()),

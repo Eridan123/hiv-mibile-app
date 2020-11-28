@@ -391,7 +391,7 @@ class DBProvider {
   }
   deleteAllMoods() async {
     final db = await database;
-    db.rawDelete("Delete * from moods");
+    db.rawDelete("Delete from moods");
   }
   //endregion
   //region Notifications
@@ -417,7 +417,7 @@ class DBProvider {
     for(var r in res){
       list.add(NotificationDb.fromJson(r));
     }
-    return res.isNotEmpty ? list : Null ;
+    return list;
   }
 
   Future<List<NotificationDb>> getNotificationsByType(NotificationDbType type) async {
@@ -499,7 +499,7 @@ class DBProvider {
     for(var r in res){
       list.add(UserMood.fromJson(r));
     }
-    return res.isNotEmpty ? list : Null ;
+    return list.isNotEmpty ? list : null ;
   }
   Future<List<UserMoodTotal>> getAllUserMoodsGroupedByTitle(int type) async{
     String queryStr='';
@@ -542,7 +542,7 @@ class DBProvider {
   }
   deleteAllUserMoods() async {
     final db = await database;
-    db.rawDelete("Delete * from user_moods");
+    db.rawDelete("Delete from user_moods");
   }
   //endregion
   //region User Symptoms
@@ -628,9 +628,9 @@ class DBProvider {
     var res =await  db.query("user_images", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? UserMood.fromJson(res.first) : Null ;
   }
-  Future<List<UserImageFile>> getAllUserImages() async {
+  Future<List<UserImageFile>> getAllUserImages(int type) async {
     final db = await database;
-    var res =await  db.query("user_images", orderBy: "date_time DESC");
+    var res =await  db.query("user_images", orderBy: "date_time DESC", where: "type = ?", whereArgs: [type]);
     List<UserImageFile> list = new List<UserImageFile>();
     for(var r in res){
       list.add(UserImageFile.fromJson(r));

@@ -119,5 +119,8 @@
   "date": "Дата",
   "notify": "Напомнить",
   "set_image_analysis": "Добавить результаты анализов ",
-  "set_image_recipe": "Добавить назначение врача"
+  "set_image_recipe": "Добавить назначение врача",
+  "analysis_images": "Рисунки анализов",
+  "recipe_images": "Рисунки назначений врача",
+  "not_yet_image_picked": "Рисунок ещё не выбран"
 }

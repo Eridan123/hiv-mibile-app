@@ -1,3 +1,4 @@
+import 'package:HIVApp/data/pref_manager.dart';
 import 'package:HIVApp/model/consultation.dart';
 import 'package:HIVApp/routes/routes.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,6 +13,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
+
+  String image_file_path = 'assets/images/';
+  var dark = Prefs.getBool(Prefs.DARKTHEME, def: false) ? '1.png':'.png';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,7 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
-                    'assets/images/information.png',
+                    image_file_path + 'info'+dark,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -55,7 +59,7 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
-                    'assets/images/test.png',
+                    image_file_path + 'test'+dark,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -80,7 +84,7 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
-                    'assets/images/oxygen.png',
+                    image_file_path + 'blood-donation'+dark,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -105,7 +109,7 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
-                    'assets/images/consult.png',
+                    image_file_path + 'chat'+dark,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -130,7 +134,7 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
-                    'assets/images/add.png',
+                    image_file_path + 'info_arvp'+dark,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -155,7 +159,7 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
-                    'assets/images/conditions.png',
+                    image_file_path + 'health'+dark,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -180,7 +184,7 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
-                    'assets/images/doc_visit.png',
+                    image_file_path + 'doctor'+dark,
                     fit: BoxFit.fill,
                   ),
                 ),

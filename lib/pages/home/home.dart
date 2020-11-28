@@ -5,6 +5,7 @@ import 'package:HIVApp/pages/map/map_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,7 @@ class _HomeState extends State<Home> {
 
   var _isDark = Prefs.getBool(Prefs.DARKTHEME, def: false);
   Color _color;
+  String image_file_path = 'assets/images/';
 
   @override
   void initState() {
@@ -67,7 +69,8 @@ class _HomeState extends State<Home> {
               leading:  Container(
                 padding: EdgeInsets.all(5),
                 child: Image.asset(
-                  'assets/images/ribbon.png',
+                  image_file_path+'ribbon1.png',
+//                  color: _isDark ? Colors.white : kColorPrimary,
                   fit: BoxFit.cover,
                 ),
               ),

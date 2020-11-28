@@ -26,6 +26,7 @@ class _SplashPageState extends State<SplashPage> {
     theme: Prefs.getBool(Prefs.DARKTHEME, def: false)
     ? AppTheme.DarkTheme
         : AppTheme.LightTheme));
+    Prefs.setString('ribbon', Prefs.getBool(Prefs.DARKTHEME, def: false)? 'ribbon11':'ribbon');
     if(Prefs.getString('language') == null)
       Navigator.of(context).pushReplacementNamed(Routes.chooseLanguage);
     else

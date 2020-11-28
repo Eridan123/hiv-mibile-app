@@ -119,5 +119,8 @@
   "date": "Дата",
   "notify": "Эскертүү",
   "set_image_analysis": "Анализдин жыйынтыгын кошуу",
-  "set_image_recipe": "Доктурдун дайындоосун кошуу"
+  "set_image_recipe": "Доктурдун дайындоосун кошуу",
+  "analysis_images": "Анализдердин сүрөттөрү",
+  "recipe_images": "Рецептердин сүрөттөрү",
+  "not_yet_image_picked": "Сүрөт тандала элек"
 }

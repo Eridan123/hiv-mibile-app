@@ -1,3 +1,4 @@
+import 'package:HIVApp/data/pref_manager.dart';
 import 'package:HIVApp/routes/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,9 @@ class MyStatePage extends StatefulWidget {
 }
 
 class _MyStatePageState extends State<MyStatePage> {
+
+  String image_file_path = 'assets/images/';
+  var dark = Prefs.getBool(Prefs.DARKTHEME, def: false) ? '1.png':'.png';
 
   @override
   void initState() {
@@ -37,7 +41,7 @@ class _MyStatePageState extends State<MyStatePage> {
                       leading: Container(
                         padding: EdgeInsets.all(5),
                         child: Image.asset(
-                          'assets/images/symptoms.png',
+                          image_file_path+'symptoms'+dark,
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -59,7 +63,7 @@ class _MyStatePageState extends State<MyStatePage> {
                       leading: Container(
                         padding: EdgeInsets.all(5),
                         child: Image.asset(
-                          'assets/images/mood.png',
+                          image_file_path+'mood'+dark,
                           fit: BoxFit.fill,
                         ),
                       ),

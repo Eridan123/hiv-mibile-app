@@ -8,6 +8,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../data/pref_manager.dart';
 import '../../../components/custom_button.dart';
 import '../symptom/add_form.dart';
+import 'add_mood_form.dart';
 
 // Example holidays
 final Map<DateTime, List> _holidays = {
@@ -31,13 +32,16 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
   CalendarController _calendarController;
   String title = 'Calendar';
   List<UserMood> _list = new List<UserMood>();
+  DateTime _selectedDate;
 
   getList() async{
     await DBProvider.db.getAllUserMoods().then((value) {
       setState(() {
-        _list = value;
-        for(var i in _list){
-          _events[i.date_time] = [i.title, i.file_name];
+        if(value != null){
+          _list = value;
+          for(var i in _list){
+            _events[i.date_time] = [i.title, i.file_name];
+          }
         }
         /*_events = {
           _selectedDay.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
@@ -64,6 +68,7 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
   void initState() {
     getList();
     super.initState();
+    _selectedDate = DateTime.now();
     final _selectedDay = DateTime.now();
 
     _selectedEvents = _events[_selectedDay] ?? [];
@@ -88,6 +93,7 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
     print('CALLBACK: _onDaySelected');
     setState(() {
       _selectedEvents = events;
+      _selectedDate = day;
     });
   }
 
@@ -108,6 +114,17 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
         shrinkWrap: true,
         children: [
           _buildTableCalendarWithBuilders(),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: CustomButton(
+              text: 'add'.tr(),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => AddMoodForm(title: 'set_mood', selectedDate: _selectedDate,),
+                ),);
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -152,7 +169,6 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
 //      availableGestures: AvailableGestures.all,
       availableCalendarFormats: const {
         CalendarFormat.month: '',
-        CalendarFormat.week: '',
       },
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,

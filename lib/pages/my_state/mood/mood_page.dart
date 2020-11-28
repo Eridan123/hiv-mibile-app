@@ -101,17 +101,6 @@ class _MoodPageState extends State<MoodPage> {
             height: MediaQuery.of(context).size.height * 0.7,
             child: getWidget(_currentWidget),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.5,
-            child: CustomButton(
-              text: 'add'.tr(),
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => AddMoodForm(title: 'set_mood'),
-                ),);
-              },
-            ),
-          ),
         ],
       ),
     );

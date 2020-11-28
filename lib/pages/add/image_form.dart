@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:HIVApp/components/custom_button.dart';
+import 'package:HIVApp/data/pref_manager.dart';
 import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/db/image_files.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +29,7 @@ class _ImageFormState extends State<ImageForm> {
   bool isVideo = false;
   String _retrieveDataError;
   File _tmpFile;
+  int type;
 
   final ImagePicker _picker = ImagePicker();
   final TextEditingController maxWidthController = TextEditingController();
@@ -55,7 +57,7 @@ class _ImageFormState extends State<ImageForm> {
   }
 
   getImageList() async {
-    await DBProvider.db.getAllUserImages();
+    await DBProvider.db.getAllUserImages(type);
   }
 
   @override
@@ -88,12 +90,12 @@ class _ImageFormState extends State<ImageForm> {
       }
     } else if (_pickImageError != null) {
       return Text(
-        'Pick image error: $_pickImageError',
+        'not_yet_image_picked'.tr(),
         textAlign: TextAlign.center,
       );
     } else {
-      return const Text(
-        'You have not yet picked an image.',
+      return Text(
+        'not_yet_image_picked'.tr(),
         textAlign: TextAlign.center,
       );
     }
@@ -114,11 +116,17 @@ class _ImageFormState extends State<ImageForm> {
   }
 
   @override
+  void initState() {
+    type = widget.type;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     getImageList();
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title.tr()),
       ),
       body: Column(
         children: [
@@ -130,8 +138,8 @@ class _ImageFormState extends State<ImageForm> {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
-                    return const Text(
-                      'You have not yet picked an image.',
+                    return Text(
+                      'not_yet_image_picked'.tr(),
                       textAlign: TextAlign.center,
                     );
                   case ConnectionState.done:
@@ -139,12 +147,12 @@ class _ImageFormState extends State<ImageForm> {
                   default:
                     if (snapshot.hasError) {
                       return Text(
-                        'Pick image/video error: ${snapshot.error}}',
+                        'error'.tr(),
                         textAlign: TextAlign.center,
                       );
                     } else {
-                      return const Text(
-                        'You have not yet picked an image.',
+                      return Text(
+                        'not_yet_image_picked'.tr(),
                         textAlign: TextAlign.center,
                       );
                     }
@@ -167,7 +175,7 @@ class _ImageFormState extends State<ImageForm> {
                 model.file_name = fileName;
                 model.date_time = DateTime.now();
                 model.user_id = 1;
-                model.type =1;
+                model.type = type;
                 await DBProvider.db.newUserImage(model);
 //                    super.initState();
                 Navigator.pop(context);
