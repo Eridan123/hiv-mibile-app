@@ -15,18 +15,18 @@ class VideoWidget extends StatelessWidget {
               child: Column(children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Stack(
-                        alignment: FractionalOffset.bottomRight +
-                            const FractionalOffset(-0.1, -0.1),
-                        children: <Widget>[
-                          _ButterFlyAssetVideo(title: 'ВИЧ видео 1', fileName: 'assets/videos/hiv1.mp4',),
-                        ]),
-                    Stack(
-                        alignment: FractionalOffset.bottomRight +
-                            const FractionalOffset(-0.1, 0.1),
-                        children: <Widget>[
-                          _ButterFlyAssetVideo(title: 'ВИЧ видео 2', fileName: 'assets/videos/hiv2.mp4',),
-                        ]),
+//                    Stack(
+//                        alignment: FractionalOffset.bottomRight +
+//                            const FractionalOffset(-0.1, -0.1),
+//                        children: <Widget>[
+//                          _ButterFlyAssetVideo(title: 'ВИЧ видео 1', fileName: 'assets/videos/hiv1.mp4',),
+//                        ]),
+//                    Stack(
+//                        alignment: FractionalOffset.bottomRight +
+//                            const FractionalOffset(-0.1, 0.1),
+//                        children: <Widget>[
+//                          _ButterFlyAssetVideo(title: 'ВИЧ видео 2', fileName: 'assets/videos/hiv2.mp4',),
+//                        ]),
                   ],
                 ),
               ])),

@@ -14,7 +14,7 @@ import 'player_widget.dart';
 
 typedef void OnError(Exception exception);
 
-const kUrl1 = 'https://luan.xyz/files/audio/ambient_c_motion.mp3';
+const kUrl1 = 'http://192.168.0.107:8000/storage/audios/1.mp3';
 const kUrl2 = 'https://luan.xyz/files/audio/nasa_on_a_mission.mp3';
 const kUrl3 = 'http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1xtra_mf_p';
 
@@ -115,7 +115,33 @@ class _AudioAppState extends State<AudioApp> {
     );
   }
 
-
+  Widget remoteUrl() {
+    return SingleChildScrollView(
+      child: _Tab(children: [
+        Text(
+          'Sample 1 ($kUrl1)',
+          key: Key('url1'),
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        PlayerWidget(url: kUrl1),
+        Text(
+          'Sample 2 ($kUrl2)',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        PlayerWidget(url: kUrl2),
+        Text(
+          'Sample 3 ($kUrl3)',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        PlayerWidget(url: kUrl3),
+        Text(
+          'Sample 4 (Low Latency mode) ($kUrl1)',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        PlayerWidget(url: kUrl1, mode: PlayerMode.LOW_LATENCY),
+      ]),
+    );
+  }
 
   Widget localAsset() {
     return Container(

@@ -30,4 +30,6 @@ class Routes {
   static const String mood = '/mood';
   static const String visit_doctor = '/visit_doctor';
   static const String visit_add = '/visit_add';
+  static const String pin_code_screen = '/pin_code_screen';
+  static const String school = '/school';
 }

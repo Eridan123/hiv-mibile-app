@@ -68,6 +68,7 @@ class PinCodeState extends State<PinCode> {
 
   final _pinCodeController = TextEditingController();
   final _confirmPinCodeController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -76,57 +77,74 @@ class PinCodeState extends State<PinCode> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 38),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'pin_code'.tr(),
-                style: kInputTextStyle,
-              ),
-              CustomTextFormField(
-                controller: _pinCodeController,
-                hintText: '* * * * * *',
-                obscureText: true,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'confirm_pin_code'.tr(),
-                style: kInputTextStyle,
-              ),
-              CustomTextFormField(
-                controller: _confirmPinCodeController,
-                hintText: '* * * * * *',
-                obscureText: true,
-              ),
-              SizedBox(
-                height: 35,
-              ),
-              Center(
-                child: Text(
-                  'step'.tr() + ' 1',
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'pin_code'.tr(),
                   style: kInputTextStyle,
                 ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              LinearProgressIndicator(
-                backgroundColor: Colors.grey,
-                value: 0.3,
-                minHeight: 5,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              CustomButton(
-                onPressed: () {
-                  Provider.of<User>(context, listen: false).setPinCode(_pinCodeController.text).then((value) => Navigator.of(context).pushNamed(Routes.home));
-                },
-                text: 'next_step'.tr(),
-              ),
-            ],
+                CustomTextFormField(
+                  controller: _pinCodeController,
+                  hintText: '* * * * * *',
+                  obscureText: true,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'isEmptyError'.tr();
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'confirm_pin_code'.tr(),
+                  style: kInputTextStyle,
+                ),
+                CustomTextFormField(
+                  controller: _confirmPinCodeController,
+                  hintText: '* * * * * *',
+                  obscureText: true,
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'isEmptyError'.tr();
+                    }
+                    else if (value != _pinCodeController.text) {
+                      return 'pinCodeNotSameError'.tr();
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 35,
+                ),
+                Center(
+                  child: Text(
+                    'step'.tr() + ' 1',
+                    style: kInputTextStyle,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                CustomButton(
+                  onPressed: () {
+                    if (!_formKey.currentState.validate()) {
+                      return;
+                    }
+                    else {
+                      Provider.of<User>(context, listen: false).setPinCode(
+                          _pinCodeController.text).then((value) =>
+                          Navigator.of(context).pushNamed(Routes.home));
+                    }
+                  },
+                  text: 'set_pin_code'.tr(),
+                ),
+              ],
+            ),
           ),
         ),
       ],

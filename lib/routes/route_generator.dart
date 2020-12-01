@@ -9,6 +9,7 @@ import 'package:HIVApp/pages/language/change_laguage_page.dart';
 import 'package:HIVApp/pages/my_state/mood/mood_page.dart';
 import 'package:HIVApp/pages/my_state/my_state.dart';
 import 'package:HIVApp/pages/my_state/symptom/symptom_page.dart';
+import 'package:HIVApp/pages/school/school_page.dart';
 import 'package:HIVApp/pages/visit/visit_add_page.dart';
 import 'package:HIVApp/pages/visit/visit_page.dart';
 import 'package:HIVApp/pages/settings/widgets/reset_password.dart';
@@ -19,6 +20,7 @@ import 'package:HIVApp/pages/signup/successful_registration.dart';
 import 'package:HIVApp/pages/test/test_information_page.dart';
 import 'package:HIVApp/pages/test/test_page.dart';
 import 'package:HIVApp/pages/treatment/treatment_page.dart';
+import 'package:HIVApp/pages/pin_code_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -117,6 +119,12 @@ class RouteGenerator {
 
       case Routes.visit_add:
         return CupertinoPageRoute(builder: (_) => VisitAddPage());
+
+      case Routes.pin_code_screen:
+        return CupertinoPageRoute(builder: (_) => PinCodeInputPage());
+
+      case Routes.school:
+        return CupertinoPageRoute(builder: (_) => SchoolPage());
 
       case Routes.error:
         return _errorRoute();

@@ -98,7 +98,7 @@ class _QuestionaryState extends State<Questionary> {
                                 Row(
                                   children: <Widget>[
                                     SizedBox(width: 10,),
-                                    Text("gender_dot".tr(), textAlign: TextAlign.center,
+                                    Text("sex".tr(), textAlign: TextAlign.center,
                                         overflow: TextOverflow.fade,
                                         style: TextStyle(fontWeight: FontWeight.bold)),
                                     Icon(Icons.ac_unit,size: 10,color: Colors.red,),

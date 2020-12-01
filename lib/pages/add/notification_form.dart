@@ -199,34 +199,6 @@ class _NotificationFormState extends State<NotificationForm> {
 
 
 
-  List getDayEnums(List list){
-    List newList = [];
-    for(int i in list){
-      if(i == 1){
-        newList.add(DateTime.monday);
-      }
-      else if(i == 2){
-        newList.add(DateTime.tuesday);
-      }
-      else if(i == 2){
-        newList.add(DateTime.wednesday);
-      }
-      else if(i == 2){
-        newList.add(DateTime.thursday);
-      }
-      else if(i == 2){
-        newList.add(DateTime.friday);
-      }
-      else if(i == 2){
-        newList.add(DateTime.saturday);
-      }
-      else if(i == 2){
-        newList.add(DateTime.sunday);
-      }
-    }
-    return newList;
-  }
-
   Future<void> _scheduledNotification(String title, String body, DateTime dateTime, NotificationDbTimeType type, int value) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
@@ -320,18 +292,6 @@ class _NotificationFormState extends State<NotificationForm> {
                         style: kInputTextStyle,
                       ),
                     ),
-//                    FlatButton(
-//                        onPressed: () {
-//                          DatePicker.showDateTimePicker(context, showTitleActions: true, onChanged: (date) {
-//                            print('change $date in time zone ' + date.timeZoneOffset.inHours.toString());
-//                          }, onConfirm: (date) {
-//                            print('confirm $date');
-//                          }, currentTime: DateTime.now(), locale: LocaleType.ru);
-//                        },
-//                        child: Text(
-//                          'show date time picker (Russian)',
-//                          style: TextStyle(color: Colors.blue),
-//                        )),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: dateTimePicker(),
@@ -407,7 +367,7 @@ class _NotificationFormState extends State<NotificationForm> {
                             _scheduledNotification(notification_title.tr(), _description, _dateTime, _day.type, 1)
                                 .then((value) async {
                               await DBProvider.db.newNotification(
-                                  NotificationDb(description: _description, datetime: _dateTime, time_type: _day.type, type: notificationDbType));
+                                  NotificationDb(description: _description, datetime: _dateTime, time_type: _day.type, type: notificationDbType, sent: 1));
                             }
                             );
                             Navigator.of(context).pop();

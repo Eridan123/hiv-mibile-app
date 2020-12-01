@@ -1,11 +1,13 @@
 import 'package:HIVApp/data/pref_manager.dart';
+import 'package:HIVApp/db/db_provider.dart';
+import 'package:HIVApp/db/model/user.dart';
 import 'package:HIVApp/model/user.dart';
 import 'package:HIVApp/pages/diary/diary_page.dart';
+import 'package:HIVApp/pages/home/widgets/nav_bar_item_widget.dart';
 import 'package:HIVApp/pages/map/map_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +15,6 @@ import '../../routes/routes.dart';
 import '../../utils/constants.dart';
 import '../settings/settings_page.dart';
 import 'home_page.dart';
-import 'widgets/widgets.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -21,6 +22,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  DbUser _user;
   double xOffset = 0;
   double yOffset = 0;
   double scaleFactor = 1;
@@ -37,6 +40,15 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _color = _isDark ? Colors.indigo[100] : Colors.grey[200];
+    getUser();
+  }
+
+  getUser() async {
+    await DBProvider.db.getUser().then((value) {
+    setState(() {
+      _user = value;
+    });
+    });
   }
 
   @override
@@ -75,7 +87,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               title: Text(
-                Prefs.getString(Prefs.USERNAME) == null ? 'guest'.tr() : Prefs.getString(Prefs.USERNAME),
+                _user == null ? 'guest'.tr() : _user.username.toString(),
                 style: TextStyle(
                   color: Theme.of(context).focusColor,
                   fontSize: 16,

@@ -4,14 +4,17 @@ class DbUser {
   int id;
   String username;
   String password;
-  int pin_code;
+  String pin_code;
   String token;
 
-  DbUser({this.id, this.username, this.password, this.token});
+  DbUser({this.id, this.username, this.password, this.token, this.pin_code});
 
   factory DbUser.fromJson(Map<String, dynamic> json) => new DbUser(
     id: json["id"],
     token: json["token"],
+    username: json["username"],
+    password: json["password"],
+    pin_code: json["pin_code"],
   );
 
   Map<String, dynamic> toJson() => {

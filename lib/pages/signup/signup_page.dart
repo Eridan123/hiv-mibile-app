@@ -4,6 +4,7 @@ import 'package:HIVApp/model/user_registrations.dart';
 import 'package:HIVApp/pages/signup/questionary.dart';
 import 'package:HIVApp/pages/signup/questionnaire.dart';
 import 'package:HIVApp/routes/routes.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -124,6 +125,39 @@ class _WidgetSignupState extends State<WidgetSignup> {
     Provider.of<UserRegistation>(context, listen: false).getList();
   }
 
+  Future<bool> _checkInternetConnection() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    }
+    else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Center(
+        child: AlertDialog(
+          title: Text('error'.tr()),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('okay'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -142,7 +176,7 @@ class _WidgetSignupState extends State<WidgetSignup> {
                 ),
                 CustomTextFormField(
                   controller: _usernameController,
-                  hintText: 'example_login',
+                  hintText: 'логин',
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'loginIsEmptyError'.tr();
@@ -242,21 +276,28 @@ class _WidgetSignupState extends State<WidgetSignup> {
                     else{
                       _user.username = _usernameController.text;
                       _user.password = _passwordController.text;
-                      bool userExists = await Provider.of<User>(context, listen: false).checkUsername(_user.username);
-                      setState(() {
-                        _userExists = userExists;
+                      _checkInternetConnection().then((value) async {
+                        if(value){
+                          bool userExists = await Provider.of<User>(context, listen: false).checkUsername(_user.username);
+                          setState(() {
+                            _userExists = userExists;
+                          });
+                          if(_userExists == false){
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => QuestionnairePage(user: _user),
+                            ),);
+                          }
+                          else{
+                            _formKey.currentState.validate();
+                            setState(() {
+                              _userExists = false;
+                            });
+                          }
+                        }
+                        else{
+                          _showErrorDialog('connect_to_internet'.tr());
+                        }
                       });
-                      if(_userExists == false){
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => QuestionnairePage(user: _user),
-                        ),);
-                      }
-                      else{
-                        _formKey.currentState.validate();
-                        setState(() {
-                          _userExists = false;
-                        });
-                      }
 
                     }
                   },

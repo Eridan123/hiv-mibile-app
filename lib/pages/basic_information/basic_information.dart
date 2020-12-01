@@ -1,3 +1,4 @@
+import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/pages/basic_information/widgets/ex_audio.dart';
 import 'package:HIVApp/pages/basic_information/widgets/audios.dart';
 import 'package:HIVApp/pages/basic_information/widgets/worked_version.dart';
@@ -34,8 +35,12 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
   void initState() {
     isSelected = [true, false, false];
     super.initState();
+    getUser();
   }
 
+  getUser() async {
+    DBProvider.db.getUser();
+  }
 
   @override
   Widget build(BuildContext context) {

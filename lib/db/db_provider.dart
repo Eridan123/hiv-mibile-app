@@ -11,6 +11,7 @@ import 'package:HIVApp/db/user_symptom.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:connectivity/connectivity.dart';
 
 import 'model/category.dart';
 import 'model/client.dart';
@@ -44,7 +45,7 @@ class DBProvider {
           "username TEXT,"
           "password TEXT,"
           "token TEXT,"
-          "pin_code INTEGER"
+          "pin_code TEXT"
           ")");
       //endregion
       //region Categories
@@ -120,7 +121,8 @@ class DBProvider {
           "description TEXT,"
           "datetime DATETIME,"
           "time_type TEXT CHECK( time_type IN ('NotificationDbTimeType.Hour','NotificationDbTimeType.Day','NotificationDbTimeType.Month') )   NOT NULL DEFAULT 'NotificationDbTimeType.Hour',"
-          "type TEXT CHECK( type IN ('NotificationDbType.Drug','NotificationDbType.Visit','NotificationDbType.Analysis') )   NOT NULL DEFAULT 'NotificationDbType.Drug'"
+          "type TEXT CHECK( type IN ('NotificationDbType.Drug','NotificationDbType.Visit','NotificationDbType.Analysis') )   NOT NULL DEFAULT 'NotificationDbType.Drug',"
+          "sent INTEGER NOT NULL DEFAULT 1"
           ")");
       //endregion
       //region Map Points
@@ -141,6 +143,7 @@ class DBProvider {
           "title TEXT,"
           "file_name TEXT,"
           "date_time DATETIME,"
+          "sent INTEGER NOT NULL DEFAULT 1,"
           "rating REAL,"
           "CONSTRAINT fk_user\n"
           "FOREIGN KEY (user_id)\n"
@@ -153,6 +156,7 @@ class DBProvider {
           "user_id INTEGER,"
           "title TEXT,"
           "file_name TEXT,"
+          "sent INTEGER NOT NULL DEFAULT 1,"
           "date_time DATETIME,"
           "CONSTRAINT fk_user\n"
           "FOREIGN KEY (user_id)\n"
@@ -166,6 +170,7 @@ class DBProvider {
           "path TEXT,"
           "type INTEGER,"
           "file_name TEXT,"
+          "sent INTEGER NOT NULL DEFAULT 1,"
           "date_time DATETIME,"
           "CONSTRAINT fk_user\n"
           "FOREIGN KEY (user_id)\n"
@@ -175,9 +180,22 @@ class DBProvider {
       //endregion
     });
   }
+  Future<bool> _checkInternetConnection() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    }
+    else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
   //region Database models' functions:
   //region User
     newUser(DbUser newUser) async {
+    deleteAllUsers();
       final db = await database;
       //get the biggest id in the table
       //insert to the table using the new id
@@ -187,10 +205,10 @@ class DBProvider {
           [newUser.id, newUser.username, newUser.password, newUser.token, newUser.pin_code]);
       return raw;
     }
-    getUser() async {
+    Future<DbUser> getUser() async {
       final db = await database;
       var res =await  db.query("users", limit: 1);
-      return res.isNotEmpty ? DbUser.fromJson(res.first) : Null ;
+      return res.isNotEmpty ? DbUser.fromJson(res.first) : null ;
     }
     updateUser(DbUser newUser) async {
       final db = await database;
@@ -204,7 +222,7 @@ class DBProvider {
     }
     deleteAllUsers() async {
       final db = await database;
-      db.rawDelete("Delete * from users");
+      db.rawDelete("Delete from users");
     }
     //endregion
   //region Categories
@@ -402,6 +420,15 @@ class DBProvider {
     var raw = await db.insert(
         "notifications",
         model.toJson());
+    _checkInternetConnection().then((value) {
+      if(value){
+        model.send().then((value) {
+          model.sent = 0;
+          model.id = raw;
+         updateNotification(model);
+        });
+      }
+    });
     return raw;
   }
   getNotification(int id) async {
@@ -482,9 +509,18 @@ class DBProvider {
     //get the biggest id in the table
     //insert to the table using the new id
     var raw = await db.rawInsert(
-        "INSERT Into user_moods(id, user_id, title, file_name, date_time)"
-            " VALUES (?,?,?,?,?)",
+        "INSERT Into user_moods(id, user_id, title, file_name, date_time,sent)"
+            " VALUES (?,?,?,?,?,1)",
         [model.id, model.user_id, model.title, model.file_name, model.date_time.toString()]);
+    _checkInternetConnection().then((value) {
+      if(value){
+        model.send().then((value) {
+          model.sent = 0;
+          model.id = raw;
+          updateUserMood(model);
+        });
+      }
+    });
     return raw;
   }
   getUserMood(int id) async {
@@ -551,9 +587,18 @@ class DBProvider {
     //get the biggest id in the table
     //insert to the table using the new id
     var raw = await db.rawInsert(
-        "INSERT Into user_symptoms(id, user_id, title, file_name, date_time, rating)"
-            " VALUES (?,?,?,?,?,?)",
+        "INSERT Into user_symptoms(id, user_id, title, file_name, date_time, rating, sent)"
+            " VALUES (?,?,?,?,?,?,1)",
         [model.id, 1, model.title, model.file_name, model.date_time.toString(), model.rating]);
+    _checkInternetConnection().then((value) {
+      if(value){
+        model.send().then((value) {
+          model.sent = 0;
+          model.id = raw;
+          updateUserSymptom(model);
+        });
+      }
+    });
     return raw;
   }
   getUserSymptom(int id) async {
@@ -611,16 +656,25 @@ class DBProvider {
   }
   deleteAllUserSymptom() async {
     final db = await database;
-    db.rawDelete("Delete * from user_symptoms");
+    db.rawDelete("Delete from user_symptoms");
   }
   //endregion
   //region User Images
   newUserImage(UserImageFile model) async {
     final db = await database;
     var raw = await db.rawInsert(
-        "INSERT Into user_images(id, user_id, path, file_name, date_time, type)"
-            " VALUES (?,?,?,?,?,?)",
+        "INSERT Into user_images(id, user_id, path, file_name, date_time, type, sent)"
+            " VALUES (?,?,?,?,?,?,1)",
         [model.id, 1, model.path, model.file_name, model.date_time.toString(), model.type]);
+    _checkInternetConnection().then((value) {
+      if(value){
+        model.send().then((value) {
+          model.sent = 0;
+          model.id = raw;
+          updateUserImage(model);
+        });
+      }
+    });
     return raw;
   }
   getUserImage(int id) async {
@@ -678,7 +732,7 @@ class DBProvider {
   }
   deleteAllUserImage() async {
     final db = await database;
-    db.rawDelete("Delete * from user_images");
+    db.rawDelete("Delete from user_images");
   }
 //endregion
   //endregion

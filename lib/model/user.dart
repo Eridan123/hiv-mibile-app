@@ -76,9 +76,9 @@ class User extends ChangeNotifier{
       {
         'username': user.username,
         'password': user.password,
-        'question1': user.first_question,
+        'question_id1': user.first_question,
         'answer1': user.first_question_answer,
-        'question2': user.second_question,
+        'question_id2': user.second_question,
         'answer2': user.second_question_answer,
         'gender_id': user.gender,
         'sex_id': user.sex,
@@ -125,6 +125,7 @@ class User extends ChangeNotifier{
         dbUser.username = username;
         dbUser.password = password;
         dbUser.token = responseData['token'];
+        dbUser.pin_code = responseData['pin_kod'];
         dbUser.id = responseData['id'];
         await DBProvider.db.newUser(dbUser);
 
@@ -165,10 +166,11 @@ class User extends ChangeNotifier{
   }
 
   Future<void> setPinCode(String pinCode) async {
+    DbUser user = await DBProvider.db.getUser();
     final url =
-        Configs.ip+'api/set_pin_kod/'+ Prefs.getString(Prefs.USER_ID);
+        Configs.ip+'api/set_pin_kod/'+ user.id.toString();
     try {
-      Map<String, String> headers = {"Content-type": "application/json","token": Prefs.getString(Prefs.TOKEN)};
+      Map<String, String> headers = {"Content-type": "application/json","token": user.token};
       final response = await http.post(
         url,
         headers:headers,
@@ -185,9 +187,9 @@ class User extends ChangeNotifier{
       else if(responseData['token'] != null) {
         Prefs.setString('pin_code', pinCode);
         this.pin_code = int.parse(pinCode);
-//        DbUser dbUser = await DBProvider.db.getUser();
-//        dbUser.pin_code = pinCode as int;
-//        await DBProvider.db.updateUser(dbUser);
+        DbUser dbUser = await DBProvider.db.getUser();
+        dbUser.pin_code = pinCode;
+        await DBProvider.db.updateUser(dbUser);
         notifyListeners();
       }
     }

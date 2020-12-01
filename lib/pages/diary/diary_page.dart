@@ -6,7 +6,6 @@ import 'package:HIVApp/db/image_files.dart';
 import 'package:HIVApp/db/notification.dart';
 import 'package:HIVApp/db/user_mood.dart';
 import 'package:HIVApp/db/user_symptom.dart';
-import 'package:HIVApp/pages/examination/examination_page.dart';
 import 'package:HIVApp/pages/test/test_page.dart';
 import 'package:HIVApp/pages/visit/visit_page.dart';
 import 'package:HIVApp/routes/routes.dart';

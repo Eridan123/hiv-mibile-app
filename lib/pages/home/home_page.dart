@@ -34,6 +34,31 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
+                    image_file_path + 'school'+dark,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                title: Text(
+                  'patient_school'.tr(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                trailing: Icon(
+                  Icons.chevron_right,
+                  color: Theme.of(context).cursorColor,
+                ),
+                onTap: () =>
+                    Navigator.of(context).pushNamed(Routes.school),
+              ),
+            ),
+            Card(
+//              color: Colors.indigo[200],
+              child: ListTile(
+                leading: Container(
+                  padding: EdgeInsets.all(5),
+                  child: Image.asset(
                     image_file_path + 'info'+dark,
                     fit: BoxFit.fill,
                   ),
@@ -84,7 +109,7 @@ class _HomePageState extends State<HomePage>
                 leading: Container(
                   padding: EdgeInsets.all(5),
                   child: Image.asset(
-                    image_file_path + 'blood-donation'+dark,
+                    image_file_path + 'medicine'+dark,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -126,31 +151,6 @@ class _HomePageState extends State<HomePage>
                 ),
                 onTap: () =>
                     Navigator.of(context).pushNamed(Routes.consultation),
-              ),
-            ),
-            Card(
-//              color: Colors.indigo[200],
-              child: ListTile(
-                leading: Container(
-                  padding: EdgeInsets.all(5),
-                  child: Image.asset(
-                    image_file_path + 'info_arvp'+dark,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                title: Text(
-                  'information_on_arv'.tr(),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                trailing: Icon(
-                  Icons.chevron_right,
-                  color: Theme.of(context).cursorColor,
-                ),
-                onTap: () =>
-                    Navigator.of(context).pushNamed(Routes.schema_of_arv),
               ),
             ),
             Card(

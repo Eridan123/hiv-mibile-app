@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:HIVApp/model/PassagePoint.dart';
 import 'package:HIVApp/utils/constants.dart';
 import 'package:fluster/fluster.dart';
 import 'package:flutter/cupertino.dart';
