@@ -1,4 +1,5 @@
 import 'package:HIVApp/components/custom_button.dart';
+import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/pages/basic_information/widgets/text.dart';
 import 'package:HIVApp/pages/basic_information/widgets/video.dart';
 import 'package:HIVApp/pages/my_state/symptom/chronology_widget.dart';
@@ -19,6 +20,7 @@ class _SymptomPageState extends State<SymptomPage> {
 
   int _currentWidget = 0;
   List<bool> isSelected;
+  bool logged = false;
 
 
   Widget getWidget(int type){
@@ -28,10 +30,40 @@ class _SymptomPageState extends State<SymptomPage> {
       return SymptomTotalWidget();
   }
 
+  isLoggedIn() async {
+    await DBProvider.db.getUserId().then((value) {
+      if(value != null)
+        setState(() {
+          logged = true;
+        });
+    });
+  }
+
   @override
   void initState() {
     isSelected = [true, false];
+    isLoggedIn();
     super.initState();
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Center(
+        child: AlertDialog(
+          title: Text('error'.tr()),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('okay'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -110,9 +142,14 @@ class _SymptomPageState extends State<SymptomPage> {
             child: CustomButton(
               text: 'add'.tr(),
               onPressed: (){
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => AddSymptomForm(title: 'set_symptom'),
-                ),);
+                if(logged){
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => AddSymptomForm(title: 'set_symptom'),
+                  ),);
+                }
+                else{
+                  _showErrorDialog('login_or_sign_up_to_add'.tr());
+                }
               },
             ),
           ),

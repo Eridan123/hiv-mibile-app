@@ -68,7 +68,6 @@ class _NotificationFormState extends State<NotificationForm> {
   Day _day;
   List<Day> _days = new List<Day>();
   String _description = '';
-  NotificationDbType notificationDbType = NotificationDbType.Drug;
   NotificationDbType _type;
   String title;
   String notification_title = 'Получение препарата';
@@ -367,7 +366,7 @@ class _NotificationFormState extends State<NotificationForm> {
                             _scheduledNotification(notification_title.tr(), _description, _dateTime, _day.type, 1)
                                 .then((value) async {
                               await DBProvider.db.newNotification(
-                                  NotificationDb(description: _description, datetime: _dateTime, time_type: _day.type, type: notificationDbType, sent: 1));
+                                  NotificationDb(description: _description, datetime: _dateTime, time_type: _day.type, type: _type, sent: 0));
                             }
                             );
                             Navigator.of(context).pop();

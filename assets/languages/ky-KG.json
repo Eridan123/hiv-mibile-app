@@ -129,5 +129,8 @@
   "continue": "Улантуу",
   "internet_error": "Интернет",
   "connect_to_internet": "Интернетке байланышыңыз!",
-  "usernameExists": "Мындай логин бар, башка тандаңыз!"
+  "usernameExists": "Мындай логин бар, башка тандаңыз!",
+  "back": "Артка",
+  "click_once_to_exit": "Тиркемеден чыгуу үчүн дагы бир жолу басыңыз!",
+  "login_or_sign_up_to_add": "Кошуу үчүн каталыңыз!"
 }

@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:HIVApp/data/configs.dart';
+import 'package:HIVApp/data/pref_manager.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -9,25 +12,72 @@ import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/foundation/constants.dart';
+import 'package:http/http.dart' as http;
+
+import '../../../db/db_provider.dart';
+import '../../../db/audio_db.dart';
 
 import 'player_widget.dart';
 
 typedef void OnError(Exception exception);
 
-const kUrl1 = 'http://192.168.0.107:8000/storage/audios/1.mp3';
-const kUrl2 = 'https://luan.xyz/files/audio/nasa_on_a_mission.mp3';
-const kUrl3 = 'http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1xtra_mf_p';
+const kUrl1 = 'http://vich.ulut.kg/storage/audios/%D0%92%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5/202012021512481.mp3';
+class AudioCategoryModel {
+  String category_name;
+  List<AudioFileModel> audios;
 
+  AudioCategoryModel({this.category_name, this.audios});
+}
 class AudioFileModel {
   String title;
   String name;
+  bool downloaded = false;
 
-  AudioFileModel({this.title, this.name});
+  AudioFileModel({this.title, this.name, this.downloaded});
 
+  static Future<List<AudioCategoryModel>> getList() async {
+    final url =
+        Configs.ip+'api/audioinformations';
+    try {
+      Map<String, String> headers = {"Content-type": "application/json","lang": Prefs.getString(Prefs.LANGUAGE)};
+      final response = await http.get(
+        url,
+        headers:headers,
+      );
+      List<AudioCategoryModel> mmList = new List<AudioCategoryModel>();
+      for(var i in json.decode(response.body)){
+        AudioCategoryModel newModel = new AudioCategoryModel(category_name: i['category_name'], audios: responseToObjects(i['audios']) );
+        mmList.add(newModel);
+      }
+      return mmList;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
 
+  static List<AudioFileModel> responseToObjects(var responseBody){
+    List<AudioFileModel> list = new List<AudioFileModel>();
+    for(var j in responseBody){
+      AudioFileModel model = new AudioFileModel();
+      model.name = j['path'];
+      model.title = j['name'];
+      model.downloaded = false;
+
+      list.add(model);
+    }
+    return list;
+  }
 }
 
 class AudioApp extends StatefulWidget {
+
+  List<AudioFileModel> list;
+  List<AudioDb> dbList;
+  String category_name;
+
+  AudioApp({this.list, this.dbList, this.category_name});
+
   @override
   _AudioAppState createState() => _AudioAppState();
 }
@@ -35,30 +85,46 @@ class AudioApp extends StatefulWidget {
 class _AudioAppState extends State<AudioApp> {
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
-  String localFilePath;
   String fileName = 'audios';
   int fileIndex =0;
   double pinPillPosition = -1000;
   bool playing = false;
+  String category_name;
 
   Duration _duration = new Duration();
   Duration _position = new Duration();
 
-  List<AudioFileModel> files = [
-    new AudioFileModel(title: '1 Название аудио', name: 'audios/1.mp3'),
-    new AudioFileModel(title: '2 Название аудио', name: 'audios/2.mp3'),
-    new AudioFileModel(title: '3 Название аудио', name: 'audios/3.mp3'),
-    new AudioFileModel(title: '4 Название аудио', name: 'audios/4.mp3'),
-  ];
+  List<AudioFileModel> files = new List<AudioFileModel>();
+  List<AudioDb> dbList = new List<AudioDb>();
 
-  List<String> fileNames = [
-    'audios/1.mp3', 'audios/2.mp3', 'audios/3.mp3', 'audios/4.mp3'
-  ];
+  List<AudioFileModel> compareRemoteLocalAudios(List<AudioFileModel> someList, List<AudioDb> anotherList){
+    List<AudioFileModel> newList =new List<AudioFileModel>();
+    for(var i in someList){
+      AudioFileModel newModel = new AudioFileModel();
+      newModel.title = i.title;
+      newModel.name = i.name;
+      if(i.downloaded == null)
+        newModel.downloaded = false;
+      else
+        newModel.downloaded = i.downloaded;
+      for(var j in anotherList){
+        if(i.name == j.remote_path){
+          newModel.downloaded = true;
+          newModel.name = j.local_path;
+          break;
+        }
+      }
+      newList.add(newModel);
+    }
+    return newList;
+  }
+
 
   @override
   void initState() {
     super.initState();
-
+    category_name = widget.category_name;
+    files = compareRemoteLocalAudios(widget.list, widget.dbList);
     if (kIsWeb) {
       // Calls to Platform.isIOS fails on web
       return;
@@ -70,7 +136,6 @@ class _AudioAppState extends State<AudioApp> {
       advancedPlayer.startHeadlessService();
     }
 
-    audioCache.loadAll(fileNames);
     audioCache.fixedPlayer = advancedPlayer;
 
     initPlayer();
@@ -91,6 +156,27 @@ class _AudioAppState extends State<AudioApp> {
     Duration newDuration = Duration(seconds: second);
 
     advancedPlayer.seek(newDuration);
+  }
+
+  Future _loadFile(AudioFileModel model) async {
+    final bytes = await readBytes('http://vich.ulut.kg'+model.name);
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/${model.title}.mp3');
+
+    await file.writeAsBytes(bytes).then((value) async {
+      AudioDb audioDb = new AudioDb(title: model.title, local_path: file.path, remote_path: model.name, category_name: category_name);
+      await DBProvider.db.newAudioFile(audioDb).then((value) {
+        setState(() {
+          model.downloaded = true;
+          model.name = audioDb.local_path;
+        });
+      });
+    });
+    if (await file.exists()) {
+      setState(() {
+//        localFilePath = file.path;
+      });
+    }
   }
 
   Widget slider() {
@@ -124,32 +210,18 @@ class _AudioAppState extends State<AudioApp> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         PlayerWidget(url: kUrl1),
-        Text(
-          'Sample 2 ($kUrl2)',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        PlayerWidget(url: kUrl2),
-        Text(
-          'Sample 3 ($kUrl3)',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        PlayerWidget(url: kUrl3),
-        Text(
-          'Sample 4 (Low Latency mode) ($kUrl1)',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        PlayerWidget(url: kUrl1, mode: PlayerMode.LOW_LATENCY),
       ]),
     );
   }
 
   Widget localAsset() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.80,
+      height: MediaQuery.of(context).size.height * 0.7,
       width: MediaQuery.of(context).size.width,
       child: Stack(
-        children: [Container(
-          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.06),
+        children: [
+          Container(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
           height: MediaQuery.of(context).size.height * 0.60,
           child: ListView.separated
             (
@@ -157,6 +229,15 @@ class _AudioAppState extends State<AudioApp> {
               itemCount: files.length,
               itemBuilder: (BuildContext ctxt, int index) {
                 return ListTile(
+                  leading: files[index].downloaded ?Container(width: 0,) :InkWell(
+                    child: Icon(Icons.download_rounded, color: Theme.of(context).buttonColor, size: 30,),
+                    onTap: (){
+                      _loadFile(files[index]);
+                      setState(() {
+                        files[index].downloaded = true;
+                      });
+                    },
+                  ),
                   title: Text(
                     files[index].title,
                     style: TextStyle(
@@ -171,8 +252,12 @@ class _AudioAppState extends State<AudioApp> {
                       audioCache.clearCache();
                       advancedPlayer.stop();
                       fileName = files[index].name;
-                      audioCache.play(fileName);
-//                  advancedPlayer.resume();
+//                      audioCache.play(fileName);
+                      var sss = 'http://vich.ulut.kg';
+                      if(files[index].downloaded)
+                        advancedPlayer.play(fileName);
+                      else
+                        advancedPlayer.play(sss+fileName);
 //                  getDuration();
                       pinPillPosition = MediaQuery.of(context).size.height * 0.06;
                       playing = true;
@@ -225,19 +310,16 @@ class _AudioAppState extends State<AudioApp> {
                                       onPressed: () {
                                         setState(() {
                                           if(fileIndex == 0) {
-                                            fileName =
-                                                fileName.replaceRange(7,8,
-                                                    (files.length)
-                                                        .toString());
                                             fileIndex = files.length - 1;
                                           }
                                           else {
-                                            fileName =
-                                                fileName.replaceRange(7,8,
-                                                    (fileIndex).toString());
                                             fileIndex = fileIndex -1;
                                           }
-                                          audioCache.play(fileName);
+                                          fileName =files[fileIndex].name;
+                                          if(files[fileIndex].downloaded)
+                                            advancedPlayer.play(fileName);
+                                          else
+                                            advancedPlayer.play('http://vich.ulut.kg'+fileName);
                                           playing = true;
 
                                         });
@@ -250,10 +332,16 @@ class _AudioAppState extends State<AudioApp> {
                                           advancedPlayer.pause();
                                         }
                                         else if(advancedPlayer.state == AudioPlayerState.PAUSED){
-                                          audioCache.play(fileName);
+                                          if(files[fileIndex].downloaded)
+                                            advancedPlayer.play(fileName);
+                                          else
+                                            advancedPlayer.play('http://vich.ulut.kg'+fileName);
                                         }
                                         else if(advancedPlayer.state == AudioPlayerState.STOPPED){
-                                          audioCache.play(fileName);
+                                          if(files[fileIndex].downloaded)
+                                            advancedPlayer.play(fileName);
+                                          else
+                                            advancedPlayer.play('http://vich.ulut.kg'+fileName);
                                         }
                                         else {
                                           advancedPlayer.pause();
@@ -268,19 +356,16 @@ class _AudioAppState extends State<AudioApp> {
                                       onPressed: () {
                                         setState(() {
                                           if(fileIndex < files.length-1) {
-                                            fileName =
-                                                fileName.replaceRange(7,8,
-                                                    (fileIndex + 2)
-                                                        .toString());
                                             fileIndex = fileIndex + 1;
                                           }
                                           else if(fileIndex >= files.length-1) {
-                                            fileName =
-                                                fileName.replaceRange(7,8,
-                                                    (1).toString());
                                             fileIndex = 0;
                                           }
-                                          audioCache.play(fileName);
+                                          fileName = files[fileIndex].name;
+                                          if(files[fileIndex].downloaded)
+                                            advancedPlayer.play(fileName);
+                                          else
+                                            advancedPlayer.play('http://vich.ulut.kg'+fileName);
                                           playing = true;
 
                                         });

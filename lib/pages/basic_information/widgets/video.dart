@@ -1,37 +1,99 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:http/http.dart' as http;
+import 'package:HIVApp/data/configs.dart';
+import 'package:HIVApp/data/pref_manager.dart';
 
-class VideoWidget extends StatelessWidget {
+import 'dart:convert';
+
+
+class VideoCategoryModel {
+  String category_name;
+  List<VideoFileModel> videos;
+
+  VideoCategoryModel({this.category_name, this.videos});
+}
+class VideoFileModel {
+  String title;
+  String name;
+
+  VideoFileModel({this.title, this.name});
+
+  static Future<List<VideoCategoryModel>> getList() async {
+    final url =
+        Configs.ip+'api/videoinformations';
+    try {
+      Map<String, String> headers = {"Content-type": "application/json","lang": Prefs.getString(Prefs.LANGUAGE)};
+      final response = await http.get(
+        url,
+        headers:headers,
+      );
+      List<VideoCategoryModel> mmList = new List<VideoCategoryModel>();
+      for(var i in json.decode(response.body)){
+        VideoCategoryModel newModel = new VideoCategoryModel(category_name: i['category_name'], videos: responseToObjects(i['videos']) );
+        mmList.add(newModel);
+      }
+      return mmList;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+
+  static List<VideoFileModel> responseToObjects(var responseBody){
+    List<VideoFileModel> list = new List<VideoFileModel>();
+    for(var j in responseBody){
+      VideoFileModel model = new VideoFileModel();
+      model.name = j['path'];
+      model.title = j['name'];
+
+      list.add(model);
+    }
+    return list;
+  }
+}
+
+
+class VideoWidget extends StatefulWidget {
+  List<VideoFileModel> list;
+
+  VideoWidget({this.list});
+
+  @override
+  _VideoWidgetState createState() => _VideoWidgetState();
+}
+
+class _VideoWidgetState extends State<VideoWidget> {
+  List<VideoFileModel> _list = new List<VideoFileModel>();
+
+  @override
+  void initState() {
+    _list = widget.list;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(0.0, MediaQuery.of(context).size.height * 0.02, 0.0, MediaQuery.of(context).size.height * 0.02),
       height: MediaQuery.of(context).size.height * 0.7,
-      child: ListView(
+      child: ListView.separated(
         shrinkWrap: true,
-        children: <Widget>[
-          Card(
-              child: Column(children: <Widget>[
-                Column(
+          itemBuilder: (context, index){
+            return Card(
+              child: Stack(
+                  alignment: FractionalOffset.bottomRight +
+                      const FractionalOffset(-0.1, -0.1),
                   children: <Widget>[
-//                    Stack(
-//                        alignment: FractionalOffset.bottomRight +
-//                            const FractionalOffset(-0.1, -0.1),
-//                        children: <Widget>[
-//                          _ButterFlyAssetVideo(title: 'ВИЧ видео 1', fileName: 'assets/videos/hiv1.mp4',),
-//                        ]),
-//                    Stack(
-//                        alignment: FractionalOffset.bottomRight +
-//                            const FractionalOffset(-0.1, 0.1),
-//                        children: <Widget>[
-//                          _ButterFlyAssetVideo(title: 'ВИЧ видео 2', fileName: 'assets/videos/hiv2.mp4',),
-//                        ]),
-                  ],
-                ),
-              ])),
-        ],
-      ),
+                    _ButterFlyAssetVideo(title: _list[index].title, fileName: 'http://vich.ulut.kg'+_list[index].name,),
+                  ]),
+            );
+          },
+          separatorBuilder: (context, index){
+            return Divider();
+          },
+          itemCount: _list.length),
     );
   }
 }
@@ -53,7 +115,7 @@ class _ButterFlyAssetVideoState extends State<_ButterFlyAssetVideo> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.fileName);
+    _controller = VideoPlayerController.network(widget.fileName);
 
     _controller.addListener(() {
       setState(() {});

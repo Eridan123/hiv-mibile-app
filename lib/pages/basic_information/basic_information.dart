@@ -1,16 +1,12 @@
 import 'package:HIVApp/db/db_provider.dart';
-import 'package:HIVApp/pages/basic_information/widgets/ex_audio.dart';
-import 'package:HIVApp/pages/basic_information/widgets/audios.dart';
-import 'package:HIVApp/pages/basic_information/widgets/worked_version.dart';
-import 'package:HIVApp/pages/basic_information/widgets/audio.dart';
-import 'package:HIVApp/pages/basic_information/widgets/local_audio.dart';
-import 'package:HIVApp/pages/basic_information/widgets/some_audio.dart';
+import 'package:HIVApp/pages/basic_information/widgets/audio_category_widget.dart';
 import 'package:HIVApp/pages/basic_information/widgets/text.dart';
-import 'package:HIVApp/pages/basic_information/widgets/video.dart';
+import 'package:HIVApp/pages/basic_information/widgets/video_category_widget.dart';
 import 'package:HIVApp/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+
 
 class BasicInformationPage extends StatefulWidget {
   @override
@@ -27,9 +23,9 @@ class _BasicInformationPageState extends State<BasicInformationPage> {
     if(type == 0)
       return TextWidget();
     else if(type == 1)
-      return VideoWidget();
+      return VideoCategoryWidget();
     else
-      return AudioApp();
+      return AudioCategoryWidget();
   }
   @override
   void initState() {

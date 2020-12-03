@@ -127,5 +127,8 @@
   "continue": "Продолжить",
   "internet_error": "Интернет",
   "connect_to_internet": "Поключитесь к интернету!",
-  "usernameExists": "Такой логин уже существует!"
+  "usernameExists": "Такой логин уже существует!",
+  "back": "Назад",
+  "click_once_to_exit": "Нажмите ещё раз чтобы выйти!",
+  "login_or_sign_up_to_add": "Войдите или регистритуйтесь чтобы добавить!"
 }

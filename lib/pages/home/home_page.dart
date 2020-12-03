@@ -1,4 +1,5 @@
 import 'package:HIVApp/data/pref_manager.dart';
+import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/model/consultation.dart';
 import 'package:HIVApp/routes/routes.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,6 +17,11 @@ class _HomePageState extends State<HomePage>
 
   String image_file_path = 'assets/images/';
   var dark = Prefs.getBool(Prefs.DARKTHEME, def: false) ? '1.png':'.png';
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

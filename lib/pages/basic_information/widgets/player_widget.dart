@@ -96,14 +96,14 @@ class _PlayerWidgetState extends State<PlayerWidget> {
               icon: Icon(Icons.stop),
               color: Colors.cyan,
             ),
-            IconButton(
+            /*IconButton(
               onPressed: _earpieceOrSpeakersToggle,
               iconSize: 64.0,
               icon: _isPlayingThroughEarpiece
                   ? Icon(Icons.volume_up)
                   : Icon(Icons.hearing),
               color: Colors.cyan,
-            ),
+            ),*/
           ],
         ),
         Column(

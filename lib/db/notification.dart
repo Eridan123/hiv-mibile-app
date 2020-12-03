@@ -25,15 +25,15 @@ class NotificationDb {
 
   factory NotificationDb.fromJson(Map<String, dynamic> json) {
     NotificationDbTimeType timeType = NotificationDbTimeType.Hour;
-    if(json["time_type"] == NotificationDbTimeType.Day.toString)
+    if(json["time_type"].toString == NotificationDbTimeType.Day.toString)
       timeType = NotificationDbTimeType.Day;
-    else if(json["time_type"] == NotificationDbTimeType.Month.toString)
+    else if(json["time_type"].toString == NotificationDbTimeType.Month.toString)
       timeType = NotificationDbTimeType.Month;
 
     NotificationDbType dbType = NotificationDbType.Drug;
-    if(json["type"] == NotificationDbType.Visit.toString)
+    if(json["type"].toString() == NotificationDbType.Visit.toString())
       dbType = NotificationDbType.Visit;
-    else if(json["type"] == NotificationDbType.Analysis.toString)
+    else if(json["type"].toString() == NotificationDbType.Analysis.toString())
       dbType = NotificationDbType.Analysis;
   return new NotificationDb(
       id: json["id"],
@@ -89,13 +89,34 @@ class NotificationDb {
       final response = await http.post(
         url,
         headers:headers,
-        body: json.encode(
-            {
+        body: {
+            "data":[json.encode({
               "patient_id": userDb.id,
               "description": description,
               "datetime": datetime.toString(),
               "remind": convertTimetypeEnumsToString(time_type),
               "type": convertTypeEnumsToString(type),
+            })],}
+      );
+      var rr = json.decode(response.body);
+      return true;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+  Future<bool> sendList(List<NotificationDb> list) async {
+    final url =
+        Configs.ip+'api/notifications';
+    DbUser userDb = await DBProvider.db.getUser();
+    try {
+      Map<String, String> headers = {"Content-type": "application/json"};
+      final response = await http.post(
+        url,
+        headers:headers,
+        body: json.encode(
+            {
+              "data": notificationList(list, userDb.id)
             }),
       );
       var rr = json.decode(response.body);
@@ -104,6 +125,20 @@ class NotificationDb {
     catch (error) {
       throw error;
     }
+  }
+
+  List<Map<String, dynamic>> notificationList(List<NotificationDb> list, int user_id) {
+    List<Map<String, dynamic>> result = new List<Map<String, dynamic>>();
+    for(var i in list){
+      result.add({
+        "patient_id": user_id,
+        "description": i.description,
+        "datetime": i.datetime.toString(),
+        "remind": convertTimetypeEnumsToString(i.time_type),
+        "type": convertTypeEnumsToString(i.type),
+      });
+    }
+    return result;
   }
 }
 NotificationDb notificationFromJson(String str) {

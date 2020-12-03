@@ -8,6 +8,7 @@ import 'package:HIVApp/db/notification.dart';
 import 'package:HIVApp/db/symptom.dart';
 import 'package:HIVApp/db/user_mood.dart';
 import 'package:HIVApp/db/user_symptom.dart';
+import 'package:HIVApp/db/audio_db.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -120,8 +121,8 @@ class DBProvider {
           "id INTEGER PRIMARY KEY AUTOINCREMENT,"
           "description TEXT,"
           "datetime DATETIME,"
-          "time_type TEXT CHECK( time_type IN ('NotificationDbTimeType.Hour','NotificationDbTimeType.Day','NotificationDbTimeType.Month') )   NOT NULL DEFAULT 'NotificationDbTimeType.Hour',"
-          "type TEXT CHECK( type IN ('NotificationDbType.Drug','NotificationDbType.Visit','NotificationDbType.Analysis') )   NOT NULL DEFAULT 'NotificationDbType.Drug',"
+          "time_type TEXT CHECK( time_type IN ('NotificationDbTimeType.Hour','NotificationDbTimeType.Day','NotificationDbTimeType.Month') )   NOT NULL,"
+          "type TEXT CHECK( type IN ('NotificationDbType.Drug','NotificationDbType.Visit','NotificationDbType.Analysis') )   NOT NULL,"
           "sent INTEGER NOT NULL DEFAULT 1"
           ")");
       //endregion
@@ -177,6 +178,15 @@ class DBProvider {
           "REFERENCES users(id)\n"
           ")");
       //endregion
+      //region Audio files
+      await db.execute("CREATE TABLE audio_files ("
+          "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+          "local_path TEXT,"
+          "title TEXT,"
+          "category_name TEXT,"
+          "remote_path TEXT"
+          ")");
+      //endregion
       //endregion
     });
   }
@@ -209,6 +219,11 @@ class DBProvider {
       final db = await database;
       var res =await  db.query("users", limit: 1);
       return res.isNotEmpty ? DbUser.fromJson(res.first) : null ;
+    }
+    Future<int> getUserId() async {
+      final db = await database;
+      var res =await  db.query("users", limit: 1);
+      return res.isNotEmpty? res.first['id'] : null;
     }
     updateUser(DbUser newUser) async {
       final db = await database;
@@ -420,12 +435,17 @@ class DBProvider {
     var raw = await db.insert(
         "notifications",
         model.toJson());
-    _checkInternetConnection().then((value) {
+    _checkInternetConnection().then((value) async {
+      var list = await getNotificationsBySent();
       if(value){
-        model.send().then((value) {
-          model.sent = 0;
+        model.sendList(list).then((value) {
+          model.sent = 1;
           model.id = raw;
          updateNotification(model);
+         for(var i in list){
+           i.sent = 1;
+           updateNotification(i);
+         }
         });
       }
     });
@@ -448,9 +468,17 @@ class DBProvider {
   }
 
   Future<List<NotificationDb>> getNotificationsByType(NotificationDbType type) async {
-
     final db = await database;
     var res =await  db.query("notifications" , where: "type = ?", whereArgs: [type.toString()]);
+    List<NotificationDb> list = new List<NotificationDb>();
+    for(var r in res){
+      list.add(NotificationDb.fromJson(r));
+    }
+    return res.isNotEmpty ? list : Null ;
+  }
+  Future<List<NotificationDb>> getNotificationsBySent() async {
+    final db = await database;
+    var res =await  db.query("notifications" , where: "sent = ?", whereArgs: [0]);
     List<NotificationDb> list = new List<NotificationDb>();
     for(var r in res){
       list.add(NotificationDb.fromJson(r));
@@ -733,6 +761,74 @@ class DBProvider {
   deleteAllUserImage() async {
     final db = await database;
     db.rawDelete("Delete from user_images");
+  }
+//endregion
+  //region Audio Files
+  Future<int> newAudioFile(AudioDb model) async {
+    final db = await database;
+    //get the biggest id in the table
+    //insert to the table using the new id
+    var raw = await db.insert(
+        "audio_files",
+        model.toJson());
+    return raw;
+  }
+  getAudioFile(int id) async {
+    final db = await database;
+    var res =await  db.query("audio_files", where: "id = ?", whereArgs: [id]);
+    return res.isNotEmpty ? AudioDb.fromJson(res.first) : Null ;
+  }
+  Future<List<AudioDb>> getAllAudioFiles() async {
+
+    final db = await database;
+    var res =await  db.query("audio_files", orderBy: "id DESC");
+    List<AudioDb> list = new List<AudioDb>();
+    for(var r in res){
+      list.add(AudioDb.fromJson(r));
+    }
+    return list;
+  }
+
+  Future<List<AudioDb>> getAudioFilesBySent() async {
+    final db = await database;
+    var res =await  db.query("audio_files" , where: "sent = ?", whereArgs: [0]);
+    List<AudioDb> list = new List<AudioDb>();
+    for(var r in res){
+      list.add(AudioDb.fromJson(r));
+    }
+    return res.isNotEmpty ? list : Null ;
+  }
+  Future<List<String>> getAudioFilesGroupByCategories() async {
+    final db = await database;
+    var res =await  db.rawQuery("select s.category_name from audio_files s group by s.category_name");
+    List<String> list = new List<String>();
+    for(var r in res){
+      list.add(r['category_name'].toString());
+    }
+    return list;
+  }
+  Future<List<AudioDb>> getAudioFilesByCategories(String category_name) async {
+    final db = await database;
+    var res =await  db.query('audio_files', where: 'category_name = ?', whereArgs: [category_name]);
+    List<AudioDb> list = new List<AudioDb>();
+    for(var r in res){
+      list.add(AudioDb.fromJson(r));
+    }
+    return list;
+  }
+  updateAudioFile(AudioDb newModel) async {
+    final db = await database;
+    var res = await db.update("audio_files", newModel.toJson(),
+        where: "id = ?", whereArgs: [newModel.id]);
+    return res;
+  }
+  deleteAudioFile(int id) async {
+    final db = await database;
+    db.delete("audio_files", where: "id = ?", whereArgs: [id]);
+  }
+  deleteAllAudioFiles() async {
+    final db = await database;
+    db.rawDelete("Delete from audio_files");
   }
 //endregion
   //endregion

@@ -1,3 +1,4 @@
+import 'package:HIVApp/db/db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 

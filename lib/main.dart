@@ -1,6 +1,8 @@
 import 'package:HIVApp/model/consultation.dart';
 import 'package:HIVApp/model/user.dart';
 import 'package:HIVApp/model/user_registrations.dart';
+import 'package:HIVApp/utils/connection/connectivity_service.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -66,27 +68,34 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _buildWithTheme(BuildContext context, ThemeState state) {
-    return MaterialApp(
-      builder: (context, child) {
-        return ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: child,
-        );
+    return StreamProvider<DataConnectionStatus>(
+      create: (context){
+        return DataConnectivityService()
+            .connectivityStreamController
+            .stream;
       },
-      title: 'HIVAPP',
-      initialRoute: Routes.splash,
-      onGenerateRoute: RouteGenerator.generateRoute,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        DefaultCupertinoLocalizations.delegate,
-        EasyLocalization.of(context).delegate,
-      ],
-      supportedLocales: EasyLocalization.of(context).supportedLocales,
-      locale: EasyLocalization.of(context).locale,
-      debugShowCheckedModeBanner: false,
-      theme: state.themeData,
+      child: MaterialApp(
+        builder: (context, child) {
+          return ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: child,
+          );
+        },
+        title: 'HIVAPP',
+        initialRoute: Routes.splash,
+        onGenerateRoute: RouteGenerator.generateRoute,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
+          EasyLocalization.of(context).delegate,
+        ],
+        supportedLocales: EasyLocalization.of(context).supportedLocales,
+        locale: EasyLocalization.of(context).locale,
+        debugShowCheckedModeBanner: false,
+        theme: state.themeData,
+      ),
     );
   }
 }

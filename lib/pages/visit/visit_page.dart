@@ -15,6 +15,35 @@ class VisitPage extends StatefulWidget {
 class _VisitPageState extends State<VisitPage> {
 
   List<NotificationDb> _list = new List<NotificationDb>();
+  bool logged = false;
+
+  isLoggedIn() async {
+    await DBProvider.db.getUserId().then((value) {
+      if(value != null)
+        setState(() {
+          logged = true;
+        });
+    });
+  }
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Center(
+        child: AlertDialog(
+          title: Text('error'.tr()),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('okay'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   _getListOfNotifications() async{
     await DBProvider.db.getAllNotifications().then((value) {
@@ -26,6 +55,7 @@ class _VisitPageState extends State<VisitPage> {
 
   @override
   void initState() {
+    isLoggedIn();
     _getListOfNotifications();
     super.initState();
   }
@@ -82,7 +112,12 @@ class _VisitPageState extends State<VisitPage> {
                 child: CustomButton(
                   text: 'add'.tr(),
                   onPressed: (){
-                    Navigator.pushNamed(context, Routes.visit_add);
+                    if(logged){
+                      Navigator.pushNamed(context, Routes.visit_add);
+                    }
+                    else{
+                      _showErrorDialog('login_or_sign_up_to_add'.tr());
+                    }
                   },
                 ),
               ),

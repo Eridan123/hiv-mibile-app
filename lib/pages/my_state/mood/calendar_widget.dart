@@ -33,6 +33,7 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
   String title = 'Calendar';
   List<UserMood> _list = new List<UserMood>();
   DateTime _selectedDate;
+  bool logged = false;
 
   getList() async{
     await DBProvider.db.getAllUserMoods().then((value) {
@@ -64,9 +65,38 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
     });
   }
 
+  isLoggedIn() async {
+    await DBProvider.db.getUserId().then((value) {
+      if(value != null)
+        setState(() {
+          logged = true;
+        });
+    });
+  }
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Center(
+        child: AlertDialog(
+          title: Text('error'.tr()),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('okay'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     getList();
+    isLoggedIn();
     super.initState();
     _selectedDate = DateTime.now();
     final _selectedDay = DateTime.now();
@@ -119,9 +149,14 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
             child: CustomButton(
               text: 'add'.tr(),
               onPressed: (){
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => AddMoodForm(title: 'set_mood', selectedDate: _selectedDate,),
-                ),);
+                if(logged){
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => AddMoodForm(title: 'set_mood', selectedDate: _selectedDate,),
+                  ),);
+                }
+                else{
+                  _showErrorDialog('login_or_sign_up_to_add'.tr());
+                }
               },
             ),
           ),

@@ -37,12 +37,12 @@ class _TextWidgetState extends State<TextWidget> {
           children: [
             ListTile(
                 title: Text(
-                  'Что такое ВИЧ?',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              'Что такое ВИЧ?',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
                 trailing: Icon(
                   Icons.chevron_right,
                   color: Colors.grey,

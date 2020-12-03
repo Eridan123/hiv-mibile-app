@@ -8,6 +8,7 @@ import 'package:HIVApp/pages/map/map_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -35,9 +36,40 @@ class _HomeState extends State<Home> {
   var _isDark = Prefs.getBool(Prefs.DARKTHEME, def: false);
   Color _color;
   String image_file_path = 'assets/images/';
+  DateTime currentBackPressTime;
+  bool logged =false;
+
+  isLoggedIn() async {
+    await DBProvider.db.getUserId().then((value) {
+      if(value != null)
+        setState(() {
+          logged = true;
+        });
+    });
+  }
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Center(
+        child: AlertDialog(
+          title: Text('error'.tr()),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('okay'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
+    isLoggedIn();
     super.initState();
     _color = _isDark ? Colors.indigo[100] : Colors.grey[200];
     getUser();
@@ -65,6 +97,17 @@ class _HomeState extends State<Home> {
       return MapPage();
     else
       return SettingsPage();
+  }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: 'click_once_to_exit'.tr());
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 
   @override
@@ -106,8 +149,11 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
-            body: Container(
-              child: _selectPage(_selectedIndex),
+            body: WillPopScope(
+              child: Container(
+                child: _selectPage(_selectedIndex),
+              ),
+              onWillPop: onWillPop,
             ),
             floatingActionButton: Container(
               width: 80,
@@ -120,8 +166,13 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.all(15),
                 child: GestureDetector(
                   onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    Navigator.of(context).pushNamed(Routes.add);
+                    if(logged){
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      Navigator.of(context).pushNamed(Routes.add);
+                    }
+                    else{
+                      _showErrorDialog('login_or_sign_up_to_add'.tr());
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
