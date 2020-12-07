@@ -4,6 +4,8 @@ import 'package:HIVApp/data/configs.dart';
 import 'package:HIVApp/data/pref_manager.dart';
 import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/db/model/user.dart';
+import 'package:HIVApp/db/user_mood.dart';
+import 'package:HIVApp/db/user_symptom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -128,6 +130,8 @@ class User extends ChangeNotifier{
         dbUser.pin_code = responseData['pin_kod'];
         dbUser.id = responseData['id'];
         await DBProvider.db.newUser(dbUser);
+        UserMood.getList();
+        UserSymptom.getList();
 
         this.user_id = responseData["id"];
         this.token = responseData["token"];
@@ -271,13 +275,32 @@ class User extends ChangeNotifier{
   }
 
   void logout() async{
-    Prefs.setString('token', null);
-    Prefs.setString('username', null);
-    Prefs.setString('password', null);
-    Prefs.setInt('user_id', null);
-    username = null;
-    password = null;
-    notifyListeners();
+    await DBProvider.db.getUser().then((value) async {
+      final url =
+          Configs.ip+'api/logged';
+      try {
+        Map<String, String> headers = {"Content-type": "application/json"};
+        final response = await http.post(
+          url,
+          headers:headers,
+          body: json.encode(
+              {"id": value.id}),
+        );
+        final responseData = json.decode(response.body);
+        if(responseData == "successfully") {
+          await DBProvider.db.deleteAllNotifications();
+          await DBProvider.db.deleteAllUsers();
+          await DBProvider.db.deleteAllUserMoods();
+          await DBProvider.db.deleteAllUserSymptom();
+          await DBProvider.db.deleteAllUserImage();
+
+          notifyListeners();
+        }
+      }
+      catch (error) {
+        throw error;
+      }
+    });
   }
   int getUserId(){
     return user_id;

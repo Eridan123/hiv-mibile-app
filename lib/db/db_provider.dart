@@ -93,29 +93,6 @@ class DBProvider {
           "longitude REAL"
           ")");
       //endregion
-      //region ARVP
-//      await db.execute("CREATE TABLE arvp ("
-//          "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-//          "consultant_id INTEGER,"
-//          "name_ky TEXT"
-//          ")");
-      //endregion
-      //region Symptoms
-      await db.execute("CREATE TABLE symptoms ("
-          "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "name_ky TEXT,"
-          "name_ru TEXT,"
-          "image_name TEXT"
-          ")");
-      //endregion
-      //region Moods
-      await db.execute("CREATE TABLE moods ("
-          "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-          "name_ky TEXT,"
-          "name_ru TEXT,"
-          "image_name TEXT"
-          ")");
-      //endregion
       //region Notifications
       await db.execute("CREATE TABLE notifications ("
           "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -365,68 +342,6 @@ class DBProvider {
     db.rawDelete("Delete * from consultation");
   }
   //endregion
-  //region Symptoms
-  newSymptom(Symptom model) async {
-    final db = await database;
-    //get the biggest id in the table
-    //insert to the table using the new id
-    var raw = await db.rawInsert(
-        "INSERT Into symptoms(id, name_ky, name_ru, image_name)"
-            " VALUES (?,?,?,?)",
-        [model.id, model.name_ky, model.name_ru, model.image_name]);
-    return raw;
-  }
-  getSymptom(int id) async {
-    final db = await database;
-    var res =await  db.query("symptoms", where: "id = ?", whereArgs: [id]);
-    return res.isNotEmpty ? Symptom.fromJson(res.first) : Null ;
-  }
-  updateSymptom(Symptom newModel) async {
-    final db = await database;
-    var res = await db.update("symptoms", newModel.toJson(),
-        where: "id = ?", whereArgs: [newModel.id]);
-    return res;
-  }
-  deleteSymptom(int id) async {
-    final db = await database;
-    db.delete("symptoms", where: "id = ?", whereArgs: [id]);
-  }
-  deleteAllSymptoms() async {
-    final db = await database;
-    db.rawDelete("Delete * from symptoms");
-  }
-  //endregion
-  //region Moods
-  newMood(Mood model) async {
-    final db = await database;
-    //get the biggest id in the table
-    //insert to the table using the new id
-    var raw = await db.rawInsert(
-        "INSERT Into moods(id, name_ky, name_ru, image_name)"
-            " VALUES (?,?,?,?)",
-        [model.id, model.name_ky, model.name_ru, model.image_name]);
-    return raw;
-  }
-  getMood(int id) async {
-    final db = await database;
-    var res =await  db.query("moods", where: "id = ?", whereArgs: [id]);
-    return res.isNotEmpty ? Mood.fromJson(res.first) : Null ;
-  }
-  updateMood(Mood newModel) async {
-    final db = await database;
-    var res = await db.update("moods", newModel.toJson(),
-        where: "id = ?", whereArgs: [newModel.id]);
-    return res;
-  }
-  deleteMood(int id) async {
-    final db = await database;
-    db.delete("moods", where: "id = ?", whereArgs: [id]);
-  }
-  deleteAllMoods() async {
-    final db = await database;
-    db.rawDelete("Delete from moods");
-  }
-  //endregion
   //region Notifications
   Future<int> newNotification(NotificationDb model) async {
     final db = await database;
@@ -438,7 +353,7 @@ class DBProvider {
     _checkInternetConnection().then((value) async {
       var list = await getNotificationsBySent();
       if(value){
-        model.sendList(list).then((value) {
+        NotificationDb.sendList(list).then((value) {
           model.sent = 1;
           model.id = raw;
          updateNotification(model);
@@ -449,6 +364,16 @@ class DBProvider {
         });
       }
     });
+    return raw;
+  }
+  Future<int> newNotification1(NotificationDb model) async {
+    final db = await database;
+    model.sent =1;
+    //get the biggest id in the table
+    //insert to the table using the new id
+    var raw = await db.insert(
+        "notifications",
+        model.toJson());
     return raw;
   }
   getNotification(int id) async {
@@ -491,13 +416,24 @@ class DBProvider {
         where: "id = ?", whereArgs: [newModel.id]);
     return res;
   }
+  checkNotSentNotifications() async{
+    final db = await database;
+    var res =await  db.query("notifications" , where: "sent = ?", whereArgs: [1]);
+    if(res.isNotEmpty) {
+      List<NotificationDb> list = new List<NotificationDb>();
+      for (var r in res) {
+        list.add(NotificationDb.fromJson(r));
+      }
+      await NotificationDb.sendList(list);
+    }
+  }
   deleteNotification(int id) async {
     final db = await database;
     db.delete("notifications", where: "id = ?", whereArgs: [id]);
   }
   deleteAllNotifications() async {
     final db = await database;
-    db.rawDelete("Delete * from notifications");
+    db.rawDelete("Delete from notifications");
   }
   //endregion
   //region Map Points
@@ -534,27 +470,41 @@ class DBProvider {
   //region User Moods
   newUserMood(UserMood model) async {
     final db = await database;
-    //get the biggest id in the table
-    //insert to the table using the new id
+    var raw = await db.rawInsert(
+        "INSERT Into user_moods(id, user_id, title, file_name, date_time,sent)"
+            " VALUES (?,?,?,?,?,0)",
+        [model.id, model.user_id, model.title, model.file_name, model.date_time.toString()]);
+    _checkInternetConnection().then((value) async {
+      var list = await getUserMoodsBySent();
+      if(value){
+        UserMood.sendList(list).then((value) {
+          model.sent = 1;
+          model.id = raw;
+          updateUserMood(model);
+          for(var i in list){
+            i.sent = 1;
+            updateUserMood(i);
+          }
+        });
+      }
+    });
+    return raw;
+  }
+  newUserMood1(UserMood model) async {
+    final db = await database;
     var raw = await db.rawInsert(
         "INSERT Into user_moods(id, user_id, title, file_name, date_time,sent)"
             " VALUES (?,?,?,?,?,1)",
         [model.id, model.user_id, model.title, model.file_name, model.date_time.toString()]);
-    _checkInternetConnection().then((value) {
-      if(value){
-        model.send().then((value) {
-          model.sent = 0;
-          model.id = raw;
-          updateUserMood(model);
-        });
-      }
-    });
     return raw;
   }
   getUserMood(int id) async {
     final db = await database;
     var res =await  db.query("user_moods", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? UserMood.fromJson(res.first) : Null ;
+  }
+  saveUserMoodsFromServer(int user_id) async {
+
   }
   Future<List<UserMood>> getAllUserMoods() async {
     final db = await database;
@@ -594,11 +544,31 @@ class DBProvider {
     }
     return res.isNotEmpty ? list : Null ;
   }
+  Future<List<UserMood>> getUserMoodsBySent() async {
+    final db = await database;
+    var res =await  db.query("user_moods" , where: "sent = ?", whereArgs: [0]);
+    List<UserMood> list = new List<UserMood>();
+    for(var r in res){
+      list.add(UserMood.fromJson(r));
+    }
+    return res.isNotEmpty ? list : null ;
+  }
   updateUserMood(UserMood newModel) async {
     final db = await database;
     var res = await db.update("user_moods", newModel.toJson(),
         where: "id = ?", whereArgs: [newModel.id]);
     return res;
+  }
+  checkNotSentUserMoods() async{
+    final db = await database;
+    var res =await  db.query("user_moods" , where: "sent = ?", whereArgs: [0]);
+    if(res.isNotEmpty) {
+      List<UserMood> list = new List<UserMood>();
+      for (var r in res) {
+        list.add(UserMood.fromJson(r));
+      }
+      await UserMood.sendList(list);
+    }
   }
   deleteUserMood(int id) async {
     final db = await database;
@@ -612,27 +582,47 @@ class DBProvider {
   //region User Symptoms
   newUserSymptom(UserSymptom model) async {
     final db = await database;
-    //get the biggest id in the table
-    //insert to the table using the new id
+    var raw = await db.rawInsert(
+        "INSERT Into user_symptoms(id, user_id, title, file_name, date_time, rating, sent)"
+            " VALUES (?,?,?,?,?,?,0)",
+        [model.id, 1, model.title, model.file_name, model.date_time.toString(), model.rating]);
+    _checkInternetConnection().then((value) async {
+      if(value){
+        var list = await getUserSymptomsBySent();
+        UserSymptom.sendList(list).then((value) {
+          model.sent = 1;
+          model.id = raw;
+          updateUserSymptom(model);
+          for(var i in list){
+            i.sent = 1;
+            updateUserSymptom(i);
+          }
+        });
+      }
+    });
+    return raw;
+  }
+  newUserSymptom1(UserSymptom model) async {
+    final db = await database;
     var raw = await db.rawInsert(
         "INSERT Into user_symptoms(id, user_id, title, file_name, date_time, rating, sent)"
             " VALUES (?,?,?,?,?,?,1)",
         [model.id, 1, model.title, model.file_name, model.date_time.toString(), model.rating]);
-    _checkInternetConnection().then((value) {
-      if(value){
-        model.send().then((value) {
-          model.sent = 0;
-          model.id = raw;
-          updateUserSymptom(model);
-        });
-      }
-    });
     return raw;
   }
   getUserSymptom(int id) async {
     final db = await database;
     var res =await  db.query("user_symptoms", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? UserMood.fromJson(res.first) : Null ;
+  }
+  Future<List<UserSymptom>> getUserSymptomsBySent() async {
+    final db = await database;
+    var res =await  db.query("user_symptoms" , where: "sent = ?", whereArgs: [0]);
+    List<UserSymptom> list = new List<UserSymptom>();
+    for(var r in res){
+      list.add(UserSymptom.fromJson(r));
+    }
+    return res.isNotEmpty ? list : null ;
   }
   Future<List<UserSymptom>> getAllUserSymptoms() async {
     final db = await database;
@@ -692,17 +682,25 @@ class DBProvider {
     final db = await database;
     var raw = await db.rawInsert(
         "INSERT Into user_images(id, user_id, path, file_name, date_time, type, sent)"
-            " VALUES (?,?,?,?,?,?,1)",
+            " VALUES (?,?,?,?,?,?,0)",
         [model.id, 1, model.path, model.file_name, model.date_time.toString(), model.type]);
     _checkInternetConnection().then((value) {
       if(value){
         model.send().then((value) {
-          model.sent = 0;
+          model.sent = 1;
           model.id = raw;
           updateUserImage(model);
         });
       }
     });
+    return raw;
+  }
+  newUserImage1(UserImageFile model) async {
+    final db = await database;
+    var raw = await db.rawInsert(
+        "INSERT Into user_images(id, user_id, path, file_name, date_time, type, sent)"
+            " VALUES (?,?,?,?,?,?,1)",
+        [model.id, 1, model.path, model.file_name, model.date_time.toString(), model.type]);
     return raw;
   }
   getUserImage(int id) async {
@@ -787,16 +785,6 @@ class DBProvider {
       list.add(AudioDb.fromJson(r));
     }
     return list;
-  }
-
-  Future<List<AudioDb>> getAudioFilesBySent() async {
-    final db = await database;
-    var res =await  db.query("audio_files" , where: "sent = ?", whereArgs: [0]);
-    List<AudioDb> list = new List<AudioDb>();
-    for(var r in res){
-      list.add(AudioDb.fromJson(r));
-    }
-    return res.isNotEmpty ? list : Null ;
   }
   Future<List<String>> getAudioFilesGroupByCategories() async {
     final db = await database;

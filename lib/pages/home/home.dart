@@ -5,6 +5,7 @@ import 'package:HIVApp/model/user.dart';
 import 'package:HIVApp/pages/diary/diary_page.dart';
 import 'package:HIVApp/pages/home/widgets/nav_bar_item_widget.dart';
 import 'package:HIVApp/pages/map/map_page.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +84,19 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Future<bool> _checkInternetConnection() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    }
+    else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -141,9 +155,17 @@ class _HomeState extends State<Home> {
                 FlatButton(
                   onPressed: () {
                     if (Prefs.USER_ID != null)
-                    Provider.of<User>(context, listen: false).logout();
-                    Navigator.of(context)
-                        .popAndPushNamed(Routes.login);
+                      _checkInternetConnection().then((value) {
+                        if(value) {
+                          Provider.of<User>(context, listen: false).logout();
+                          Navigator.of(context)
+                              .popAndPushNamed(Routes.login);
+                        }
+                        else
+                          {
+                          _showErrorDialog('connect_to_internet_to_logout'.tr());
+                        }
+                      });
                   },
                   child: FaIcon(FontAwesomeIcons.signOutAlt, color: Theme.of(context).focusColor,),
                 ),

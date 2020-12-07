@@ -33,7 +33,7 @@ class UserSymptom {
     "user_id": user_id,
     "title": title,
     "file_name": file_name,
-    "date_time": date_time,
+    "date_time": date_time.toString(),
     "rating": rating,
     "sent": sent,
   };
@@ -47,13 +47,41 @@ class UserSymptom {
       final response = await http.post(
         url,
         headers:headers,
+        body:
+            {
+              "data": [
+                json.encode(
+                  {
+                    "patient_id": userDb.id,
+                    "title": title,
+                    "file_name": file_name,
+                    "level": rating.round(),
+                    "date": "${date_time.year}-${date_time.month}-${date_time.day}",
+                  }
+                )
+              ]
+            },
+      );
+      var rr = json.decode(response.body);
+      return true;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+
+  static Future<bool> sendList(List<UserSymptom> list) async {
+    final url =
+        Configs.ip+'api/patientsymptoms';
+    DbUser userDb = await DBProvider.db.getUser();
+    try {
+      Map<String, String> headers = {"Content-type": "application/json"};
+      final response = await http.post(
+        url,
+        headers:headers,
         body: json.encode(
             {
-              "patient_id": userDb.id,
-              "title": title,
-              "file_name": file_name,
-              "level": rating,
-              "date": date_time,
+              "data": userSymptomList(list, userDb.id)
             }),
       );
       var rr = json.decode(response.body);
@@ -62,6 +90,55 @@ class UserSymptom {
     catch (error) {
       throw error;
     }
+  }
+  static Future<bool> getList() async {
+    await DBProvider.db.getUser().then((value) async {
+      final url =
+          Configs.ip+'api/patientsymptoms/'+value.id.toString();
+      try {
+        Map<String, String> headers = {"Content-type": "application/json","token": value.token};
+        final response = await http.get(
+          url,
+          headers:headers,
+        );
+        var rr = saveListToDatabase(json.decode(response.body));
+        return true;
+      }
+      catch (error) {
+        throw error;
+      }
+    });
+  }
+  static List<UserSymptom> saveListToDatabase(var responseBody){
+    List<UserSymptom> list = new List<UserSymptom>();
+    for(var i in responseBody){
+      UserSymptom model = new UserSymptom();
+
+      model.user_id = i['patient_id'];
+      model.title = i['title'];
+      model.file_name = i['file_name'];
+      model.date_time = DateTime.parse(i['date']);
+      model.rating = double.parse(i['level']);
+      model.sent = 1;
+
+      DBProvider.db.newUserSymptom1(model);
+      list.add(model);
+    }
+    return list;
+  }
+
+  static List<Map<String, dynamic>> userSymptomList(List<UserSymptom> list, int user_id) {
+    List<Map<String, dynamic>> result = new List<Map<String, dynamic>>();
+    for(var i in list){
+      result.add({
+        "patient_id": user_id,
+        "title": i.title,
+        "date": i.date_time.toString(),
+        "file_name": i.file_name,
+        "level": i.rating.round(),
+      });
+    }
+    return result;
   }
 }
 UserSymptom userSymptomFromJson(String str) {

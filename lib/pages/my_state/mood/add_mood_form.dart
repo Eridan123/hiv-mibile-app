@@ -405,7 +405,6 @@ class _AddMoodFormState extends State<AddMoodForm> {
                   userMood.date_time = _dateTime;
                   userMood.user_id = 1;
                   await DBProvider.db.newUserMood(userMood);
-//                    super.initState();
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pushNamed(context, Routes.mood);

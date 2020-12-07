@@ -62,7 +62,7 @@ class NotificationDb {
     "type": convertTypeEnumsToString(type),
   };
 
-  String convertTimetypeEnumsToString(NotificationDbTimeType type){
+  static String convertTimetypeEnumsToString(NotificationDbTimeType type){
     if(type == NotificationDbTimeType.Day)
       return 'day';
     else if(type == NotificationDbTimeType.Hour)
@@ -71,13 +71,31 @@ class NotificationDb {
       return 'month';
   }
 
-  String convertTypeEnumsToString(NotificationDbType type){
+  static String convertTypeEnumsToString(NotificationDbType type){
     if(type == NotificationDbType.Drug)
       return 'medications';
     else if(type == NotificationDbType.Analysis)
       return 'tests';
     else
       return 'visit';
+  }
+
+  static NotificationDbTimeType convertStringToTimetypeEnums(String type){
+    if(type == 'day')
+      return NotificationDbTimeType.Day;
+    else if(type == 'hour')
+      return NotificationDbTimeType.Hour;
+    else
+      return NotificationDbTimeType.Month;
+  }
+
+  static NotificationDbType convertStringToTypeEnums(String type){
+    if(type == 'medications')
+      return NotificationDbType.Drug;
+    else if(type == 'tests')
+      return NotificationDbType.Analysis;
+    else
+      return NotificationDbType.Visit;
   }
 
   Future<bool> send() async {
@@ -105,7 +123,7 @@ class NotificationDb {
       throw error;
     }
   }
-  Future<bool> sendList(List<NotificationDb> list) async {
+  static Future<bool> sendList(List<NotificationDb> list) async {
     final url =
         Configs.ip+'api/notifications';
     DbUser userDb = await DBProvider.db.getUser();
@@ -126,8 +144,42 @@ class NotificationDb {
       throw error;
     }
   }
+  static Future<bool> getList() async {
+    await DBProvider.db.getUser().then((value) async {
+      final url =
+          Configs.ip+'api/patientmoods/'+value.id.toString();
+      try {
+        Map<String, String> headers = {"Content-type": "application/json","token": value.token};
+        final response = await http.get(
+          url,
+          headers:headers,
+        );
+        var rr = saveListToDatabase(json.decode(response.body));
+        return true;
+      }
+      catch (error) {
+        throw error;
+      }
+    });
+  }
+  static List<NotificationDb> saveListToDatabase(var responseBody){
+    List<NotificationDb> list = new List<NotificationDb>();
+    for(var i in responseBody){
+      NotificationDb model = new NotificationDb();
 
-  List<Map<String, dynamic>> notificationList(List<NotificationDb> list, int user_id) {
+      model.datetime = i['datetime'];
+      model.description = i['description'];
+      model.type = convertStringToTypeEnums(i['type']);
+      model.time_type = convertStringToTimetypeEnums(i['remind']);
+      model.sent = 1;
+
+      DBProvider.db.newNotification1(model);
+      list.add(model);
+    }
+    return list;
+  }
+
+  static List<Map<String, dynamic>> notificationList(List<NotificationDb> list, int user_id) {
     List<Map<String, dynamic>> result = new List<Map<String, dynamic>>();
     for(var i in list){
       result.add({

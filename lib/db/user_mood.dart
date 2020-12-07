@@ -30,7 +30,7 @@ class UserMood {
     "user_id": user_id,
     "title": title,
     "file_name": file_name,
-    "date_time": date_time,
+    "date_time": date_time.toString(),
     "sent": sent
   };
 
@@ -41,7 +41,7 @@ class UserMood {
     "date": date_time,
   };
 
-  Future<bool> send() async {
+  Future<bool> get() async {
     final url =
         Configs.ip+'api/patientmoods';
     DbUser userDb = await DBProvider.db.getUser();
@@ -64,6 +64,75 @@ class UserMood {
     catch (error) {
       throw error;
     }
+  }
+
+  static Future<bool> sendList(List<UserMood> list) async {
+    final url =
+        Configs.ip+'api/patientmoods';
+    DbUser userDb = await DBProvider.db.getUser();
+    try {
+      Map<String, String> headers = {"Content-type": "application/json"};
+      final response = await http.post(
+        url,
+        headers:headers,
+        body: json.encode(
+            {
+              "data": userMoodList(list, userDb.id)
+            }),
+      );
+      var rr = json.decode(response.body);
+      return true;
+    }
+    catch (error) {
+      throw error;
+    }
+  }
+  static Future<bool> getList() async {
+    await DBProvider.db.getUser().then((value) async {
+      final url =
+          Configs.ip+'api/patientmoods/'+value.id.toString();
+      try {
+        Map<String, String> headers = {"Content-type": "application/json","token": value.token};
+        final response = await http.get(
+          url,
+          headers:headers,
+        );
+        var rr = saveListToDatabase(json.decode(response.body));
+        return true;
+      }
+      catch (error) {
+        throw error;
+      }
+    });
+  }
+  static List<UserMood> saveListToDatabase(var responseBody){
+    List<UserMood> list = new List<UserMood>();
+    for(var i in responseBody){
+      UserMood model = new UserMood();
+
+      model.user_id = i['patient_id'];
+      model.title = i['title'];
+      model.file_name = i['file_name'];
+      model.date_time = DateTime.parse(i['date']);
+      model.sent = 1;
+
+      DBProvider.db.newUserMood1(model);
+      list.add(model);
+    }
+    return list;
+  }
+
+  static List<Map<String, dynamic>> userMoodList(List<UserMood> list, int user_id) {
+    List<Map<String, dynamic>> result = new List<Map<String, dynamic>>();
+    for(var i in list){
+      result.add({
+        "patient_id": user_id,
+        "title": i.title,
+        "file_name": i.file_name,
+        "date": "${i.date_time.year}-${i.date_time.month.toString().padLeft(2, '0')}-${i.date_time.day.toString().padLeft(2, '0')}",
+      });
+    }
+    return result;
   }
 }
 UserMood userMoodFromJson(String str) {
