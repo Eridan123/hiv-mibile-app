@@ -28,6 +28,7 @@ class _AddMoodFormState extends State<AddMoodForm> {
   String selectedSymptom = '';
   String selectedSymptomTitle = '';
   List<UserMood> _list = new List<UserMood>();
+  String asset_path = "assets/images/moods/";
 
   Widget dateTimePicker() {
     return Container(
@@ -99,14 +100,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/angry.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'angry.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Зол'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/angry.png';
+                                  selectedSymptom = 'angry.png';
                                   selectedSymptomTitle = 'Зол';
                                 });
                               },),
@@ -120,14 +121,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/angry-1.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'angry-1.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Гневен'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/angry-1.png';
+                                  selectedSymptom = 'angry-1.png';
                                   selectedSymptomTitle = 'Гневен';
                                 });
                               },),
@@ -141,14 +142,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/bored.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'bored.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Скучно'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/bored.png';
+                                  selectedSymptom = 'bored.png';
                                   selectedSymptomTitle = 'Скучно';
                                 });
                               },),
@@ -168,14 +169,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/crying.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'crying.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Слёзы'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/crying.png';
+                                  selectedSymptom = 'crying.png';
                                   selectedSymptomTitle = 'Слёзы';
                                 });
                               },),
@@ -189,14 +190,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/happy.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'happy.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Счастлив'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/happy.png';
+                                  selectedSymptom = 'happy.png';
                                   selectedSymptomTitle = 'Счастлив';
                                 });
                               },),
@@ -210,14 +211,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/embarrassed.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'embarrassed.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Смушён'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/embarrassed.png';
+                                  selectedSymptom = 'embarrassed.png';
                                   selectedSymptomTitle = 'Смушён';
                                 });
                               },),
@@ -237,14 +238,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/happy-1.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'happy-1.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Благополучный', style: kTextStyleBody2.copyWith(fontSize: 13)),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/happy-1.png';
+                                  selectedSymptom = 'happy-1.png';
                                   selectedSymptomTitle = 'Благополучный';
                                 });
                               },),
@@ -258,14 +259,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/ill.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'ill.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Болен'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/ill.png';
+                                  selectedSymptom = 'ill.png';
                                   selectedSymptomTitle = 'Болен';
                                 });
                               },),
@@ -279,14 +280,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/sad.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'sad.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Грустно'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/sad.png';
+                                  selectedSymptom = 'sad.png';
                                   selectedSymptomTitle = 'Грустно';
                                 });
                               },),
@@ -306,14 +307,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/mad.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'mad.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Сумашедший'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/mad.png';
+                                  selectedSymptom = 'mad.png';
                                   selectedSymptomTitle = 'Сумашедший';
                                 });
                               },),
@@ -327,14 +328,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/in-love.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'in-love.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Влюблён'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/in-love.png';
+                                  selectedSymptom = 'in-love.png';
                                   selectedSymptomTitle = 'Влюблён';
                                 });
                               },),
@@ -348,14 +349,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/smile.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'smile.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Улыбка'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/smile.png';
+                                  selectedSymptom = 'smile.png';
                                   selectedSymptomTitle = 'Улыбка';
                                 });
                               },),
@@ -375,14 +376,14 @@ class _AddMoodFormState extends State<AddMoodForm> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
-                                    Image.asset('assets/images/moods/unhappy.png', height: MediaQuery.of(context).size.height * 0.06,),
+                                    Image.asset(asset_path+'unhappy.png', height: MediaQuery.of(context).size.height * 0.06,),
                                     Text('Несчастный'),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
-                                  selectedSymptom = 'assets/images/moods/unhappy.png';
+                                  selectedSymptom = 'unhappy.png';
                                   selectedSymptomTitle = 'Несчастный';
                                 });
                               },),

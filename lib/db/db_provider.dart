@@ -354,9 +354,6 @@ class DBProvider {
       var list = await getNotificationsBySent();
       if(value){
         NotificationDb.sendList(list).then((value) {
-          model.sent = 1;
-          model.id = raw;
-         updateNotification(model);
          for(var i in list){
            i.sent = 1;
            updateNotification(i);
@@ -478,9 +475,6 @@ class DBProvider {
       var list = await getUserMoodsBySent();
       if(value){
         UserMood.sendList(list).then((value) {
-          model.sent = 1;
-          model.id = raw;
-          updateUserMood(model);
           for(var i in list){
             i.sent = 1;
             updateUserMood(i);
@@ -590,9 +584,6 @@ class DBProvider {
       if(value){
         var list = await getUserSymptomsBySent();
         UserSymptom.sendList(list).then((value) {
-          model.sent = 1;
-          model.id = raw;
-          updateUserSymptom(model);
           for(var i in list){
             i.sent = 1;
             updateUserSymptom(i);
@@ -684,12 +675,14 @@ class DBProvider {
         "INSERT Into user_images(id, user_id, path, file_name, date_time, type, sent)"
             " VALUES (?,?,?,?,?,?,0)",
         [model.id, 1, model.path, model.file_name, model.date_time.toString(), model.type]);
-    _checkInternetConnection().then((value) {
+    _checkInternetConnection().then((value) async {
       if(value){
-        model.send().then((value) {
-          model.sent = 1;
-          model.id = raw;
-          updateUserImage(model);
+        var list = await getUserImageFilesBySent();
+        UserImageFile.sendList(list).then((value) {
+          for(var i in list){
+            i.sent = 1;
+            updateUserImage(i);
+          }
         });
       }
     });
@@ -717,35 +710,24 @@ class DBProvider {
     }
     return list;
   }
-  /*Future<List<UserSymptomTotal>> getAllUserImagesByType(int type) async{
-    String queryStr='';
-    if(type == 1){
-      queryStr = "'-7 day'";
-    }
-    else if(type == 2){
-      queryStr = "'-30 day'";
-    }
-    else if(type == 3){
-      queryStr = "'-60 day'";
-    }
-    else if(type == 4){
-      queryStr = "'-90 day'";
-    }
-    else if(type == 5){
-      queryStr = "'-6 months'";
-    }
-    else {
-      queryStr = "'-1 year'";
-    }
-
+  Future<List<UserImageFile>> getUserImageFiles() async {
     final db = await database;
-    var res =await  db.rawQuery("select s.file_name, s.title, count() as count from user_images s where s.date_time > datetime('now',"+queryStr+") group by s.title");
-    List<UserSymptomTotal> list = new List<UserSymptomTotal>();
+    var res =await  db.query("user_images");
+    List<UserImageFile> list = new List<UserImageFile>();
     for(var r in res){
-      list.add(UserSymptomTotal.fromJson(r));
+      list.add(UserImageFile.fromJson(r));
     }
-    return res.isNotEmpty ? list : Null ;
-  }*/
+    return list;
+  }
+  Future<List<UserImageFile>> getUserImageFilesBySent() async {
+    final db = await database;
+    var res =await  db.query("user_images" , where: "sent = ?", whereArgs: [0]);
+    List<UserImageFile> list = new List<UserImageFile>();
+    for(var r in res){
+      list.add(UserImageFile.fromJson(r));
+    }
+    return res.isNotEmpty ? list : null ;
+  }
   updateUserImage(UserImageFile newModel) async {
     final db = await database;
     var res = await db.update("user_images", newModel.toJson(),
@@ -758,7 +740,13 @@ class DBProvider {
   }
   deleteAllUserImage() async {
     final db = await database;
-    db.rawDelete("Delete from user_images");
+    await getUserImageFiles().then((value) {
+      for(var i in value){
+        var file = new File(i.path);
+        file.delete(recursive: true);
+      }
+      db.rawDelete("Delete from user_images");
+    });
   }
 //endregion
   //region Audio Files

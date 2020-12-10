@@ -34,6 +34,7 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
   List<UserMood> _list = new List<UserMood>();
   DateTime _selectedDate;
   bool logged = false;
+  String asset_path = "assets/images/moods/";
 
   getList() async{
     await DBProvider.db.getAllUserMoods().then((value) {
@@ -268,7 +269,7 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
               Positioned(
                 right: 1,
                 bottom: 1,
-                child: Image.asset(events[1], height: 30, width: 30,),
+                child: Image.asset(asset_path + events[1], height: 30, width: 30,),
               ),
             );
           }

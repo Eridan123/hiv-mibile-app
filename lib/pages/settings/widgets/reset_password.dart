@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:connectivity/connectivity.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   @override
@@ -26,6 +27,38 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+  Future<bool> _checkInternetConnection() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    }
+    else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => Center(
+        child: AlertDialog(
+          title: Text('error'.tr()),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('okay'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -84,7 +117,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   ),
                                   CustomTextFormField(
                                     controller: _usernameController,
-                                    hintText: 'example_login',
+                                    hintText: 'логин',
                                     validator: (value) {
                                       if (value.isEmpty) {
                                         return 'loginIsEmptyError'.tr();
@@ -201,15 +234,22 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                       return;
                                     }
                                     else{
-                                      _user.first_question = _question1.id;
-                                      _user.username = _usernameController.text;
-                                      _user.second_question = _question2.id;
-                                      _user.first_question_answer = _firstQuestionAnswerController.text;
-                                      _user.second_question_answer = _secondQuestionAnswerController.text;
-                                      _user.resetPassword(_user).then((value) {
-                                        Navigator.push(context, MaterialPageRoute(
-                                          builder: (context) => ChangePasswordPage(false),
-                                        ),);
+                                      _checkInternetConnection().then((value) {
+                                        if(value){
+                                          _user.first_question = _question1.id;
+                                          _user.username = _usernameController.text;
+                                          _user.second_question = _question2.id;
+                                          _user.first_question_answer = _firstQuestionAnswerController.text;
+                                          _user.second_question_answer = _secondQuestionAnswerController.text;
+                                          _user.resetPassword(_user).then((value) {
+                                            Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) => ChangePasswordPage(false),
+                                            ),);
+                                          });
+                                        }
+                                        else{
+                                          _showErrorDialog('connect_to_internet'.tr());
+                                        }
                                       });
                                     }
                                   },

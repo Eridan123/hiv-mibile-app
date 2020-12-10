@@ -28,6 +28,7 @@ class _MoodTotalWidgetState extends State<MoodTotalWidget> {
   DateTime initialDate = DateTime.now();
   Color _color;
   var _isDark = Prefs.getBool(Prefs.DARKTHEME, def: false);
+  String asset_path = "assets/images/moods/";
 
 
   getList() async{
@@ -102,7 +103,7 @@ class _MoodTotalWidgetState extends State<MoodTotalWidget> {
                 itemBuilder: (context, index){
                   return ListTile(
                     tileColor: index%2==0 ? _color: Colors.transparent,
-                    leading: Image.asset(_list[index].file_name),
+                    leading: Image.asset(asset_path + _list[index].file_name),
                     title: Text(_list[index].title,
                       style: TextStyle(
                         fontSize: 16,

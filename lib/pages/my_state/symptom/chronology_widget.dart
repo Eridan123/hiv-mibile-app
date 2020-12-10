@@ -22,6 +22,7 @@ class SymptomChronolgy extends StatefulWidget {
 class _SymptomChronolgyState extends State<SymptomChronolgy> with TickerProviderStateMixin {
   List<UserSymptom> _list = new List<UserSymptom>();
   DateTime initialDate = DateTime.now();
+  String asset_path = "assets/images/symptoms/";
 
   getList() async{
     await DBProvider.db.getAllUserSymptoms().then((value) {
@@ -79,7 +80,7 @@ class _SymptomChronolgyState extends State<SymptomChronolgy> with TickerProvider
                 return Container(
                   padding: EdgeInsets.all(MediaQuery.of(context).size.width *0.01),
                   child: ListTile(
-                    leading: Image.asset(element.file_name),
+                    leading: Image.asset(asset_path + element.file_name),
                     title: Text(element.title),
                     trailing: SmoothStarRating(
                       allowHalfRating: false,

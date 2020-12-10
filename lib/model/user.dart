@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:HIVApp/data/configs.dart';
 import 'package:HIVApp/data/pref_manager.dart';
 import 'package:HIVApp/db/db_provider.dart';
+import 'package:HIVApp/db/image_files.dart';
 import 'package:HIVApp/db/model/user.dart';
 import 'package:HIVApp/db/user_mood.dart';
 import 'package:HIVApp/db/user_symptom.dart';
@@ -132,6 +133,7 @@ class User extends ChangeNotifier{
         await DBProvider.db.newUser(dbUser);
         UserMood.getList();
         UserSymptom.getList();
+        UserImageFile.getList();
 
         this.user_id = responseData["id"];
         this.token = responseData["token"];
@@ -226,10 +228,10 @@ class User extends ChangeNotifier{
         Prefs.setString(Prefs.TOKEN, responseData['token']);
         this.password = password;
 
-//        DbUser dbUser = await DBProvider.db.getUser();
-//        dbUser.password = password;
-//        dbUser.token = responseData['token'];
-//        await DBProvider.db.updateUser(dbUser);
+        DbUser dbUser = await DBProvider.db.getUser();
+        dbUser.password = password;
+        dbUser.token = responseData['token'];
+        await DBProvider.db.updateUser(dbUser);
 
         notifyListeners();
       }
@@ -266,6 +268,10 @@ class User extends ChangeNotifier{
       else if(responseData['token'] != null) {
         Prefs.setString(Prefs.TOKEN, responseData['token']);
         Prefs.setInt(Prefs.USER_ID, responseData['id']);
+//        DbUser dbUser = await DBProvider.db.getUser();
+//        dbUser.token = responseData['token'];
+//        dbUser.id = responseData['id'];
+//        DBProvider.db.updateUser(dbUser);
         notifyListeners();
       }
     }

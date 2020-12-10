@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/pref_manager.dart';
 import '../../utils/app_themes.dart';
 import '../../utils/themebloc/theme_bloc.dart';
+import 'package:HIVApp/model/user_registrations.dart';
+import 'package:provider/provider.dart';
 import 'widgets/widgets.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -18,6 +20,7 @@ class _SettingsPageState extends State<SettingsPage>
 
   @override
   void initState() {
+    Provider.of<UserRegistation>(context, listen: false).getList();
     super.initState();
     _color = _isDark ? Colors.white.withOpacity(0.12) : Colors.grey[200];
   }

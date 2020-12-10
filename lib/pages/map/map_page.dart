@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/utils/constants.dart';
 import 'package:fluster/fluster.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong/latlong.dart';
-//import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../model/organization.dart';
 
 class PinInformation {
   String pinPath;
@@ -35,8 +36,10 @@ class _MapPageState extends State<MapPage> {
   String pinTitle ='';
   String pinName ='';
   MapController mapController;
+  List<OrganizationType> _orgList = [];
+  List<Marker> _markers = new List<Marker>();
 
-  void onMarkerTapped(int markerId, double lat, double lng) async {
+  void onMarkerTapped(int markerId, double lat, double lng,{Organization organization}) async {
     String locationType;
     String locationName;
     if(markerId == 2){
@@ -75,6 +78,10 @@ class _MapPageState extends State<MapPage> {
       locationType = 'г. Талас ул. Ленина. 257';
       locationName = '55-23-6, 29-60-91';
     }
+    else if(markerId == 10){
+      locationType = "${organization.city}. ${organization.street}.\n ${organization.organization_name}";
+      locationName = "${organization.phone_number}. ${organization.working_hours}";
+    }
     setState(() {
       pinTitle = locationName;
       pinName = locationType;
@@ -85,10 +92,176 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
+    getList();
+    initMarkers();
     super.initState();
     mapController = new MapController();
   }
 
+  String markerByOrgType(String type){
+    if(type == "Клиники")
+      return 'marker';
+    else if(type == "Группа самопомощи")
+      return 'marker1';
+  }
+
+  mapFromOrganizationsList(){
+    List<Marker> list = new List<Marker>();
+    for(int i=0;i<_orgList.length;i++){
+      for(var j in _orgList[i].list){
+        var d = Marker(
+          width: 40.0,
+          height: 50.0,
+          point: new LatLng(j.location.latitude, j.location.longitude),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/marker"+i.toString()+".png",),
+              onTap: () => onMarkerTapped(10,j.location.latitude, j.location.longitude, organization: j),
+            ),
+          ),
+        );
+        list.add(d);
+      }
+    }
+    setState(() {
+      _markers.addAll(list);
+    });
+  }
+
+  initMarkers() async {
+    setState(() {
+      _markers.addAll([
+        Marker(
+          width: 200.0,
+          height: 250.0,
+          point: new LatLng(42.871406, 74.619950),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(2,42.871406, 74.619950),
+            ),
+          ),
+        ),
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: new LatLng(42.865216, 74.597695),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(1, 42.865216, 74.597695),
+            ),
+          ),
+        ),
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: new LatLng(42.830901, 75.293157),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(3, 42.830901, 75.293157),
+            ),
+          ),
+        ),
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: new LatLng(42.479976, 78.397745),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(4, 42.479976, 78.397745),
+            ),
+          ),
+        ),
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: new LatLng(41.423498, 76.019460),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(5, 41.423498, 76.019460),
+            ),
+          ),
+        ),
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: new LatLng(40.930903920543, 73.012453429583),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(6, 40.930903920543, 73.012453429583),
+            ),
+          ),
+        ),
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: new LatLng(40.527083, 72.795963),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(7, 40.527083, 72.795963),
+            ),
+          ),
+        ),
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: new LatLng(40.077585, 70.804748),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(8, 40.077585, 70.804748),
+            ),
+          ),
+        ),
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: new LatLng(42.531484, 72.205452),
+          builder: (ctx) =>
+          new Container(
+            child:
+            InkWell(
+              child: Image.asset("assets/images/ribbon3.png",),
+              onTap: () => onMarkerTapped(9, 42.531484, 72.205452),
+            ),
+          ),
+        ),
+      ]);
+    });
+  }
+
+  getList() async {
+    await Organization.get().then((value) {
+      setState(() {
+        _orgList.addAll(value);
+      });
+      mapFromOrganizationsList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,125 +283,7 @@ class _MapPageState extends State<MapPage> {
                 subdomains: ['a', 'b', 'c']
             ),
             new MarkerLayerOptions(
-              markers: [
-                Marker(
-                  width: 200.0,
-                  height: 250.0,
-                  point: new LatLng(42.871406, 74.619950),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(2,42.871406, 74.619950),
-                    ),
-                  ),
-                ),
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: new LatLng(42.865216, 74.597695),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(1, 42.865216, 74.597695),
-                    ),
-                  ),
-                ),
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: new LatLng(42.830901, 75.293157),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(3, 42.830901, 75.293157),
-                    ),
-                  ),
-                ),
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: new LatLng(42.479976, 78.397745),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(4, 42.479976, 78.397745),
-                    ),
-                  ),
-                ),
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: new LatLng(41.423498, 76.019460),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(5, 41.423498, 76.019460),
-                    ),
-                  ),
-                ),
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: new LatLng(40.930903920543, 73.012453429583),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(6, 40.930903920543, 73.012453429583),
-                    ),
-                  ),
-                ),
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: new LatLng(40.527083, 72.795963),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(7, 40.527083, 72.795963),
-                    ),
-                  ),
-                ),
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: new LatLng(40.077585, 70.804748),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(8, 40.077585, 70.804748),
-                    ),
-                  ),
-                ),
-                Marker(
-                  width: 80.0,
-                  height: 80.0,
-                  point: new LatLng(42.531484, 72.205452),
-                  builder: (ctx) =>
-                  new Container(
-                    child:
-                    InkWell(
-                        child: Image.asset("assets/images/ribbon3.png",),
-                      onTap: () => onMarkerTapped(9, 42.531484, 72.205452),
-                    ),
-                  ),
-                ),
-              ],
+              markers: _markers,
             ),
           ],
         ),

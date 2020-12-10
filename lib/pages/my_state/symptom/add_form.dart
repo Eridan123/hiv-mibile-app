@@ -37,6 +37,7 @@ class _AddSymptomFormState extends State<AddSymptomForm> {
   List<UserSymptom> _list = new List<UserSymptom>();
   double rating=0;
   List<SymptomViewModel> _symtopList = new List<SymptomViewModel>();
+  String asset_path = "assets/images/symptoms/";
 
   Widget dateTimePicker() {
     return Container(
@@ -67,19 +68,19 @@ class _AddSymptomFormState extends State<AddSymptomForm> {
   }
 
   fillTheSymptomList(){
-    SymptomViewModel model =new SymptomViewModel(fileName: 'assets/images/symptoms/acne.png', title: 'Угревая сыпь', rating: 0.0);
+    SymptomViewModel model =new SymptomViewModel(fileName: 'acne.png', title: 'Угревая сыпь', rating: 0.0);
     _symtopList.add(model);
-    model =new SymptomViewModel(fileName: 'assets/images/symptoms/dizziness.png', title: 'Головокружение', rating: 0.0);
+    model =new SymptomViewModel(fileName: 'dizziness.png', title: 'Головокружение', rating: 0.0);
     _symtopList.add(model);
-    model =new SymptomViewModel(fileName: 'assets/images/symptoms/fever.png', title: 'Лихородка', rating: 0.0);
+    model =new SymptomViewModel(fileName: 'fever.png', title: 'Лихородка', rating: 0.0);
     _symtopList.add(model);
-    model =new SymptomViewModel(fileName: 'assets/images/symptoms/frontal-headaches.png', title: 'Мигрень', rating: 0.0);
+    model =new SymptomViewModel(fileName: 'frontal-headaches.png', title: 'Мигрень', rating: 0.0);
     _symtopList.add(model);
-    model =new SymptomViewModel(fileName: 'assets/images/symptoms/headache.png', title: 'Головная боль', rating: 0.0);
+    model =new SymptomViewModel(fileName: 'headache.png', title: 'Головная боль', rating: 0.0);
     _symtopList.add(model);
-    model =new SymptomViewModel(fileName: 'assets/images/symptoms/inflammation.png', title: 'Боль в шее', rating: 0.0);
+    model =new SymptomViewModel(fileName: 'inflammation.png', title: 'Боль в шее', rating: 0.0);
     _symtopList.add(model);
-    model =new SymptomViewModel(fileName: 'assets/images/symptoms/shoulder.png', title: 'Боль в плечах', rating: 0.0);
+    model =new SymptomViewModel(fileName: 'shoulder.png', title: 'Боль в плечах', rating: 0.0);
     _symtopList.add(model);
   }
   
@@ -110,7 +111,7 @@ class _AddSymptomFormState extends State<AddSymptomForm> {
                 child: ListView.separated(
                     itemBuilder: (context, index){
                       return ListTile(
-                        leading: Image.asset(_symtopList[index].fileName),
+                        leading: Image.asset(asset_path + _symtopList[index].fileName),
                         title: Text(_symtopList[index].title),
                         trailing: SmoothStarRating(
                           allowHalfRating: false,

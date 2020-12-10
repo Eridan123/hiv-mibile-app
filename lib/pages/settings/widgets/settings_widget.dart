@@ -21,7 +21,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
   @override
   void initState() {
-    Provider.of<UserRegistation>(context, listen: false).getList();
   }
 
   @override

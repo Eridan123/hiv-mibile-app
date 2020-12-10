@@ -130,6 +130,9 @@ class _ImageFormState extends State<ImageForm> {
       ),
       body: Column(
         children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
           Center(
             child: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
                 ? FutureBuilder<void>(
@@ -143,7 +146,10 @@ class _ImageFormState extends State<ImageForm> {
                       textAlign: TextAlign.center,
                     );
                   case ConnectionState.done:
-                    return _previewImage();
+                    return Container(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                        child: _previewImage()
+                    );
                   default:
                     if (snapshot.hasError) {
                       return Text(
