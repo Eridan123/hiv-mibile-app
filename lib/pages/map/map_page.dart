@@ -79,7 +79,7 @@ class _MapPageState extends State<MapPage> {
       locationName = '55-23-6, 29-60-91';
     }
     else if(markerId == 10){
-      locationType = "${organization.city}. ${organization.street}.\n ${organization.organization_name}";
+      locationType = "${organization.organization_name}\n${organization.city}. ${organization.street}.";
       locationName = "${organization.phone_number}. ${organization.working_hours}";
     }
     setState(() {
@@ -117,7 +117,7 @@ class _MapPageState extends State<MapPage> {
           new Container(
             child:
             InkWell(
-              child: Image.asset("assets/images/marker"+i.toString()+".png",),
+              child: i<7 ? Image.asset("assets/images/marker"+i.toString()+".png",) : Image.asset("assets/images/marker6.png",),
               onTap: () => onMarkerTapped(10,j.location.latitude, j.location.longitude, organization: j),
             ),
           ),

@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../../../utils/constants.dart';
+import '../../../db/model/user.dart';
 
 class SymptomViewModel{
   String fileName;
@@ -38,6 +39,7 @@ class _AddSymptomFormState extends State<AddSymptomForm> {
   double rating=0;
   List<SymptomViewModel> _symtopList = new List<SymptomViewModel>();
   String asset_path = "assets/images/symptoms/";
+  DbUser dbUser = new DbUser();
 
   Widget dateTimePicker() {
     return Container(
@@ -83,10 +85,19 @@ class _AddSymptomFormState extends State<AddSymptomForm> {
     model =new SymptomViewModel(fileName: 'shoulder.png', title: 'Боль в плечах', rating: 0.0);
     _symtopList.add(model);
   }
+
+  getUser()async {
+    DBProvider.db.getUser().then((value) {
+      setState(() {
+        dbUser = value;
+      });
+    });
+  }
   
   @override
   void initState() {
     fillTheSymptomList();
+    getUser();
     super.initState();
   }
 
@@ -145,7 +156,7 @@ class _AddSymptomFormState extends State<AddSymptomForm> {
                         userSymptom.title = i.title;
                         userSymptom.file_name = i.fileName;
                         userSymptom.date_time = _dateTime;
-                        userSymptom.user_id = 1;
+                        userSymptom.user_id = dbUser.id;
                         userSymptom.rating = i.rating;
                         await DBProvider.db.newUserSymptom(userSymptom);
                       }

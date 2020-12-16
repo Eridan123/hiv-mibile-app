@@ -294,6 +294,11 @@ class User extends ChangeNotifier{
         );
         final responseData = json.decode(response.body);
         if(responseData == "successfully") {
+          await DBProvider.db.getAllUserSymptoms();
+          await DBProvider.db.sendNotSentNotifications();
+          await DBProvider.db.sendNotSentUserMoods();
+          await DBProvider.db.sendNotSentUserSymptoms();
+          await DBProvider.db.sendNotSentUserImages();
           await DBProvider.db.deleteAllNotifications();
           await DBProvider.db.deleteAllUsers();
           await DBProvider.db.deleteAllUserMoods();

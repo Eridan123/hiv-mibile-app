@@ -10,6 +10,8 @@ import 'package:HIVApp/pages/my_state/mood/mood_page.dart';
 import 'package:HIVApp/pages/my_state/my_state.dart';
 import 'package:HIVApp/pages/my_state/symptom/symptom_page.dart';
 import 'package:HIVApp/pages/school/school_page.dart';
+import 'package:HIVApp/pages/test/result_page.dart';
+import 'package:HIVApp/pages/test/warning_page.dart';
 import 'package:HIVApp/pages/visit/visit_add_page.dart';
 import 'package:HIVApp/pages/visit/visit_page.dart';
 import 'package:HIVApp/pages/settings/widgets/reset_password.dart';
@@ -125,6 +127,12 @@ class RouteGenerator {
 
       case Routes.school:
         return CupertinoPageRoute(builder: (_) => SchoolPage());
+
+      case Routes.test_warning:
+        return CupertinoPageRoute(builder: (_) => WarningPage());
+
+      case Routes.risk_result:
+        return CupertinoPageRoute(builder: (_) => TestResultPage());
 
       case Routes.error:
         return _errorRoute();

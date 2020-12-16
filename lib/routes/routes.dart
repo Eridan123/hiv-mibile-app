@@ -32,4 +32,6 @@ class Routes {
   static const String visit_add = '/visit_add';
   static const String pin_code_screen = '/pin_code_screen';
   static const String school = '/school';
+  static const String test_warning = '/test_warning';
+  static const String risk_result = '/risk_result';
 }

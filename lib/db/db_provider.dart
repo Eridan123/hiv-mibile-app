@@ -350,18 +350,21 @@ class DBProvider {
     var raw = await db.insert(
         "notifications",
         model.toJson());
+    await sendNotSentNotifications();
+    return raw;
+  }
+  Future<void> sendNotSentNotifications()async {
     _checkInternetConnection().then((value) async {
       var list = await getNotificationsBySent();
       if(value){
         NotificationDb.sendList(list).then((value) {
-         for(var i in list){
-           i.sent = 1;
-           updateNotification(i);
-         }
+          for(var i in list){
+            i.sent = 1;
+            updateNotification(i);
+          }
         });
       }
     });
-    return raw;
   }
   Future<int> newNotification1(NotificationDb model) async {
     final db = await database;
@@ -471,6 +474,10 @@ class DBProvider {
         "INSERT Into user_moods(id, user_id, title, file_name, date_time,sent)"
             " VALUES (?,?,?,?,?,0)",
         [model.id, model.user_id, model.title, model.file_name, model.date_time.toString()]);
+    sendNotSentUserMoods();
+    return raw;
+  }
+  Future<void> sendNotSentUserMoods() async {
     _checkInternetConnection().then((value) async {
       var list = await getUserMoodsBySent();
       if(value){
@@ -482,7 +489,6 @@ class DBProvider {
         });
       }
     });
-    return raw;
   }
   newUserMood1(UserMood model) async {
     final db = await database;
@@ -578,8 +584,12 @@ class DBProvider {
     final db = await database;
     var raw = await db.rawInsert(
         "INSERT Into user_symptoms(id, user_id, title, file_name, date_time, rating, sent)"
-            " VALUES (?,?,?,?,?,?,0)",
-        [model.id, 1, model.title, model.file_name, model.date_time.toString(), model.rating]);
+            " VALUES (?,?,?,?,?,?,?)",
+        [model.id, 1, model.title, model.file_name, model.date_time.toString(), model.rating,0]);
+    await sendNotSentUserSymptoms();
+    return raw;
+  }
+  Future<void> sendNotSentUserSymptoms()async {
     _checkInternetConnection().then((value) async {
       if(value){
         var list = await getUserSymptomsBySent();
@@ -591,7 +601,6 @@ class DBProvider {
         });
       }
     });
-    return raw;
   }
   newUserSymptom1(UserSymptom model) async {
     final db = await database;
@@ -675,6 +684,10 @@ class DBProvider {
         "INSERT Into user_images(id, user_id, path, file_name, date_time, type, sent)"
             " VALUES (?,?,?,?,?,?,0)",
         [model.id, 1, model.path, model.file_name, model.date_time.toString(), model.type]);
+    await sendNotSentUserImages();
+    return raw;
+  }
+  sendNotSentUserImages()async {
     _checkInternetConnection().then((value) async {
       if(value){
         var list = await getUserImageFilesBySent();
@@ -686,7 +699,6 @@ class DBProvider {
         });
       }
     });
-    return raw;
   }
   newUserImage1(UserImageFile model) async {
     final db = await database;
