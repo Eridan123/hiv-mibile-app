@@ -94,63 +94,63 @@ class _AddMoodFormState extends State<AddMoodForm> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Зол' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'angry' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'angry.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Зол'),
+                                    Text('angry'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'angry.png';
-                                  selectedSymptomTitle = 'Зол';
+                                  selectedSymptomTitle = 'angry';
                                 });
                               },),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Гневен' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'angry-1' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'angry-1.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Гневен'),
+                                    Text('angry-1'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'angry-1.png';
-                                  selectedSymptomTitle = 'Гневен';
+                                  selectedSymptomTitle = 'angry-1';
                                 });
                               },),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Скучно' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'bored' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'bored.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Скучно'),
+                                    Text('bored'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'bored.png';
-                                  selectedSymptomTitle = 'Скучно';
+                                  selectedSymptomTitle = 'bored';
                                 });
                               },),
                           ),
@@ -163,63 +163,63 @@ class _AddMoodFormState extends State<AddMoodForm> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Слёзы' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'crying' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'crying.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Слёзы'),
+                                    Text('crying'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'crying.png';
-                                  selectedSymptomTitle = 'Слёзы';
+                                  selectedSymptomTitle = 'crying';
                                 });
                               },),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Счастлив' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'happy' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'happy.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Счастлив'),
+                                    Text('happy'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'happy.png';
-                                  selectedSymptomTitle = 'Счастлив';
+                                  selectedSymptomTitle = 'happy';
                                 });
                               },),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Смушён' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'embarrassed' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'embarrassed.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Смушён'),
+                                    Text('embarrassed'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'embarrassed.png';
-                                  selectedSymptomTitle = 'Смушён';
+                                  selectedSymptomTitle = 'embarrassed';
                                 });
                               },),
                           ),
@@ -232,63 +232,63 @@ class _AddMoodFormState extends State<AddMoodForm> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Благополучный' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'happy-1' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'happy-1.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Благополучный', style: kTextStyleBody2.copyWith(fontSize: 13)),
+                                    Text('happy-1'.tr(), style: kTextStyleBody2.copyWith(fontSize: 13)),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'happy-1.png';
-                                  selectedSymptomTitle = 'Благополучный';
+                                  selectedSymptomTitle = 'happy-1';
                                 });
                               },),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Болен' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'ill' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'ill.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Болен'),
+                                    Text('ill'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'ill.png';
-                                  selectedSymptomTitle = 'Болен';
+                                  selectedSymptomTitle = 'ill';
                                 });
                               },),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Грустно' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'sad' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'sad.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Грустно'),
+                                    Text('sad'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'sad.png';
-                                  selectedSymptomTitle = 'Грустно';
+                                  selectedSymptomTitle = 'sad';
                                 });
                               },),
                           ),
@@ -301,63 +301,63 @@ class _AddMoodFormState extends State<AddMoodForm> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Сумашедший' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'mad' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'mad.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Сумашедший'),
+                                    Text('mad'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'mad.png';
-                                  selectedSymptomTitle = 'Сумашедший';
+                                  selectedSymptomTitle = 'mad';
                                 });
                               },),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Влюблён' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'in-love' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'in-love.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Влюблён'),
+                                    Text('in-love'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'in-love.png';
-                                  selectedSymptomTitle = 'Влюблён';
+                                  selectedSymptomTitle = 'in-love';
                                 });
                               },),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Улыбка' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'smile' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'smile.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Улыбка'),
+                                    Text('smile'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'smile.png';
-                                  selectedSymptomTitle = 'Улыбка';
+                                  selectedSymptomTitle = 'smile';
                                 });
                               },),
                           ),
@@ -370,21 +370,21 @@ class _AddMoodFormState extends State<AddMoodForm> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             width: MediaQuery.of(context).size.width * 0.3,
-                            color: selectedSymptomTitle == 'Несчастный' ? kColorPrimary : Colors.transparent,
+                            color: selectedSymptomTitle == 'unhappy' ? kColorPrimary : Colors.transparent,
                             child: InkWell(
                               child:Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   children: [
                                     Image.asset(asset_path+'unhappy.png', height: MediaQuery.of(context).size.height * 0.06,),
-                                    Text('Несчастный'),
+                                    Text('unhappy'.tr()),
                                   ],
                                 ),
                               ),
                               onTap: (){
                                 setState(() {
                                   selectedSymptom = 'unhappy.png';
-                                  selectedSymptomTitle = 'Несчастный';
+                                  selectedSymptomTitle = 'unhappy';
                                 });
                               },),
                           ),

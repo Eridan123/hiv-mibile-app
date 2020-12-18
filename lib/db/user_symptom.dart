@@ -70,10 +70,9 @@ class UserSymptom {
     }
   }
 
-  static Future<bool> sendList(List<UserSymptom> list) async {
+  static Future<bool> sendList(List<UserSymptom> list, int user_id) async {
     final url =
         Configs.ip+'api/patientsymptoms';
-    DbUser userDb = await DBProvider.db.getUser();
     try {
       Map<String, String> headers = {"Content-type": "application/json"};
       final response = await http.post(
@@ -81,7 +80,7 @@ class UserSymptom {
         headers:headers,
         body: json.encode(
             {
-              "data": userSymptomList(list, userDb.id)
+              "data": userSymptomList(list, user_id)
             }),
       );
       var rr = json.decode(response.body);

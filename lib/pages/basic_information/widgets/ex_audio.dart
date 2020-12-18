@@ -159,7 +159,7 @@ class _AudioAppState extends State<AudioApp> {
   }
 
   Future _loadFile(AudioFileModel model) async {
-    final bytes = await readBytes('http://vich.ulut.kg'+model.name);
+    final bytes = await readBytes(Configs.file_ip+model.name);
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/${model.title}.mp3');
 
@@ -253,7 +253,7 @@ class _AudioAppState extends State<AudioApp> {
                       advancedPlayer.stop();
                       fileName = files[index].name;
 //                      audioCache.play(fileName);
-                      var sss = 'http://vich.ulut.kg';
+                      var sss = Configs.file_ip;
                       if(files[index].downloaded)
                         advancedPlayer.play(fileName);
                       else
@@ -319,7 +319,7 @@ class _AudioAppState extends State<AudioApp> {
                                           if(files[fileIndex].downloaded)
                                             advancedPlayer.play(fileName);
                                           else
-                                            advancedPlayer.play('http://vich.ulut.kg'+fileName);
+                                            advancedPlayer.play(Configs.file_ip+fileName);
                                           playing = true;
 
                                         });
@@ -335,13 +335,13 @@ class _AudioAppState extends State<AudioApp> {
                                           if(files[fileIndex].downloaded)
                                             advancedPlayer.play(fileName);
                                           else
-                                            advancedPlayer.play('http://vich.ulut.kg'+fileName);
+                                            advancedPlayer.play(Configs.file_ip+fileName);
                                         }
                                         else if(advancedPlayer.state == AudioPlayerState.STOPPED){
                                           if(files[fileIndex].downloaded)
                                             advancedPlayer.play(fileName);
                                           else
-                                            advancedPlayer.play('http://vich.ulut.kg'+fileName);
+                                            advancedPlayer.play(Configs.file_ip+fileName);
                                         }
                                         else {
                                           advancedPlayer.pause();
@@ -365,7 +365,7 @@ class _AudioAppState extends State<AudioApp> {
                                           if(files[fileIndex].downloaded)
                                             advancedPlayer.play(fileName);
                                           else
-                                            advancedPlayer.play('http://vich.ulut.kg'+fileName);
+                                            advancedPlayer.play(Configs.file_ip+fileName);
                                           playing = true;
 
                                         });

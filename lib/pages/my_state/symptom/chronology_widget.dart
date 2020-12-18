@@ -81,7 +81,7 @@ class _SymptomChronolgyState extends State<SymptomChronolgy> with TickerProvider
                   padding: EdgeInsets.all(MediaQuery.of(context).size.width *0.01),
                   child: ListTile(
                     leading: Image.asset(asset_path + element.file_name),
-                    title: Text(element.title),
+                    title: Text(element.title.tr()),
                     trailing: SmoothStarRating(
                       allowHalfRating: false,
                       starCount: 5,

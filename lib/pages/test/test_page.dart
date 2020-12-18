@@ -512,23 +512,3 @@ class _SexQuestionsState extends State<SexQuestions> {
     );
   }
 }
-
-class ManQuestions extends StatefulWidget {
-  @override
-  _ManQuestionsState createState() => _ManQuestionsState();
-}
-
-class _ManQuestionsState extends State<ManQuestions> {
-
-  List<TestTreeModel> allNeededQuestions = new List<TestTreeModel>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-

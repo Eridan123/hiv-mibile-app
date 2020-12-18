@@ -86,7 +86,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                   alignment: FractionalOffset.bottomRight +
                       const FractionalOffset(-0.1, -0.1),
                   children: <Widget>[
-                    _ButterFlyAssetVideo(title: _list[index].title, fileName: 'http://vich.ulut.kg'+_list[index].name,),
+                    _ButterFlyAssetVideo(title: _list[index].title, fileName: Configs.file_ip+_list[index].name,),
                   ]),
             );
           },

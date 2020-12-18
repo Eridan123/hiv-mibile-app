@@ -27,7 +27,7 @@ class User extends ChangeNotifier{
   bool intersex;
   int sex;
   int birth_year;
-  int pin_code;
+  String pin_code;
   String token;
 
 
@@ -64,6 +64,7 @@ class User extends ChangeNotifier{
         DbUser dbUser = new DbUser();
         dbUser.username = username;
         dbUser.password = password;
+        dbUser.pin_code = pin_code;
         dbUser.token = responseData['token'];
         dbUser.id = responseData['id'];
         await DBProvider.db.newUser(dbUser);
@@ -192,7 +193,7 @@ class User extends ChangeNotifier{
       }
       else if(responseData['token'] != null) {
         Prefs.setString('pin_code', pinCode);
-        this.pin_code = int.parse(pinCode);
+        this.pin_code = pinCode;
         DbUser dbUser = await DBProvider.db.getUser();
         dbUser.pin_code = pinCode;
         await DBProvider.db.updateUser(dbUser);
@@ -281,35 +282,38 @@ class User extends ChangeNotifier{
   }
 
   void logout() async{
+    var userId=0;
     await DBProvider.db.getUser().then((value) async {
-      final url =
-          Configs.ip+'api/logged';
-      try {
-        Map<String, String> headers = {"Content-type": "application/json"};
-        final response = await http.post(
-          url,
-          headers:headers,
-          body: json.encode(
-              {"id": value.id}),
-        );
-        final responseData = json.decode(response.body);
-        if(responseData == "successfully") {
-          await DBProvider.db.getAllUserSymptoms();
-          await DBProvider.db.sendNotSentNotifications();
-          await DBProvider.db.sendNotSentUserMoods();
-          await DBProvider.db.sendNotSentUserSymptoms();
-          await DBProvider.db.sendNotSentUserImages();
-          await DBProvider.db.deleteAllNotifications();
-          await DBProvider.db.deleteAllUsers();
-          await DBProvider.db.deleteAllUserMoods();
-          await DBProvider.db.deleteAllUserSymptom();
-          await DBProvider.db.deleteAllUserImage();
+      if(value != null){
+        userId = value.id;
+        final url =
+            Configs.ip+'api/logged';
+        try {
+          Map<String, String> headers = {"Content-type": "application/json"};
+          final response = await http.post(
+            url,
+            headers:headers,
+            body: json.encode(
+                {"id": value.id}),
+          );
+          final responseData = json.decode(response.body);
+          if(responseData == "successfully") {
+            await DBProvider.db.sendNotSentUserSymptoms(userId, true);
+            await DBProvider.db.sendNotSentNotifications();
+            await DBProvider.db.sendNotSentUserMoods(userId, true);
+            await DBProvider.db.sendNotSentUserImages(user_id, true);
+//            await DBProvider.db.deleteAllNotifications();
+            await DBProvider.db.deleteAllUsers();
+//            await DBProvider.db.deleteAllUserImage();
+//            await DBProvider.db.deleteAllUserSymptom();
+//            await DBProvider.db.deleteAllUserMoods();
 
-          notifyListeners();
+            notifyListeners();
+          }
         }
-      }
-      catch (error) {
-        throw error;
+        catch (error) {
+          throw error;
+        }
       }
     });
   }

@@ -43,17 +43,17 @@ class _MoodTotalWidgetState extends State<MoodTotalWidget> {
 
   @override
   void initState() {
-    timeType = new TimeType(name: 'За последние 7 дней', type: 1);
+    timeType = new TimeType(name: 'last7Days'.tr(), type: 1);
     _timeList.add(timeType);
-    timeType = new TimeType(name: 'За последние 30 дней', type: 2);
+    timeType = new TimeType(name: 'last30Days'.tr(), type: 2);
     _timeList.add(timeType);
-    timeType = new TimeType(name: 'За последние 60 дней', type: 3);
+    timeType = new TimeType(name: 'last60Days'.tr(), type: 3);
     _timeList.add(timeType);
-    timeType = new TimeType(name: 'За последние 90 дней', type: 4);
+    timeType = new TimeType(name: 'last90Days'.tr(), type: 4);
     _timeList.add(timeType);
-    timeType = new TimeType(name: 'За последние 6 месяцев', type: 5);
+    timeType = new TimeType(name: 'last6Months'.tr(), type: 5);
     _timeList.add(timeType);
-    timeType = new TimeType(name: 'За последний год', type: 6);
+    timeType = new TimeType(name: 'lastYear'.tr(), type: 6);
     _timeList.add(timeType);
     getList();
     super.initState();
@@ -104,13 +104,13 @@ class _MoodTotalWidgetState extends State<MoodTotalWidget> {
                   return ListTile(
                     tileColor: index%2==0 ? _color: Colors.transparent,
                     leading: Image.asset(asset_path + _list[index].file_name),
-                    title: Text(_list[index].title,
+                    title: Text(_list[index].title.tr(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    trailing: Text(_list[index].count ==1 ?_list[index].count.toString() + ' день' : _list[index].count<5 ?_list[index].count.toString() + ' дня' : _list[index].count.toString() + ' дней',
+                    trailing: Text(_list[index].count ==1 ?_list[index].count.toString() +' '+ 'day'.tr() : _list[index].count<5 ?_list[index].count.toString() + ' ' + 'days1'.tr() : _list[index].count.toString() + ' '+'days2'.tr(),
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,

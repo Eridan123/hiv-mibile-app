@@ -121,7 +121,7 @@ class DBProvider {
           "title TEXT,"
           "file_name TEXT,"
           "date_time DATETIME,"
-          "sent INTEGER NOT NULL DEFAULT 1,"
+          "sent INTEGER NOT NULL DEFAULT 0,"
           "rating REAL,"
           "CONSTRAINT fk_user\n"
           "FOREIGN KEY (user_id)\n"
@@ -134,7 +134,7 @@ class DBProvider {
           "user_id INTEGER,"
           "title TEXT,"
           "file_name TEXT,"
-          "sent INTEGER NOT NULL DEFAULT 1,"
+          "sent INTEGER NOT NULL DEFAULT 0,"
           "date_time DATETIME,"
           "CONSTRAINT fk_user\n"
           "FOREIGN KEY (user_id)\n"
@@ -353,16 +353,18 @@ class DBProvider {
     await sendNotSentNotifications();
     return raw;
   }
-  Future<void> sendNotSentNotifications()async {
+  Future<void> sendNotSentNotifications({int user_id})async {
     _checkInternetConnection().then((value) async {
-      var list = await getNotificationsBySent();
       if(value){
-        NotificationDb.sendList(list).then((value) {
-          for(var i in list){
-            i.sent = 1;
-            updateNotification(i);
-          }
+        getNotificationsBySent().then((list) {
+          NotificationDb.sendList(list, user_id: user_id).then((value) {
+            for(var i in list){
+              i.sent = 1;
+              updateNotification(i);
+            }
+          });
         });
+        await deleteAllNotifications();
       }
     });
   }
@@ -474,19 +476,24 @@ class DBProvider {
         "INSERT Into user_moods(id, user_id, title, file_name, date_time,sent)"
             " VALUES (?,?,?,?,?,0)",
         [model.id, model.user_id, model.title, model.file_name, model.date_time.toString()]);
-    sendNotSentUserMoods();
+    sendNotSentUserMoods(model.user_id, false);
     return raw;
   }
-  Future<void> sendNotSentUserMoods() async {
+  Future<void> sendNotSentUserMoods(int user_id, bool logout) async {
     _checkInternetConnection().then((value) async {
-      var list = await getUserMoodsBySent();
       if(value){
-        UserMood.sendList(list).then((value) {
-          for(var i in list){
-            i.sent = 1;
-            updateUserMood(i);
-          }
+        getUserMoodsBySent().then((list) {
+          UserMood.sendList(list, user_id).then((value) {
+            for(var i in list){
+              if(!logout){
+                i.sent = 1;
+                updateUserMood(i);
+              }
+            }
+          });
         });
+        if(logout)
+          await deleteAllUserMoods();
       }
     });
   }
@@ -502,9 +509,6 @@ class DBProvider {
     final db = await database;
     var res =await  db.query("user_moods", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? UserMood.fromJson(res.first) : Null ;
-  }
-  saveUserMoodsFromServer(int user_id) async {
-
   }
   Future<List<UserMood>> getAllUserMoods() async {
     final db = await database;
@@ -559,17 +563,6 @@ class DBProvider {
         where: "id = ?", whereArgs: [newModel.id]);
     return res;
   }
-  checkNotSentUserMoods() async{
-    final db = await database;
-    var res =await  db.query("user_moods" , where: "sent = ?", whereArgs: [0]);
-    if(res.isNotEmpty) {
-      List<UserMood> list = new List<UserMood>();
-      for (var r in res) {
-        list.add(UserMood.fromJson(r));
-      }
-      await UserMood.sendList(list);
-    }
-  }
   deleteUserMood(int id) async {
     final db = await database;
     db.delete("user_moods", where: "id = ?", whereArgs: [id]);
@@ -585,20 +578,29 @@ class DBProvider {
     var raw = await db.rawInsert(
         "INSERT Into user_symptoms(id, user_id, title, file_name, date_time, rating, sent)"
             " VALUES (?,?,?,?,?,?,?)",
-        [model.id, 1, model.title, model.file_name, model.date_time.toString(), model.rating,0]);
-    await sendNotSentUserSymptoms();
+        [model.id, model.user_id, model.title, model.file_name, model.date_time.toString(), model.rating,0]);
+    await sendNotSentUserSymptoms(model.user_id, false);
     return raw;
   }
-  Future<void> sendNotSentUserSymptoms()async {
+  Future<void> sendNotSentUserSymptoms(int user_id, bool logout)async {
     _checkInternetConnection().then((value) async {
       if(value){
-        var list = await getUserSymptomsBySent();
-        UserSymptom.sendList(list).then((value) {
-          for(var i in list){
-            i.sent = 1;
-            updateUserSymptom(i);
-          }
+        getUserSymptomsBySent().then((list) {
+          UserSymptom.sendList(list, user_id).then((value) {
+            for(var i in list){
+              if(logout){
+//                deleteUserSymptom(i.id);
+              }
+              else{
+                i.sent = 1;
+                updateUserSymptom(i);
+              }
+            }
+          });
         });
+
+        if(logout)
+          await deleteAllUserSymptom();
       }
     });
   }
@@ -683,20 +685,23 @@ class DBProvider {
     var raw = await db.rawInsert(
         "INSERT Into user_images(id, user_id, path, file_name, date_time, type, sent)"
             " VALUES (?,?,?,?,?,?,0)",
-        [model.id, 1, model.path, model.file_name, model.date_time.toString(), model.type]);
-    await sendNotSentUserImages();
+        [model.id, model.user_id, model.path, model.file_name, model.date_time.toString(), model.type]);
+    await sendNotSentUserImages(model.user_id, false);
     return raw;
   }
-  sendNotSentUserImages()async {
+  sendNotSentUserImages(int user_id, bool logout)async {
     _checkInternetConnection().then((value) async {
       if(value){
-        var list = await getUserImageFilesBySent();
-        UserImageFile.sendList(list).then((value) {
-          for(var i in list){
-            i.sent = 1;
-            updateUserImage(i);
-          }
+        getUserImageFilesBySent().then((list) {
+          UserImageFile.sendList(list, user_id).then((value) {
+            for(var i in list){
+              i.sent = 1;
+              updateUserImage(i);
+            }
+          });
         });
+        if(logout)
+          deleteAllUserImage();
       }
     });
   }

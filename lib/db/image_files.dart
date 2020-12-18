@@ -80,10 +80,9 @@ class UserImageFile {
     }
   }
 
-  static Future<bool> sendList(List<UserImageFile> list) async {
+  static Future<bool> sendList(List<UserImageFile> list, int user_id) async {
     final url =
         Configs.ip+'api/patientresultimages';
-    DbUser userDb = await DBProvider.db.getUser();
     try {
       Map<String, String> headers = {"Content-type": "application/json"};
       final response = await http.post(
@@ -91,7 +90,7 @@ class UserImageFile {
         headers:headers,
         body: json.encode(
             {
-              "data": userImageFileList(list, userDb.id)
+              "data": userImageFileList(list, user_id)
             }),
       );
       var rr = json.decode(response.body);

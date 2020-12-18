@@ -123,10 +123,18 @@ class NotificationDb {
       throw error;
     }
   }
-  static Future<bool> sendList(List<NotificationDb> list) async {
+  static Future<bool> sendList(List<NotificationDb> list, {int user_id}) async {
     final url =
         Configs.ip+'api/notifications';
-    DbUser userDb = await DBProvider.db.getUser();
+    bool userExists = false;
+    DbUser userDb= new DbUser();
+    try{
+      userDb = await DBProvider.db.getUser();
+      userExists = true;
+    }
+    catch(error){
+      throw error;
+    }
     try {
       Map<String, String> headers = {"Content-type": "application/json"};
       final response = await http.post(
@@ -134,7 +142,7 @@ class NotificationDb {
         headers:headers,
         body: json.encode(
             {
-              "data": notificationList(list, userDb.id)
+              "data": notificationList(list, userExists ? userDb.id : user_id)
             }),
       );
       var rr = json.decode(response.body);
