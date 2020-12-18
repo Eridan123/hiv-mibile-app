@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../empty_page.dart';
+import 'warning_page.dart';
 
 class TestPage extends StatefulWidget {
   @override
@@ -130,6 +131,9 @@ class QuestionBuilder extends StatefulWidget {
 
 class _QuestionBuilderState extends State<QuestionBuilder> {
   TestTreeModel model = new TestTreeModel();
+  int type;
+  bool female = false;
+  double val =0;
 
   var question2 = new TestTreeModel(body: "В сексе я предпочитаю", value: 0, );
   var question3 = new TestTreeModel(body: "Количество партнеров в сексе за последний год", value: 0, );
@@ -150,26 +154,28 @@ class _QuestionBuilderState extends State<QuestionBuilder> {
   var question18 = new TestTreeModel(body: "я использую презерватив, когда занимаюсь анальным сексом", value: 0, );
 
 
-  var question2Answer1 = new TestTreeModel(body: "Не важно", value: 0,);
-  var question2Answer2 = new TestTreeModel(body: "Мужчин", value: 0,);
-  var question2Answer3 = new TestTreeModel(body: "Женщин", value: 0,);
+  //region Answers
 
-  var question3Answer1 = new TestTreeModel(body: "1", value: 0, );
-  var question3Answer2 = new TestTreeModel(body: ">1", value: 0, );
-  var question3Answer3 = new TestTreeModel(body: "Много", value: 0, );
+  var question2Answer1 = new TestTreeModel(body: "Не важно", value: 12,);
+  var question2Answer2 = new TestTreeModel(body: "Мужчин", value: 2,);
+  var question2Answer3 = new TestTreeModel(body: "Женщин", value: 1,);
+
+  var question3Answer1 = new TestTreeModel(body: "1", value: 5, );
+  var question3Answer2 = new TestTreeModel(body: ">1", value: 2, );
+  var question3Answer3 = new TestTreeModel(body: "Много", value: 25, );
   var question3Answer4 = new TestTreeModel(body: "Нет", value: 0, );
 
 
   var question4Answer1 = new TestTreeModel(body: "Да", value: 0, );
   var question4Answer2 = new TestTreeModel(body: "Нет", value: 0, );
 
-  var question5Answer1 = new TestTreeModel(body: "Да", value: 0, );
+  var question5Answer1 = new TestTreeModel(body: "Да", value: 2, );
   var question5Answer2 = new TestTreeModel(body: "Нет", value: 0, );
-  var question5Answer3 = new TestTreeModel(body: "Затрудняюсь ответить", value: 0, );
+  var question5Answer3 = new TestTreeModel(body: "Затрудняюсь ответить", value: 5, );
 
-  var question6Answer1 = new TestTreeModel(body: "Да", value: 0, );
+  var question6Answer1 = new TestTreeModel(body: "Да", value: 10, );
   var question6Answer2 = new TestTreeModel(body: "Нет", value: 0, );
-  var question6Answer3 = new TestTreeModel(body: "Не знаю", value: 0, );
+  var question6Answer3 = new TestTreeModel(body: "Не знаю", value: 3, );
 
   var question7Answer1 = new TestTreeModel(body: "Да", value: 0, );
   var question7Answer2 = new TestTreeModel(body: "Нет", value: 0, );
@@ -213,6 +219,8 @@ class _QuestionBuilderState extends State<QuestionBuilder> {
   var question18Answer2 = new TestTreeModel(body: "Никогда", value: 0, );
   var question18Answer3 = new TestTreeModel(body: "Не всегда", value: 0, );
 
+  //endregion
+
   @override
   void initState() {
     question2.answers = [question2Answer1, question2Answer2, question2Answer3];
@@ -236,16 +244,22 @@ class _QuestionBuilderState extends State<QuestionBuilder> {
     question2Answer1.to = question3;
     question2Answer2.to = question3;
     question2Answer3.to = question3;
-    if(widget.type == 0)
-      manQuestionBuilder();
-    else if(widget.type == 1)
-      womanQuestionBuilder();
-    else if(widget.type == 2)
-      transManQuestionBuilder();
-    else if(widget.type == 3)
-      transWomanQuestionBuilder();
+
+    type = widget.type;
+    buildTree(type);
     model = question2;
     super.initState();
+  }
+
+  buildTree(int type){
+    if(type == 0)
+      manQuestionBuilder();
+    else if(type == 1)
+      womanQuestionBuilder();
+    else if(type == 2)
+      transManQuestionBuilder();
+    else if(type == 3)
+      transWomanQuestionBuilder();
   }
 
   manQuestionBuilder(){
@@ -254,20 +268,16 @@ class _QuestionBuilderState extends State<QuestionBuilder> {
     question3Answer3.to = question4;
     question3Answer4.to = question5;
 
-    question4Answer1.to = question7;
-    question4Answer2.to = question7;
+    question4Answer1.to = question5;
+    question4Answer2.to = question5;
 
     question5Answer1.to = question6;
     question5Answer2.to = question6;
-    question5Answer2.to = question8;
+    question5Answer3.to = question8;
 
     question6Answer1.to = question8;
     question6Answer2.to = question8;
     question6Answer3.to = question8;
-
-    question7Answer1.to = question6;
-    question7Answer2.to = question9;
-    question7Answer3.to = question9;
 
     question8Answer1.to = question10;
     question8Answer2.to = question10;
@@ -275,7 +285,7 @@ class _QuestionBuilderState extends State<QuestionBuilder> {
     question9Answer1.to = question10;
 
     question10Answer1.to = question12;
-    question10Answer2.to = question11;
+    question10Answer2.to = question12;
     question10Answer3.to = question12;
 
     question11Answer1.to = question13;
@@ -289,6 +299,26 @@ class _QuestionBuilderState extends State<QuestionBuilder> {
     question18Answer1.to = question13;
     question18Answer2.to = question13;
     question18Answer3.to = question13;
+
+    if(female){
+      question4Answer1.to = question7;
+      question4Answer2.to = question7;
+
+      question7Answer1.to = question6;
+      question7Answer2.to = question9;
+      question7Answer3.to = question9;
+
+      question9Answer1.to = question10;
+      question9Answer2.to = question10;
+
+      question10Answer2.to = question11;
+
+      question11Answer1.to = question13;
+      question11Answer2.to = question13;
+      question11Answer3.to = question13;
+    }
+
+
 
   }
   womanQuestionBuilder(){
@@ -366,6 +396,20 @@ class _QuestionBuilderState extends State<QuestionBuilder> {
     question17Answer2.to = question13;
     question17Answer3.to = question13;
 
+    if(female){
+      question5Answer2.to = question14;
+      question5Answer3.to = question14;
+
+      question14Answer1.to = question15;
+      question14Answer2.to = question13;
+
+      question15Answer1.to = question16;
+      question15Answer2.to = question16;
+
+      question16Answer1.to = question13;
+      question16Answer2.to = question13;
+    }
+
   }
   transWomanQuestionBuilder(){
 
@@ -431,13 +475,28 @@ class _QuestionBuilderState extends State<QuestionBuilder> {
                     child: CustomButton(
                       text: model.answers[index].body,
                       onPressed: (){
+                        if(question2Answer3 == model.answers[index]){
+                          setState(() {
+                            female = true;
+                            buildTree(type);
+                          });
+                        }
+                        else if(question2Answer3 != model.answers[index]){
+                          setState(() {
+                            female = false;
+                            buildTree(type);
+                          });
+                        }
                         if(model.answers[index].to != null){
                           setState(() {
+                            val=model.answers[index].value + val;
                             model = model.answers[index].to;
                           });
                         }
                         else{
-                          Navigator.pushNamed(context, Routes.test_warning);
+                          Route route =
+                          MaterialPageRoute(builder: (context) => WarningPage(value: val,));
+                          Navigator.push(context,route);
                         }
                       },
                     ),

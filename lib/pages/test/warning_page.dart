@@ -1,10 +1,16 @@
 import 'package:HIVApp/components/custom_button.dart';
+import 'package:HIVApp/pages/test/result_page.dart';
 import 'package:HIVApp/routes/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class WarningPage extends StatelessWidget {
+  double value;
+
+
+  WarningPage({this.value});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +34,9 @@ class WarningPage extends StatelessWidget {
               text: 'continue'.tr(),
               textSize: 25,
               onPressed: (){
-                Navigator.pushNamed(context, Routes.risk_result);
+                Route route =
+                MaterialPageRoute(builder: (context) => TestResultPage(value: value,));
+                Navigator.push(context,route);
               },
             )
           ],
