@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import "package:http/http.dart" as http;
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ConsultantContactPage extends StatefulWidget {
@@ -216,7 +217,7 @@ class _ConsultantContactPageState extends State<ConsultantContactPage> {
                 ),
               ),
               leading: FaIcon(FontAwesomeIcons.mapMarked, color: Colors.lightGreen, size: 40,),
-              onTap: () => _facebookMe(model.facebook),
+              onTap: () => MapsLauncher.launchCoordinates(model.location.latitude, model.location.longitude),
             ),
           ),
           SizedBox(

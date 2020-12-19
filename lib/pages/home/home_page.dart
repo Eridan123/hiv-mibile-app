@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     print('Enter home page');
     super.build(context);
-//    Provider.of<Consultation>(context, listen: false).getConsultants();
+    Provider.of<Consultation>(context, listen: false).getConsultants();
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),

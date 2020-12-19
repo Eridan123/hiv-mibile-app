@@ -53,13 +53,19 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (ctx) => Center(
         child: AlertDialog(
-          title: Text('error'.tr()),
+          title: Text(''),
           content: Text(message),
           actions: <Widget>[
             FlatButton(
-              child: Text('okay'.tr()),
+              child: Text('back'.tr()),
               onPressed: () {
                 Navigator.of(ctx).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('continue'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).popAndPushNamed(Routes.login);
               },
             )
           ],

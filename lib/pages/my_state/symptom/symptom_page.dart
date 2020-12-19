@@ -4,6 +4,7 @@ import 'package:HIVApp/pages/basic_information/widgets/text.dart';
 import 'package:HIVApp/pages/basic_information/widgets/video.dart';
 import 'package:HIVApp/pages/my_state/symptom/chronology_widget.dart';
 import 'package:HIVApp/pages/my_state/symptom/total_widget.dart';
+import 'package:HIVApp/routes/routes.dart';
 import 'package:HIVApp/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,13 +52,19 @@ class _SymptomPageState extends State<SymptomPage> {
       context: context,
       builder: (ctx) => Center(
         child: AlertDialog(
-          title: Text('error'.tr()),
+          title: Text(''),
           content: Text(message),
           actions: <Widget>[
             FlatButton(
-              child: Text('okay'.tr()),
+              child: Text('back'.tr()),
               onPressed: () {
                 Navigator.of(ctx).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('continue'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).popAndPushNamed(Routes.login);
               },
             )
           ],

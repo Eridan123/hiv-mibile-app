@@ -1,5 +1,6 @@
 import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/db/user_mood.dart';
+import 'package:HIVApp/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -79,13 +80,19 @@ class _MoodCalendarWidgetState extends State<MoodCalendarWidget> with TickerProv
       context: context,
       builder: (ctx) => Center(
         child: AlertDialog(
-          title: Text('error'.tr()),
+          title: Text(''),
           content: Text(message),
           actions: <Widget>[
             FlatButton(
-              child: Text('okay'.tr()),
+              child: Text('back'.tr()),
               onPressed: () {
                 Navigator.of(ctx).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('continue'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).popAndPushNamed(Routes.login);
               },
             )
           ],

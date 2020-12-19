@@ -30,13 +30,19 @@ class _VisitPageState extends State<VisitPage> {
       context: context,
       builder: (ctx) => Center(
         child: AlertDialog(
-          title: Text('error'.tr()),
+          title: Text(''),
           content: Text(message),
           actions: <Widget>[
             FlatButton(
-              child: Text('okay'.tr()),
+              child: Text('back'.tr()),
               onPressed: () {
                 Navigator.of(ctx).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('continue'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).popAndPushNamed(Routes.login);
               },
             )
           ],

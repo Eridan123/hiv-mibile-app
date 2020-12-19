@@ -87,7 +87,7 @@ class _TextWidgetState extends State<TextWidget> {
                 onTap: () {
 
                   Route route =
-                  MaterialPageRoute(builder: (context) => TextBody(fontSize: _fontSize, title: 'ЧТО ПРОИСХОДИТ, КОГДА ВИЧ ПОПАДАЕТ В ОРГАНИЗМ ЧЕЛОВЕКА?', type: 3,));
+                  MaterialPageRoute(builder: (context) => TextBody(fontSize: _fontSize, title: 'Что происходит, когда ВИЧ попадает в организм человека?', type: 3,));
                   Navigator.push(context,route);}
             ),
             Divider(),
@@ -415,7 +415,6 @@ class _TextBodyState extends State<TextBody> {
                         'возбудителей инфекционных и других заболеваний, которые редко наблюдаются у лиц с сильной иммунной системой. Их называют'
                         ' СПИД-индикаторными заболеваниями или '),
                     TextSpan(text: 'оппортунистическими инфекциями.', style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: ' (Здесь вы можете посмотреть фильм о размножении ВИЧ).', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, backgroundColor: Colors.yellow)),
                   ]
               ),
             ),
@@ -424,7 +423,7 @@ class _TextBodyState extends State<TextBody> {
             title: Column(
               children: [
                 Container(
-                  child: Image.asset('assets/images/mechanism.jpg', fit: BoxFit.fitWidth,),
+                  child: Image.asset('assets/images/mechanism.png', fit: BoxFit.fitWidth,),
                 ),
               ],
             ),
@@ -505,7 +504,7 @@ class _TextBodyState extends State<TextBody> {
             title: Column(
               children: [
                 Container(
-                  child: Image.asset('assets/images/image_way1.jpg', fit: BoxFit.fitWidth,),
+                  child: Image.asset('assets/images/image_way1.png', fit: BoxFit.fitWidth,),
                 ),
               ],
             ),
@@ -901,7 +900,6 @@ class _TextBodyState extends State<TextBody> {
                     TextSpan(text: 'Если Вы употребляете наркотики, то снижайте риск: пользуйтесь только своим чистым шприцем; не набирайте наркотик из общей '
                         'посуды; откажитесь от инъекционного потребления – переходите на неинъекционные пути потребления (курение, прием через рот) или примите '
                         'участие в метадоновой программе. (О метадоновой программе можно узнать здесь).'),
-                    TextSpan(text: '(О метадоновой программе можно узнать здесь).', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, backgroundColor: Colors.yellow)),
                   ]
               ),
             ),
@@ -1003,7 +1001,6 @@ class _TextBodyState extends State<TextBody> {
                     TextSpan(text: 'Для предупреждения ВИЧ-инфекции можно также проводить профилактическое лечение до контакта – называется доконтактная'
                         ' профилактика (ДКП), а также после опасного контакта  –  постконтактая профилактика (ПКП).  ',
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: 'Информацию о ДКП и ПКП Вы можете найти здесь\n', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, backgroundColor: Colors.yellow)),
                   ]
               ),
             ),
@@ -1112,16 +1109,6 @@ class _TextBodyState extends State<TextBody> {
                   children: [
                     TextSpan(text: 'Следует также помнить, что ДКП и ПКП не защищают от беременности и ИППП. Поэтому нужно параллельно использовать средства '
                         'защиты (презервативы, лубриканты) и контрацептивы.', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ]
-              ),
-            ),
-          ),
-          ListTile(
-            title: RichText(
-              text: TextSpan(
-                  style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
-                  children: [
-                    TextSpan(text: 'Куда обратиться – ссылка на наши карты', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, backgroundColor: Colors.yellow)),
                   ]
               ),
             ),
@@ -1237,7 +1224,6 @@ class _TextBodyState extends State<TextBody> {
                   style: TextStyle( fontSize:  widget.fontSize, color: Theme.of(context).cursorColor),
                   children: [
                     TextSpan(text: 'Метадон можно получить бесплатно в медицинских организациях, а также в тюрьмах (Перечень пунктов вы найдете здесь). \n'),
-                    TextSpan(text: '(Перечень пунктов вы найдете здесь).', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, backgroundColor: Colors.yellow),),
                   ]
               ),
             ),

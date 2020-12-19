@@ -289,7 +289,7 @@ class _AudioAppState extends State<AudioApp> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    Text(_position.inMinutes.toString().padLeft(2, '0') + ':' + _position.inSeconds.toString().padLeft(2, '0'), style: TextStyle(color: Colors.white),),
+                                    Text((_position.inMinutes+ (_position.inSeconds.toInt()/60).toInt()).toString().padLeft(2, '0') + ':' + ((_position.inSeconds.round()%60) ).toString().padLeft(2, '0'), style: TextStyle(color: Colors.white),),
                                     slider(),
 //                                  getLocalFileDuration(),
                                     Text((_duration.inMinutes + (_duration.inSeconds.toInt()/60).toInt()).toString().padLeft(2, '0') + ':' + ((_duration.inSeconds.round()%60) ).toString().padLeft(2, '0'), style: TextStyle(color: Colors.white),),
