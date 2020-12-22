@@ -57,10 +57,10 @@ class NotificationForm extends StatefulWidget {
   NotificationForm({this.type});
 
   @override
-  _NotificationFormState createState() => _NotificationFormState();
+  NotificationFormState createState() => NotificationFormState();
 }
 
-class _NotificationFormState extends State<NotificationForm> {
+class NotificationFormState extends State<NotificationForm> {
 
   NotificationAppLaunchDetails notificationAppLaunchDetails;
   bool didNotificationLaunchApp;
@@ -188,19 +188,19 @@ class _NotificationFormState extends State<NotificationForm> {
     selectNotificationSubject.close();
   }
 
-  Future<void> _cancelNotification() async {
-    await flutterLocalNotificationsPlugin.cancel(0);
+  static Future<void> cancelNotification(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 
-  Future<void> _cancelAllNotifications() async {
+  static Future<void> cancelAllNotifications() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
 
 
-  Future<void> _scheduledNotification(String title, String body, DateTime dateTime, NotificationDbTimeType type, int value) async {
+  static Future<void> scheduledNotification(String title, String body, DateTime dateTime, NotificationDbTimeType type, int value) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
+        dateTime.millisecond,
         title,
         body,
         _nextInstanceOfDay(type, value, dateTime),
@@ -216,7 +216,7 @@ class _NotificationFormState extends State<NotificationForm> {
         matchDateTimeComponents: DateTimeComponents.time);
   }
 
-  tz.TZDateTime _nextInstanceOf(DateTime dateTime) {
+  static tz.TZDateTime _nextInstanceOf(DateTime dateTime) {
     tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
     tz.TZDateTime(tz.local, dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute);
@@ -226,7 +226,7 @@ class _NotificationFormState extends State<NotificationForm> {
     return scheduledDate;
   }
 
-  tz.TZDateTime _nextInstanceOfDay(NotificationDbTimeType type, int value, DateTime dateTime) {
+  static tz.TZDateTime _nextInstanceOfDay(NotificationDbTimeType type, int value, DateTime dateTime) {
     tz.TZDateTime scheduledDate = _nextInstanceOf(dateTime);
     if(type == NotificationDbTimeType.Hour)
       scheduledDate = scheduledDate.subtract(Duration(hours: value));
@@ -363,7 +363,7 @@ class _NotificationFormState extends State<NotificationForm> {
                         TextButton(
                           child: Text('add'.tr()),
                           onPressed: () {
-                            _scheduledNotification(notification_title.tr(), _description, _dateTime, _day.type, 1)
+                            scheduledNotification(notification_title.tr(), _description, _dateTime, _day.type, 1)
                                 .then((value) async {
                               await DBProvider.db.newNotification(
                                   NotificationDb(description: _description, datetime: _dateTime, time_type: _day.type, type: _type, sent: 0));

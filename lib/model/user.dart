@@ -5,8 +5,10 @@ import 'package:HIVApp/data/pref_manager.dart';
 import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/db/image_files.dart';
 import 'package:HIVApp/db/model/user.dart';
+import 'package:HIVApp/db/notification.dart';
 import 'package:HIVApp/db/user_mood.dart';
 import 'package:HIVApp/db/user_symptom.dart';
+import 'package:HIVApp/pages/add/notification_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -135,6 +137,7 @@ class User extends ChangeNotifier{
         UserMood.getList();
         UserSymptom.getList();
         UserImageFile.getList();
+        NotificationDb.getList();
 
         this.user_id = responseData["id"];
         this.token = responseData["token"];
@@ -302,11 +305,8 @@ class User extends ChangeNotifier{
             await DBProvider.db.sendNotSentNotifications();
             await DBProvider.db.sendNotSentUserMoods(userId, true);
             await DBProvider.db.sendNotSentUserImages(user_id, true);
-//            await DBProvider.db.deleteAllNotifications();
             await DBProvider.db.deleteAllUsers();
-//            await DBProvider.db.deleteAllUserImage();
-//            await DBProvider.db.deleteAllUserSymptom();
-//            await DBProvider.db.deleteAllUserMoods();
+            NotificationFormState.cancelAllNotifications();
 
             notifyListeners();
           }

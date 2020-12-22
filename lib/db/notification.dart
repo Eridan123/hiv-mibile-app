@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../data/configs.dart';
 import 'package:http/http.dart' as http;
 import 'mother.dart';
 import 'model/user.dart';
 import 'db_provider.dart';
+import '../pages/add/notification_form.dart';
 
 enum NotificationDbTimeType {
   Hour, Day, Month
@@ -155,7 +157,7 @@ class NotificationDb {
   static Future<bool> getList() async {
     await DBProvider.db.getUser().then((value) async {
       final url =
-          Configs.ip+'api/patientmoods/'+value.id.toString();
+          Configs.ip+'api/notifications/'+value.id.toString();
       try {
         Map<String, String> headers = {"Content-type": "application/json","token": value.token};
         final response = await http.get(
@@ -175,13 +177,21 @@ class NotificationDb {
     for(var i in responseBody){
       NotificationDb model = new NotificationDb();
 
-      model.datetime = i['datetime'];
+      model.datetime = DateTime.parse(i['datetime']);
       model.description = i['description'];
       model.type = convertStringToTypeEnums(i['type']);
       model.time_type = convertStringToTimetypeEnums(i['remind']);
       model.sent = 1;
 
       DBProvider.db.newNotification1(model);
+      var notificationTitleStr = 'analysis_notification_title';
+      if(model.type == NotificationDbType.Drug){
+        notificationTitleStr = 'drug_notification_title';
+      }
+      else if(model.type == NotificationDbType.Visit){
+        notificationTitleStr = 'visit_notification_title';
+      }
+      NotificationFormState.scheduledNotification(notificationTitleStr.tr(), model.description, model.datetime, model.time_type, 1);
       list.add(model);
     }
     return list;
