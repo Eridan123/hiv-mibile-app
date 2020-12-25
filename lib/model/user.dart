@@ -317,6 +317,29 @@ class User extends ChangeNotifier{
       }
     });
   }
+  static void sendMapTestView(String type) async{
+    int testInt = type =='test'? 1: 0;
+    int mapInt = type =='map'? 1: 0;
+    final url =
+        Configs.ip+'api/statistics';
+    try {
+      Map<String, String> headers = {"Content-type": "application/json"};
+      final response = await http.post(
+        url,
+        headers:headers,
+        body: json.encode(
+            {
+              "test": testInt,
+              "map": mapInt
+            }),
+      );
+      final responseData = json.decode(response.body);
+      print(responseData);
+    }
+    catch (error) {
+      throw error;
+    }
+  }
   int getUserId(){
     return user_id;
   }

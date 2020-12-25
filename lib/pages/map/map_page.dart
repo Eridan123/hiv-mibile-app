@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:HIVApp/db/db_provider.dart';
 import 'package:HIVApp/utils/constants.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:fluster/fluster.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong/latlong.dart';
 import '../../model/organization.dart';
+import '../../model/user.dart';
 
 class PinInformation {
   String pinPath;
@@ -90,12 +92,32 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
+  Future<bool> _checkInternetConnection() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    }
+    else if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
   @override
   void initState() {
     getList();
     initMarkers();
     super.initState();
     mapController = new MapController();
+    sendMap();
+  }
+
+  sendMap() async{
+    await _checkInternetConnection().then((value) {
+      User.sendMapTestView('map');
+    });
   }
 
   String markerByOrgType(String type){

@@ -88,6 +88,7 @@ class _AudioAppState extends State<AudioApp> {
   String fileName = 'audios';
   int fileIndex =0;
   double pinPillPosition = -1000;
+  double playerHeight = 0;
   bool playing = false;
   String category_name;
 
@@ -222,7 +223,7 @@ class _AudioAppState extends State<AudioApp> {
         children: [
           Container(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-          height: MediaQuery.of(context).size.height * 0.60,
+          height: MediaQuery.of(context).size.height * 0.70 - playerHeight,
           child: ListView.separated
             (
               separatorBuilder: (BuildContext context, int index) => Divider(),
@@ -259,7 +260,8 @@ class _AudioAppState extends State<AudioApp> {
                       else
                         advancedPlayer.play(sss+fileName);
 //                  getDuration();
-                      pinPillPosition = MediaQuery.of(context).size.height * 0.06;
+                      pinPillPosition = MediaQuery.of(context).size.height * 0.001;
+                      playerHeight = MediaQuery.of(context).size.height * 0.20;
                       playing = true;
                     });
                   },
@@ -270,112 +272,117 @@ class _AudioAppState extends State<AudioApp> {
           AnimatedPositioned(
               bottom: pinPillPosition, right: 0, left: 0,
               duration: Duration(milliseconds: 200),
-              child: Container(
+              child: Column(
+                children: [
+                  Divider(),
+                  Container(
 //                    margin: EdgeInsets.all(5),
-                  height: MediaQuery.of(context).size.height * 0.22,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).bottomAppBarColor,
+                      height: playerHeight,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).bottomAppBarColor,
 //                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                  ),
-                  child: Column(
-                      children: <Widget>[
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child: Column(
-                              children: [
-                                Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.max,
+                      ),
+                      child: Column(
+                          children: <Widget>[
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.95,
+                                child: Column(
                                   children: [
-                                    Text((_position.inMinutes+ (_position.inSeconds.toInt()/60).toInt()).toString().padLeft(2, '0') + ':' + ((_position.inSeconds.round()%60) ).toString().padLeft(2, '0'), style: TextStyle(color: Colors.white),),
-                                    slider(),
+                                    Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text((_position.inMinutes+ (_position.inSeconds.toInt()/60).toInt()).toString().padLeft(2, '0') + ':' + ((_position.inSeconds.round()%60) ).toString().padLeft(2, '0'), style: TextStyle(color: Colors.white),),
+                                        slider(),
 //                                  getLocalFileDuration(),
-                                    Text((_duration.inMinutes + (_duration.inSeconds.toInt()/60).toInt()).toString().padLeft(2, '0') + ':' + ((_duration.inSeconds.round()%60) ).toString().padLeft(2, '0'), style: TextStyle(color: Colors.white),),
+                                        Text((_duration.inMinutes + (_duration.inSeconds.toInt()/60).toInt()).toString().padLeft(2, '0') + ':' + ((_duration.inSeconds.round()%60) ).toString().padLeft(2, '0'), style: TextStyle(color: Colors.white),),
+                                      ],
+                                    ),
                                   ],
-                                ),
-                              ],
-                            )),
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            child: Column(
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                                )),
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Column(
                                   children: [
-                                    _Btn1(
-                                      txt: Icon(FontAwesomeIcons.stepBackward, size: 30,  color: Colors.white,),
-                                      onPressed: () {
-                                        setState(() {
-                                          if(fileIndex == 0) {
-                                            fileIndex = files.length - 1;
-                                          }
-                                          else {
-                                            fileIndex = fileIndex -1;
-                                          }
-                                          fileName =files[fileIndex].name;
-                                          if(files[fileIndex].downloaded)
-                                            advancedPlayer.play(fileName);
-                                          else
-                                            advancedPlayer.play(Configs.file_ip+fileName);
-                                          playing = true;
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        _Btn1(
+                                          txt: Icon(FontAwesomeIcons.stepBackward, size: 30,  color: Colors.white,),
+                                          onPressed: () {
+                                            setState(() {
+                                              if(fileIndex == 0) {
+                                                fileIndex = files.length - 1;
+                                              }
+                                              else {
+                                                fileIndex = fileIndex -1;
+                                              }
+                                              fileName =files[fileIndex].name;
+                                              if(files[fileIndex].downloaded)
+                                                advancedPlayer.play(fileName);
+                                              else
+                                                advancedPlayer.play(Configs.file_ip+fileName);
+                                              playing = true;
 
-                                        });
-                                      },
-                                    ),
-                                    _Btn1(
-                                      txt: Icon(playing ? FontAwesomeIcons.pauseCircle : FontAwesomeIcons.playCircle, size: 70, color: Colors.white),
-                                      onPressed: () {
-                                        if(advancedPlayer.state == AudioPlayerState.PLAYING){
-                                          advancedPlayer.pause();
-                                        }
-                                        else if(advancedPlayer.state == AudioPlayerState.PAUSED){
-                                          if(files[fileIndex].downloaded)
-                                            advancedPlayer.play(fileName);
-                                          else
-                                            advancedPlayer.play(Configs.file_ip+fileName);
-                                        }
-                                        else if(advancedPlayer.state == AudioPlayerState.STOPPED){
-                                          if(files[fileIndex].downloaded)
-                                            advancedPlayer.play(fileName);
-                                          else
-                                            advancedPlayer.play(Configs.file_ip+fileName);
-                                        }
-                                        else {
-                                          advancedPlayer.pause();
-                                        }
-                                        setState(() {
-                                          playing = ! playing;
-                                        });
-                                      },
-                                    ),
-                                    _Btn1(
-                                      txt: Icon(FontAwesomeIcons.stepForward, size: 30, color: Colors.white),
-                                      onPressed: () {
-                                        setState(() {
-                                          if(fileIndex < files.length-1) {
-                                            fileIndex = fileIndex + 1;
-                                          }
-                                          else if(fileIndex >= files.length-1) {
-                                            fileIndex = 0;
-                                          }
-                                          fileName = files[fileIndex].name;
-                                          if(files[fileIndex].downloaded)
-                                            advancedPlayer.play(fileName);
-                                          else
-                                            advancedPlayer.play(Configs.file_ip+fileName);
-                                          playing = true;
+                                            });
+                                          },
+                                        ),
+                                        _Btn1(
+                                          txt: Icon(playing ? FontAwesomeIcons.pauseCircle : FontAwesomeIcons.playCircle, size: 70, color: Colors.white),
+                                          onPressed: () {
+                                            if(advancedPlayer.state == AudioPlayerState.PLAYING){
+                                              advancedPlayer.pause();
+                                            }
+                                            else if(advancedPlayer.state == AudioPlayerState.PAUSED){
+                                              if(files[fileIndex].downloaded)
+                                                advancedPlayer.play(fileName);
+                                              else
+                                                advancedPlayer.play(Configs.file_ip+fileName);
+                                            }
+                                            else if(advancedPlayer.state == AudioPlayerState.STOPPED){
+                                              if(files[fileIndex].downloaded)
+                                                advancedPlayer.play(fileName);
+                                              else
+                                                advancedPlayer.play(Configs.file_ip+fileName);
+                                            }
+                                            else {
+                                              advancedPlayer.pause();
+                                            }
+                                            setState(() {
+                                              playing = ! playing;
+                                            });
+                                          },
+                                        ),
+                                        _Btn1(
+                                          txt: Icon(FontAwesomeIcons.stepForward, size: 30, color: Colors.white),
+                                          onPressed: () {
+                                            setState(() {
+                                              if(fileIndex < files.length-1) {
+                                                fileIndex = fileIndex + 1;
+                                              }
+                                              else if(fileIndex >= files.length-1) {
+                                                fileIndex = 0;
+                                              }
+                                              fileName = files[fileIndex].name;
+                                              if(files[fileIndex].downloaded)
+                                                advancedPlayer.play(fileName);
+                                              else
+                                                advancedPlayer.play(Configs.file_ip+fileName);
+                                              playing = true;
 
-                                        });
-                                      },
+                                            });
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ],
-                                ),
-                              ],
-                            )), // first widget
-                      ])
+                                )), // first widget
+                          ])
+                  ),
+                ],
               )  // end of Align
           ),
       ]

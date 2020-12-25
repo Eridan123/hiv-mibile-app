@@ -15,19 +15,17 @@ class Organization{
 
   static Future<List<OrganizationType>> get() async {
 
-    return await DBProvider.db.getUser().then((value) async {
-      final url = Configs.ip + 'api/organizations';
-      try {
-        Map<String, String> headers = {"Content-type": "application/json"};
-        final response = await http.get(
-          url,
-          headers: headers,
-        );
-        return responseToObjectList(json.decode(response.body));
-      } catch (error) {
-        throw error;
-      }
-    });
+    final url = Configs.ip + 'api/organizations';
+    try {
+      Map<String, String> headers = {"Content-type": "application/json"};
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      return responseToObjectList(json.decode(response.body));
+    } catch (error) {
+      throw error;
+    }
   }
   static List<OrganizationType> responseToObjectList(var responseBody){
     List<OrganizationType> list = new List<OrganizationType>();
