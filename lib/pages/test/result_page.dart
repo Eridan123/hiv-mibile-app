@@ -49,8 +49,8 @@ class TestResultPage extends StatelessWidget {
                 CircularPercentIndicator(
                   radius: MediaQuery.of(context).size.width * 0.6,
                   lineWidth: 20.0,
-                  percent: value==100 ? value/100 :value%100/100,
-                  center: new Text(value.toString()+'%'),
+                  percent: value,
+                  center: new Text((value * 100).toInt().toString()+'%'),
                   progressColor: value <30 ? Colors.green : value <60 ? Colors.blue : Colors.red,
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.2,),

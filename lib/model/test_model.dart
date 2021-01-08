@@ -16,7 +16,7 @@ class TestAnswer{
 
 class TestTreeModel{
   String body;
-  double value;
+  int value;
   TestTreeModel to;
   List<TestTreeModel> answers;
 
