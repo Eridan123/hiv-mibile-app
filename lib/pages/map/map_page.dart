@@ -45,6 +45,8 @@ class _MapPageState extends State<MapPage> {
   List<Marker> _markers = new List<Marker>();
   int type_id = 0;
 
+  int selected_index = -1;
+
   void onMarkerTapped(int markerId, double lat, double lng,{Organization organization}) async {
     String locationType;
     String locationName;
@@ -135,57 +137,64 @@ class _MapPageState extends State<MapPage> {
   }
   String asset_path = "assets/images/";
 
+
+
   void _showFilterDialog() {
     showDialog(
       context: context,
-      builder: (ctx) => Center(
-        child: AlertDialog(
-          title: Text('organization_types'.tr()),
-          content: Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            width: MediaQuery.of(context).size.width * 1,
-            child: ListView.separated(
-              shrinkWrap: true,
-                itemBuilder: (context, index){
-                  return ListTile(
-                    leading: Image.asset(asset_path + 'marker'+index.toString()+'.png', width: 100, height: 100,),
-                    title: Text(Prefs.getString(Prefs.LANGUAGE) =='ky' ?_orgList1[index].ky:_orgList1[index].ru,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+      builder: (ctx) {
+        return StatefulBuilder(builder: (context, setState){
+          return AlertDialog(
+            title: Text('organization_types'.tr()),
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.15,
+              width: MediaQuery.of(context).size.width * 1,
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index){
+                    return ListTile(
+                      selected: index == selected_index,
+                      selectedTileColor: kColorBlue,
+                      leading: Image.asset(asset_path + 'marker'+index.toString()+'.png', width: MediaQuery.of(context).size.width * 0.1, height: MediaQuery.of(context).size.width * 0.1,),
+                      title: Text(Prefs.getString(Prefs.LANGUAGE) =='ky' ?_orgList1[index].ky:_orgList1[index].ru,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    onTap: (){
-                      setState(() {
-                        type_id = _orgList1[index].id;
-                      });
-                    },
-                  );
-                },
-                separatorBuilder: (context, index){
-                  return Divider();
-                },
-                itemCount: _orgList1.length),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('back'.tr()),
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
+                      onTap: (){
+                        setState(() {
+                          selected_index = index;
+                          type_id = _orgList1[index].id;
+                        });
+                      },
+                    );
+                  },
+                  separatorBuilder: (context, index){
+                    return Divider();
+                  },
+                  itemCount: _orgList1.length),
             ),
-            FlatButton(
-              child: Text('search'.tr()),
-              onPressed: () {
-                getList();
-                mapController.move(mapController.center, 10);
-                pinPillPosition = -1000;
-                Navigator.of(ctx).pop();
-              },
-            )
-          ],
-        ),
-      ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('back'.tr()),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              ),
+              FlatButton(
+                child: Text('search'.tr()),
+                onPressed: () {
+                  getList();
+                  mapController.move(mapController.center, 10);
+                  pinPillPosition = -1000;
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          );
+        });
+        }
     );
   }
 
@@ -391,26 +400,41 @@ class _MapPageState extends State<MapPage> {
         ),
         Column(
           children: [
-            FloatingActionButton(
-              backgroundColor: kColorLightBlue,
-              onPressed: (){
-                mapController.move(mapController.center, mapController.zoom - 1);
-              },
-              child: Icon(FontAwesomeIcons.minusCircle),
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.1,
+              child: FloatingActionButton(
+                backgroundColor: kColorBlue,
+                onPressed: (){
+                  mapController.move(mapController.center, mapController.zoom - 1);
+                },
+                child: Icon(FontAwesomeIcons.minusCircle),
+              ),
             ),
-            FloatingActionButton(
-              backgroundColor: kColorLightBlue,
-              onPressed: (){
-                mapController.move(mapController.center, mapController.zoom + 1);
-              },
-              child: Icon(FontAwesomeIcons.plusCircle),
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.1,
+              child: FloatingActionButton(
+                backgroundColor: kColorBlue,
+                onPressed: (){
+                  mapController.move(mapController.center, mapController.zoom + 1);
+                },
+                child: Icon(FontAwesomeIcons.plusCircle),
+              ),
             ),
-            FloatingActionButton(
-              backgroundColor: kColorLightBlue,
-              onPressed: (){
-                _showFilterDialog();
-              },
-              child: Icon(FontAwesomeIcons.filter),
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.1,
+              child: FloatingActionButton(
+                backgroundColor: kColorBlue,
+                onPressed: (){
+                  _showFilterDialog();
+                },
+                child: Icon(FontAwesomeIcons.filter),
+              ),
             ),
           ],
         ),

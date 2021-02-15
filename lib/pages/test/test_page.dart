@@ -209,7 +209,7 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
   static final _myTabbedPageKey = new GlobalKey<_QuestionBuilderState>();
   TestTreeModel model = new TestTreeModel();
   int type;
-  bool female = false;
+  bool female = true;
   bool is_big = false;
   bool blood = false;
   bool symptom = false;
@@ -247,6 +247,7 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
   var question17 = new TestTreeModel(body: "я использую презерватив, когда занимаюсь сексом", value: 0, );
   var question18 = new TestTreeModel(body: "я использую презерватив, когда занимаюсь анальным сексом", value: 0, );
   var question26 = new TestTreeModel(body: "Были-ли у тебя когда либо сексуальные отношения?", value: 0, );
+  var question27 = new TestTreeModel(body: "У меня были случаи секса с применением насилия", value: 0, );
 
   //Blood
   var question19 = new TestTreeModel(body: "Мне делали переливание крови или его компонентов", value: 0, );
@@ -327,6 +328,10 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
 
   var question26Answer1 = new TestTreeModel(body: "Да", value: 5, );
   var question26Answer2 = new TestTreeModel(body: "Нет", value: 1, );
+
+  var question27Answer1 = new TestTreeModel(body: "Да", value: 10, );
+  var question27Answer2 = new TestTreeModel(body: "Нет", value: 1, );
+  var question27Answer3 = new TestTreeModel(body: "Не помню", value: 10, );
   //endregion
   //region Blood
   var question19Answer1 = new TestTreeModel(body: "Да", value: 5, );
@@ -378,6 +383,7 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
     question17.answers = [question17Answer1, question17Answer2, question17Answer3];
     question18.answers = [question18Answer1, question18Answer2, question18Answer3];
     question26.answers = [question26Answer1, question26Answer2];
+    question27.answers = [question27Answer1, question27Answer2, question27Answer3];
 
     question19.answers = [question19Answer1, question19Answer2,];
     question20.answers = [question20Answer1, question20Answer2, question20Answer3, question20Answer4];
@@ -397,6 +403,45 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
 
     question13Answer1.to = question19;
     question13Answer2.to = question19;
+
+    question3Answer1.to = question8;
+    question3Answer2.to = question4;
+    question3Answer3.to = question4;
+
+    question4Answer1.to = question9;
+    question4Answer2.to = question9;
+
+    question6Answer1.to = question27;
+    question6Answer2.to = question27;
+    question6Answer3.to = question27;
+
+    question7Answer1.to = question6;
+    question7Answer2.to = question6;
+    question7Answer3.to = question6;
+
+    question8Answer1.to = question9;
+    question8Answer2.to = question9;
+
+    if(female){
+      question9Answer1.to = question10;
+      question9Answer2.to = question10;
+    }
+    else {
+      question9Answer1.to = question11;
+      question9Answer2.to = question11;
+    }
+
+    question10Answer1.to = question12;
+    question10Answer2.to = question12;
+    question10Answer3.to = question12;
+
+    question11Answer1.to = question7;
+    question11Answer2.to = question7;
+    question11Answer3.to = question7;
+
+    question12Answer1.to = question11;
+    question12Answer2.to = question11;
+    question12Answer3.to = question11;
 
     type = widget.type;
     buildTree(type);
@@ -424,59 +469,58 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
     });
   }
   manQuestionBuilder(){
-    question3Answer1.to = question5;
+    question2Answer1.to = question26;
+    question2Answer2.to = question26;
+    question2Answer3.to = question26;
+
+    question26Answer1.to = question3;
+    question26Answer2.to = question19;
+
+    question13Answer1.to = question19;
+    question13Answer2.to = question19;
+
+    question3Answer1.to = question8;
     question3Answer2.to = question4;
     question3Answer3.to = question4;
 
-    question4Answer1.to = question5;
-    question4Answer2.to = question5;
+    question4Answer1.to = question9;
+    question4Answer2.to = question9;
 
-    question5Answer1.to = question6;
-    question5Answer2.to = question6;
-    question5Answer3.to = question8;
+    question6Answer1.to = question27;
+    question6Answer2.to = question27;
+    question6Answer3.to = question27;
 
-    question6Answer1.to = question8;
-    question6Answer2.to = question8;
-    question6Answer3.to = question8;
+    question7Answer1.to = question6;
+    question7Answer2.to = question6;
+    question7Answer3.to = question6;
 
-    question8Answer1.to = question10;
-    question8Answer2.to = question10;
+    question8Answer1.to = question9;
+    question8Answer2.to = question9;
 
-    question9Answer1.to = question10;
+    if(female){
+      question9Answer1.to = question10;
+      question9Answer2.to = question10;
+    }
+    else {
+      question9Answer1.to = question11;
+      question9Answer2.to = question11;
+    }
 
     question10Answer1.to = question12;
     question10Answer2.to = question12;
     question10Answer3.to = question12;
 
-    question11Answer1.to = question13;
-    question11Answer2.to = question13;
-    question11Answer3.to = question13;
+    question11Answer1.to = question7;
+    question11Answer2.to = question7;
+    question11Answer3.to = question7;
 
-    question12Answer1.to = question18;
-    question12Answer2.to = question18;
-    question12Answer3.to = question18;
+    question12Answer1.to = question11;
+    question12Answer2.to = question11;
+    question12Answer3.to = question11;
 
-    question18Answer1.to = question13;
-    question18Answer2.to = question13;
-    question18Answer3.to = question13;
-
-    if(female){
-      question4Answer1.to = question7;
-      question4Answer2.to = question7;
-
-      question7Answer1.to = question6;
-      question7Answer2.to = question9;
-      question7Answer3.to = question9;
-
-      question9Answer1.to = question10;
-      question9Answer2.to = question10;
-
-      question10Answer2.to = question11;
-
-      question11Answer1.to = question13;
-      question11Answer2.to = question13;
-      question11Answer3.to = question13;
-    }
+    question27Answer1.to = question19;
+    question27Answer2.to = question19;
+    question27Answer3.to = question19;
 
 
 
@@ -744,21 +788,10 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
                               child: CustomButton(
                                 text: model.answers[index].body,
                                 onPressed: (){
-                                  if(question2Answer3 == model.answers[index]){
-                                    setState(() {
-                                      female = true;
-                                      buildTree(type);
-                                    });
-                                  }
-                                  else if(question2Answer3 != model.answers[index]){
+                                  if(question4Answer1 == model.answers[index] || question4Answer2 == model.answers[index]){
                                     setState(() {
                                       female = false;
-                                      buildTree(type);
-                                    });
-                                  }
-                                  else if(question3Answer1 != model.answers[index]){
-                                    setState(() {
-                                      is_big = true;
+                                      buildTree(0);
                                     });
                                   }
                                   if(model.answers[index].to != null){
@@ -777,7 +810,7 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
                                   }
                                   else{
                                     Route route =
-                                    MaterialPageRoute(builder: (context) => WarningPage(value: val, total: is_big?135.0:120));
+                                    MaterialPageRoute(builder: (context) => WarningPage(value: val, total: female?125.0:110.0));
                                     Navigator.push(context,route);
                                   }
                                 },

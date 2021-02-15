@@ -19,6 +19,10 @@ import '../settings/settings_page.dart';
 import 'home_page.dart';
 
 class Home extends StatefulWidget {
+  int index;
+
+  Home({this.index});
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -76,6 +80,10 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    if(widget.index != null){
+      _selectedIndex=widget.index;
+      _selectPage(widget.index);
+    }
     isLoggedIn();
     super.initState();
     _color = _isDark ? Colors.indigo[100] : Colors.grey[200];
