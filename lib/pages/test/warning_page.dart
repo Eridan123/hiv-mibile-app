@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 
 class WarningPage extends StatelessWidget {
   double value;
+  double total;
 
 
-  WarningPage({this.value});
+  WarningPage({this.value, this.total});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class WarningPage extends StatelessWidget {
               textSize: 25,
               onPressed: (){
                 Route route =
-                MaterialPageRoute(builder: (context) => TestResultPage(value: value,));
+                MaterialPageRoute(builder: (context) => TestResultPage(value: value, total: total,));
                 Navigator.push(context,route);
               },
             )

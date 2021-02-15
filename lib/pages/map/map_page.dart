@@ -5,10 +5,12 @@ import 'package:HIVApp/utils/constants.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:fluster/fluster.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong/latlong.dart';
+import 'package:HIVApp/data/pref_manager.dart';
 import '../../model/organization.dart';
 import '../../model/user.dart';
 
@@ -39,12 +41,14 @@ class _MapPageState extends State<MapPage> {
   String pinName ='';
   MapController mapController;
   List<OrganizationType> _orgList = [];
+  List<OrganizationType1> _orgList1 = [];
   List<Marker> _markers = new List<Marker>();
+  int type_id = 0;
 
   void onMarkerTapped(int markerId, double lat, double lng,{Organization organization}) async {
     String locationType;
     String locationName;
-    if(markerId == 2){
+    /*if(markerId == 2){
       locationType = 'г. Бишкек Респ. центр "СПИД"';
       locationName = '+996 (312) 30-054';
     }
@@ -79,8 +83,8 @@ class _MapPageState extends State<MapPage> {
     else if(markerId == 9){
       locationType = 'г. Талас ул. Ленина. 257';
       locationName = '55-23-6, 29-60-91';
-    }
-    else if(markerId == 10){
+    }*/
+    if(markerId == 10){
       locationType = "${organization.organization_name}\n${organization.city}. ${organization.street}.";
       locationName = "${organization.phone_number}. ${organization.working_hours}";
     }
@@ -105,8 +109,11 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+
+
   @override
   void initState() {
+    getTypeList();
     getList();
     initMarkers();
     super.initState();
@@ -126,28 +133,91 @@ class _MapPageState extends State<MapPage> {
     else if(type == "Группа самопомощи")
       return 'marker1';
   }
+  String asset_path = "assets/images/";
+
+  void _showFilterDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => Center(
+        child: AlertDialog(
+          title: Text('organization_types'.tr()),
+          content: Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            width: MediaQuery.of(context).size.width * 1,
+            child: ListView.separated(
+              shrinkWrap: true,
+                itemBuilder: (context, index){
+                  return ListTile(
+                    leading: Image.asset(asset_path + 'marker'+index.toString()+'.png', width: 100, height: 100,),
+                    title: Text(Prefs.getString(Prefs.LANGUAGE) =='ky' ?_orgList1[index].ky:_orgList1[index].ru,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onTap: (){
+                      setState(() {
+                        type_id = _orgList1[index].id;
+                      });
+                    },
+                  );
+                },
+                separatorBuilder: (context, index){
+                  return Divider();
+                },
+                itemCount: _orgList1.length),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('back'.tr()),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('search'.tr()),
+              onPressed: () {
+                getList();
+                mapController.move(mapController.center, 10);
+                pinPillPosition = -1000;
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   mapFromOrganizationsList(){
-    List<Marker> list = new List<Marker>();
+    List<Marker> list = [];
     for(int i=0;i<_orgList.length;i++){
       for(var j in _orgList[i].list){
-        var d = Marker(
-          width: 40.0,
-          height: 50.0,
-          point: new LatLng(j.location.latitude, j.location.longitude),
-          builder: (ctx) =>
-          new Container(
-            child:
-            InkWell(
-              child: i<7 ? Image.asset("assets/images/marker"+i.toString()+".png",) : Image.asset("assets/images/marker6.png",),
-              onTap: () => onMarkerTapped(10,j.location.latitude, j.location.longitude, organization: j),
+        if(j.location.latitude != null) {
+          var d = Marker(
+            width: 40.0,
+            height: 50.0,
+            point: new LatLng(j.location.latitude, j.location.longitude),
+            builder: (ctx) =>
+            new Container(
+              child:
+              InkWell(
+                child: i < 7 ? Image.asset(
+                  "assets/images/marker" + i.toString() + ".png",) : Image
+                    .asset("assets/images/marker6.png",),
+                onTap: () =>
+                    onMarkerTapped(
+                        10, j.location.latitude, j.location.longitude,
+                        organization: j),
+              ),
             ),
-          ),
-        );
-        list.add(d);
+          );
+          list.add(d);
+        }
       }
     }
     setState(() {
+      _markers.clear();
       _markers.addAll(list);
     });
   }
@@ -155,7 +225,7 @@ class _MapPageState extends State<MapPage> {
   initMarkers() async {
     setState(() {
       _markers.addAll([
-        Marker(
+        /*Marker(
           width: 200.0,
           height: 250.0,
           point: new LatLng(42.871406, 74.619950),
@@ -271,15 +341,25 @@ class _MapPageState extends State<MapPage> {
               onTap: () => onMarkerTapped(9, 42.531484, 72.205452),
             ),
           ),
-        ),
+        ),*/
       ]);
     });
   }
 
   getList() async {
-    await Organization.get().then((value) {
+    await Organization.get(this.type_id).then((value) {
       setState(() {
+        _orgList.clear();
         _orgList.addAll(value);
+      });
+      mapFromOrganizationsList();
+    });
+  }
+
+  getTypeList() async {
+    await Organization.getTypes().then((value) {
+      setState(() {
+        _orgList1.addAll(value);
       });
       mapFromOrganizationsList();
     });
@@ -325,6 +405,13 @@ class _MapPageState extends State<MapPage> {
               },
               child: Icon(FontAwesomeIcons.plusCircle),
             ),
+            FloatingActionButton(
+              backgroundColor: kColorLightBlue,
+              onPressed: (){
+                _showFilterDialog();
+              },
+              child: Icon(FontAwesomeIcons.filter),
+            ),
           ],
         ),
         AnimatedPositioned(
@@ -332,7 +419,7 @@ class _MapPageState extends State<MapPage> {
             duration: Duration(milliseconds: 200),
             child: Container(
               margin: EdgeInsets.all(5),
-              height: MediaQuery.of(context).orientation == Orientation.landscape ?  MediaQuery.of(context).size.height * 0.20 : MediaQuery.of(context).size.height * 0.15,
+              height: MediaQuery.of(context).orientation == Orientation.landscape ?  MediaQuery.of(context).size.height * 0.40 : MediaQuery.of(context).size.height * 0.22,
               width: MediaQuery.of(context).size.width * 1,
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,

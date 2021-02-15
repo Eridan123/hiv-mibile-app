@@ -210,6 +210,7 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
   TestTreeModel model = new TestTreeModel();
   int type;
   bool female = false;
+  bool is_big = false;
   bool blood = false;
   bool symptom = false;
   double val = 0;
@@ -245,7 +246,7 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
   var question16 = new TestTreeModel(body: "Мы практиковали анальный секс", value: 0, );
   var question17 = new TestTreeModel(body: "я использую презерватив, когда занимаюсь сексом", value: 0, );
   var question18 = new TestTreeModel(body: "я использую презерватив, когда занимаюсь анальным сексом", value: 0, );
-  var question26 = new TestTreeModel(body: "У тебя есть половой партнер по сексом", value: 0, );
+  var question26 = new TestTreeModel(body: "Были-ли у тебя когда либо сексуальные отношения?", value: 0, );
 
   //Blood
   var question19 = new TestTreeModel(body: "Мне делали переливание крови или его компонентов", value: 0, );
@@ -262,97 +263,97 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
   //region Answers
   //region Sex
 
-  var question2Answer1 = new TestTreeModel(body: "Не важно", value: 0,);
-  var question2Answer2 = new TestTreeModel(body: "Мужчин", value: 0,);
-  var question2Answer3 = new TestTreeModel(body: "Женщин", value: 0,);
+  var question2Answer1 = new TestTreeModel(body: "Не важно", value: 1,);
+  var question2Answer2 = new TestTreeModel(body: "Мужчин", value: 1,);
+  var question2Answer3 = new TestTreeModel(body: "Женщин", value: 1,);
 
-  var question3Answer1 = new TestTreeModel(body: "1", value: 0, );
-  var question3Answer2 = new TestTreeModel(body: ">1", value: 1, );
-  var question3Answer3 = new TestTreeModel(body: "Много", value: 1, );
+  var question3Answer1 = new TestTreeModel(body: "1", value: 1, );
+  var question3Answer2 = new TestTreeModel(body: ">1", value: 5, );
+  var question3Answer3 = new TestTreeModel(body: "Много", value: 5, );
 
 
-  var question4Answer1 = new TestTreeModel(body: "Да", value: 0, );
-  var question4Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question4Answer1 = new TestTreeModel(body: "Да", value: 10, );
+  var question4Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
   var question5Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question5Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question5Answer2 = new TestTreeModel(body: "Нет", value: 1, );
   var question5Answer3 = new TestTreeModel(body: "Затрудняюсь ответить", value: 1, );
 
-  var question6Answer1 = new TestTreeModel(body: "Да", value: 0, );
+  var question6Answer1 = new TestTreeModel(body: "Да", value: 5, );
   var question6Answer2 = new TestTreeModel(body: "Нет", value: 1, );
-  var question6Answer3 = new TestTreeModel(body: "Не знаю", value: 1, );
+  var question6Answer3 = new TestTreeModel(body: "Не знаю", value: 5, );
 
-  var question7Answer1 = new TestTreeModel(body: "Да", value: 0, );
+  var question7Answer1 = new TestTreeModel(body: "Да", value: 5, );
   var question7Answer2 = new TestTreeModel(body: "Нет", value: 1, );
-  var question7Answer3 = new TestTreeModel(body: "Не знаю", value: 1, );
+  var question7Answer3 = new TestTreeModel(body: "Не знаю", value: 5, );
 
-  var question8Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question8Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question8Answer1 = new TestTreeModel(body: "Да", value: 10, );
+  var question8Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
-  var question9Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question9Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question9Answer1 = new TestTreeModel(body: "Да", value: 10, );
+  var question9Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
-  var question10Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question10Answer2 = new TestTreeModel(body: "Нет", value: 0, );
-  var question10Answer3 = new TestTreeModel(body: "Не знаю", value: 1, );
+  var question10Answer1 = new TestTreeModel(body: "Да", value: 5, );
+  var question10Answer2 = new TestTreeModel(body: "Нет", value: 1, );
+  var question10Answer3 = new TestTreeModel(body: "Не знаю", value: 5, );
 
-  var question11Answer1 = new TestTreeModel(body: "Всегда", value: 0, );
-  var question11Answer2 = new TestTreeModel(body: "Никогда", value: 1, );
-  var question11Answer3 = new TestTreeModel(body: "Иногда", value: 1, );
+  var question11Answer1 = new TestTreeModel(body: "Всегда", value: 1, );
+  var question11Answer2 = new TestTreeModel(body: "Никогда", value: 10, );
+  var question11Answer3 = new TestTreeModel(body: "Иногда", value: 10, );
 
-  var question12Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question12Answer2 = new TestTreeModel(body: "Нет", value: 0, );
-  var question12Answer3 = new TestTreeModel(body: "Не знаю", value: 1, );
+  var question12Answer1 = new TestTreeModel(body: "Да", value: 10, );
+  var question12Answer2 = new TestTreeModel(body: "Нет", value: 1, );
+  var question12Answer3 = new TestTreeModel(body: "Не знаю", value: 10, );
 
-  var question13Answer1 = new TestTreeModel(body: "Бывает", value: 1, );
-  var question13Answer2 = new TestTreeModel(body: "Никогда", value: 0, );
+  var question13Answer1 = new TestTreeModel(body: "Бывает", value: 10, );
+  var question13Answer2 = new TestTreeModel(body: "Никогда", value: 1, );
 
   var question14Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question14Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question14Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
-  var question15Answer1 = new TestTreeModel(body: "Да", value: 0, );
+  var question15Answer1 = new TestTreeModel(body: "Да", value: 1, );
   var question15Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
   var question16Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question16Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question16Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
-  var question17Answer1 = new TestTreeModel(body: "Всегда", value: 0, );
+  var question17Answer1 = new TestTreeModel(body: "Всегда", value: 1, );
   var question17Answer2 = new TestTreeModel(body: "Никогда", value: 1, );
   var question17Answer3 = new TestTreeModel(body: "Не всегда", value: 1, );
 
-  var question18Answer1 = new TestTreeModel(body: "Всегда", value: 0, );
+  var question18Answer1 = new TestTreeModel(body: "Всегда", value: 1, );
   var question18Answer2 = new TestTreeModel(body: "Никогда", value: 1, );
   var question18Answer3 = new TestTreeModel(body: "Не всегда", value: 1, );
 
-  var question26Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question26Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question26Answer1 = new TestTreeModel(body: "Да", value: 5, );
+  var question26Answer2 = new TestTreeModel(body: "Нет", value: 1, );
   //endregion
   //region Blood
-  var question19Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question19Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question19Answer1 = new TestTreeModel(body: "Да", value: 5, );
+  var question19Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
-  var question20Answer1 = new TestTreeModel(body: "Пробовал один-два раза", value: 1, );
-  var question20Answer2 = new TestTreeModel(body: "Употребля и сейчас", value: 1, );
-  var question20Answer3 = new TestTreeModel(body: "Раньше да, сейчас нет", value: 1, );
-  var question20Answer4 = new TestTreeModel(body: "не употреблял никогда", value: 0, );
+  var question20Answer1 = new TestTreeModel(body: "Пробовал один-два раза", value: 10, );
+  var question20Answer2 = new TestTreeModel(body: "Употребля и сейчас", value: 10, );
+  var question20Answer3 = new TestTreeModel(body: "Раньше да, сейчас нет", value: 10, );
+  var question20Answer4 = new TestTreeModel(body: "не употреблял никогда", value: 1, );
 
   var question21Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question21Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question21Answer2 = new TestTreeModel(body: "Нет", value: 1, );
   //endregion
   //region Symtom
-  var question22Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question22Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question22Answer1 = new TestTreeModel(body: "Да", value: 5, );
+  var question22Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
-  var question23Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question23Answer2 = new TestTreeModel(body: "Нет", value: 0, );
-  var question23Answer3 = new TestTreeModel(body: "Не знаю", value: 1, );
+  var question23Answer1 = new TestTreeModel(body: "Да", value: 5, );
+  var question23Answer2 = new TestTreeModel(body: "Нет", value: 1, );
+  var question23Answer3 = new TestTreeModel(body: "Не знаю", value: 5, );
 
-  var question24Answer1 = new TestTreeModel(body: "Да", value: 1, );
-  var question24Answer2 = new TestTreeModel(body: "Нет", value: 0, );
+  var question24Answer1 = new TestTreeModel(body: "Да", value: 5, );
+  var question24Answer2 = new TestTreeModel(body: "Нет", value: 1, );
 
-  var question25Answer1 = new TestTreeModel(body: ">6 месяцев", value: 1, );
-  var question25Answer2 = new TestTreeModel(body: "<6 месяцев", value: 0, );
-  var question25Answer3 = new TestTreeModel(body: "Никогда", value: 1, );
+  var question25Answer1 = new TestTreeModel(body: ">6 месяцев", value: 10, );
+  var question25Answer2 = new TestTreeModel(body: "<6 месяцев", value: 1, );
+  var question25Answer3 = new TestTreeModel(body: "Никогда", value: 10, );
   //endregion
   //endregion
 
@@ -755,6 +756,11 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
                                       buildTree(type);
                                     });
                                   }
+                                  else if(question3Answer1 != model.answers[index]){
+                                    setState(() {
+                                      is_big = true;
+                                    });
+                                  }
                                   if(model.answers[index].to != null){
                                     setState(() {
                                       if(model.answers[index].to == question19){
@@ -771,7 +777,7 @@ class _QuestionBuilderState extends State<QuestionBuilder> with SingleTickerProv
                                   }
                                   else{
                                     Route route =
-                                    MaterialPageRoute(builder: (context) => WarningPage(value: val/total,));
+                                    MaterialPageRoute(builder: (context) => WarningPage(value: val, total: is_big?135.0:120));
                                     Navigator.push(context,route);
                                   }
                                 },

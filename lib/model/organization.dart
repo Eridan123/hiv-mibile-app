@@ -13,9 +13,9 @@ class Organization{
   String working_hours;
   OrganizationLocation location;
 
-  static Future<List<OrganizationType>> get() async {
+  static Future<List<OrganizationType>> get(int type_id) async {
 
-    final url = Configs.ip + 'api/organizations';
+    final url = Configs.ip + 'api/organizations/'+type_id.toString();
     try {
       Map<String, String> headers = {"Content-type": "application/json"};
       final response = await http.get(
@@ -23,6 +23,21 @@ class Organization{
         headers: headers,
       );
       return responseToObjectList(json.decode(response.body));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static Future<List<OrganizationType1>> getTypes() async {
+
+    final url = Configs.ip + 'api/organizationtypes';
+    try {
+      Map<String, String> headers = {"Content-type": "application/json"};
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      return responseToObjectTypeList(json.decode(response.body));
     } catch (error) {
       throw error;
     }
@@ -46,6 +61,20 @@ class Organization{
     }
     return list;
   }
+
+  static List<OrganizationType1> responseToObjectTypeList(var responseBody){
+    List<OrganizationType1> list = new List<OrganizationType1>();
+    for(var j in responseBody) {
+      OrganizationType1 type = new OrganizationType1();
+      var orgType = j['organizationtype'];
+      type.ky = orgType['ky'];
+      type.ru = orgType['ru'];
+      type.id = j['id'];
+      list.add(type);
+    }
+    return list;
+  }
+
   static Organization responseToObjects(var i){
     OrganizationLocation organizationLocation = new OrganizationLocation();
     organizationLocation.longitude = i['location']['longitude'];
@@ -69,4 +98,10 @@ class OrganizationType{
   String ky;
   String ru;
   List<Organization> list;
+}
+
+class OrganizationType1{
+  int id;
+  String ky;
+  String ru;
 }

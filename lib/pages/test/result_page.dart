@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:HIVApp/components/custom_button.dart';
 import 'package:HIVApp/model/user.dart';
 import 'package:HIVApp/routes/routes.dart';
@@ -11,6 +9,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class TestResultPage extends StatelessWidget {
   double value;
+  double total;
 
   Future<bool> _checkInternetConnection() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -31,7 +30,7 @@ class TestResultPage extends StatelessWidget {
     });
   }
 
-  TestResultPage({this.value});
+  TestResultPage({this.value, this.total});
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +48,8 @@ class TestResultPage extends StatelessWidget {
                 CircularPercentIndicator(
                   radius: MediaQuery.of(context).size.width * 0.6,
                   lineWidth: 20.0,
-                  percent: value,
-                  center: new Text((value * 100).toInt().toString()+'%'),
+                  percent: ((value*100)/total)/100,
+                  center: new Text(((value*100/total)).toString()+'%'),
                   progressColor: value <30 ? Colors.green : value <60 ? Colors.blue : Colors.red,
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.2,),
